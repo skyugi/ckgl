@@ -1,5 +1,6 @@
 package com.lzh.wms.sys.common;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.List;
 public class TreeNode {
 
     private Integer id;
+    @JsonProperty("parentId")
     private Integer pid;
     /**
      * 页面需要的json字段
@@ -29,7 +31,7 @@ public class TreeNode {
     private List<TreeNode> children;
 
     /**
-     * 左侧导航栏构造器
+     * 左侧导航栏构造器--标准数据格式
      * @param id
      * @param pid
      * @param title
@@ -43,6 +45,20 @@ public class TreeNode {
         this.title = title;
         this.icon = icon;
         this.href = href;
+        this.spread = spread;
+    }
+
+    /**
+     * dtree的数据格式--简单json类型
+     * @param id
+     * @param pid
+     * @param title
+     * @param spread
+     */
+    public TreeNode(Integer id, Integer pid, String title, Boolean spread) {
+        this.id = id;
+        this.pid = pid;
+        this.title = title;
         this.spread = spread;
     }
 }
