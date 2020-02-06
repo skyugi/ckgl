@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * 系统前端控制器
+ * 系统前端控制器 路由
  * 从登陆前端控制器分离
  *
  * @author lzh
@@ -50,8 +50,40 @@ public class SystemController {
         return "system/logInfo/logInfoManager";
     }
 
+    /**
+     * 跳转到公告管理
+     * @return
+     */
     @RequestMapping("/toNoticeManager")
     public String toNoticeManager(){
         return "/system/notice/noticeManager";
     }
+
+    /**
+     * 跳转到部门管理
+     * @return
+     */
+    @RequestMapping("toDeptManager")
+    public String toDeptManager(){
+        return "system/dept/deptManager";
+    }
+
+    /**
+     * 跳转到部门管理右边页面
+     * @return
+     */
+    @RequestMapping("toDeptRight")
+    public String toDeptRight(){
+        return "system/dept/deptRight";
+    }
+
+    /**
+     * 跳转到部门管理左边页面
+     * @return
+     */
+    @RequestMapping("toDeptLeft")
+    public String toDeptLeft(){
+        return "system/dept/deptLeft";
+    }
+
 }

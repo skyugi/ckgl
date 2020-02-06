@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * json数据实体
+ * 返回数据表格的json数据实体
  *
  * @author lzh
  * @date 2020-01-30 22:03

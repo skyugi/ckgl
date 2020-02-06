@@ -48,7 +48,7 @@ public class MenuController {
         }
 //        System.out.println(list);
         /**
-         * 构造层级关系,三级菜单
+         * 构造层级关系,两级菜单
          */
         List<TreeNode> list1 = new ArrayList<>();
 
@@ -73,7 +73,7 @@ public class MenuController {
             list1.add(treeNode);
         }
 
-
+        System.out.println(new DataGridView(list));
         return new DataGridView(list1);
     }
 }
