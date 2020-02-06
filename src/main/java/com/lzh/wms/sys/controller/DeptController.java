@@ -30,14 +30,16 @@ public class DeptController {
     @Autowired
     private DeptService deptService;
 
+    /**
+     * 加载部门左边页面的树
+     * @param deptVo
+     * @return
+     */
     @RequestMapping("loadDeptManagerLeftTreeJson")
     public DataGridView loadDeptManagerLeftTreeJson(DeptVo deptVo){
         List<Dept> list = deptService.list();
-        List<TreeNode> treeNodeList = new ArrayList<>();
-        for (Dept dept : list) {
-            treeNodeList.add(new TreeNode(dept.getId(),dept.getPid(),dept.getTitle(),dept.getOpen()== Constast.OPEN_TRUE ?true:false));
-        }
-        return new DataGridView(treeNodeList);
+        DataGridView dataGridView = deptService.loadDeptManagerLeftTreeJson(deptVo,list);
+        return dataGridView;
     }
 }
 
