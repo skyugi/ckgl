@@ -44,7 +44,8 @@
 
         // 绑定节点点击
         dtree.on("node('deptTree')" ,function(obj){
-            layer.msg(JSON.stringify(obj.param));
+            // layer.msg(JSON.stringify(obj.param));
+            window.parent.right.reloadTable(obj.param.nodeId);
         });
     });
 </script>
