@@ -326,55 +326,33 @@
         })*/
 
         /**
-         * 批量删除部门
-         * @param checkStatus
-         */
-
-        /* function batchDeleteDept(checkStatus) {
-             var length = checkStatus.data.length;
-             if (length > 0) {
-                 layer.confirm("你确定要删除这些部门吗",{icon: 3, title: '提示'},function (index) {
-                     layer.close(index);
-                     //获取选中行的数据
-                     var data = checkStatus.data;
-                     var ids="";
-                     $.each(data,function (index,item) {
-                         if (index == 0){
-                             ids = "ids=" + item.id;
-                         }else {
-                             ids += "&ids=" + item.id;
-                         }
-                     });
-                     // alert(ids);
-                     //向服务端发送请求
-                     $.post("/dept/batchDeleteDept",ids,function (result) {
-                         if (result.code == 200){
-                             tableInit.reload();
-                         }
-                         layer.msg(result.msg);
-                     });
-                 });
-             }else {
-                 layer.msg("请至少选择一行数据");
-             }
-         }*/
-
-        /**
          * 删除部门
          * @param data
          */
         function deleteDept(data) {
-            layer.confirm('你确定要删除【' + data.title + '】这条部门吗', {icon: 3, title: '提示'}, function (index) {
-                // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                layer.close(index);
-                //向服务端发送删除指令
-                $.post("/dept/deleteDept", {id: data.id}, function (result) {
-                    if (result.code == 200) {
-                        tableInit.reload();
-                    }
-                    layer.msg(result.msg);
-                });
+            // console.log(data);
+            $.post("/dept/checkHasChildrenNode",{id: data.id},function (result) {
+                if (result.value){
+                    layer.msg("当前部门有下级部门，请先删除下级部门");
+                }else {
+                    layer.confirm('你确定要删除【' + data.title + '】这条部门吗', {icon: 3, title: '提示'}, function (index) {
+                        // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                        layer.close(index);
+                        //向服务端发送删除指令
+                        $.post("/dept/deleteDept", {id: data.id}, function (res) {
+                            if (res.code == 200) {
+                                tableInit.reload();
+                                //刷新部门树
+                                window.parent.left.deptTree.reload();
+                                //刷新下拉树
+                                selectDeptTree.reload();
+                            }
+                            layer.msg(res.msg);
+                        });
+                    });
+                }
             });
+
         }
         
         //初始化下拉树

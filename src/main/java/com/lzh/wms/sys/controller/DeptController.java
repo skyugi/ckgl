@@ -109,5 +109,42 @@ public class DeptController {
             return ResultObj.UPDATE_ERROR;
         }
     }
+
+    /**
+     * 判断当前部门是否有子部门
+     * @param deptVo
+     * @return
+     */
+    @RequestMapping("/checkHasChildrenNode")
+//    public Map<String,Object> checkHasChildrenNode(Integer id){
+    public Map<String,Object> checkHasChildrenNode(DeptVo deptVo){
+        Map<String,Object> map = new HashMap<>();
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("pid",deptVo.getId());
+        List<Dept> list = deptService.list(queryWrapper);
+        if (list != null && list.size() > 0){
+            map.put("value",true);
+        }else {
+            map.put("value",false);
+        }
+        return map;
+    }
+
+    /**
+     * 删除部门
+     * @param deptVo
+     * @return
+     */
+    @RequestMapping("/deleteDept")
+//    public ResultObj deleteDept(Integer id){
+    public ResultObj deleteDept(DeptVo deptVo){
+        try {
+            deptService.removeById(deptVo.getId());
+            return ResultObj.DELETE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.DELETE_ERROR;
+        }
+    }
 }
 
