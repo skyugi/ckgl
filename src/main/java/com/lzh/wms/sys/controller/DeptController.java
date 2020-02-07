@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lzh.wms.sys.common.Constast;
 import com.lzh.wms.sys.common.DataGridView;
+import com.lzh.wms.sys.common.ResultObj;
 import com.lzh.wms.sys.common.TreeNode;
 import com.lzh.wms.sys.domain.Dept;
 import com.lzh.wms.sys.domain.Notice;
@@ -17,8 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -58,6 +58,56 @@ public class DeptController {
         QueryWrapper queryWrapper = deptService.loadAllDept(page,deptVo);
         deptService.page(page, queryWrapper);
         return new DataGridView(page.getTotal(), page.getRecords());
+    }
+
+    /**
+     * 获取最大排序码
+     * @return
+     */
+    @RequestMapping("/getDeptMaxOrderNum")
+    public Map<String,Object> getDeptMaxOrderNum(){
+        Map<String,Object> map = new HashMap<>();
+        QueryWrapper queryWrapper = deptService.getDeptMaxOrderNum();
+        List<Dept> list = deptService.list(queryWrapper);
+        if (list != null && list.size()>0) {
+            map.put("value",list.get(0).getOrdernum()+1);
+        }else {
+            map.put("value",1);
+        }
+        return map;
+    }
+
+    /**
+     * 添加部门
+     * @param deptVo
+     * @return
+     */
+    @RequestMapping("/addDept")
+    public ResultObj addDept(DeptVo deptVo) {
+        deptVo.setCreatetime(new Date());
+        try {
+            deptService.save(deptVo);
+            return ResultObj.ADD_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.ADD_ERROR;
+        }
+    }
+
+    /**
+     * 修改部门
+     * @param deptVo
+     * @return
+     */
+    @RequestMapping("/updateDept")
+    public ResultObj updateDept(DeptVo deptVo) {
+        try {
+            deptService.updateById(deptVo);
+            return ResultObj.UPDATE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.UPDATE_ERROR;
+        }
     }
 }
 

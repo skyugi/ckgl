@@ -67,4 +67,11 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
         return queryWrapper;
     }
 
+    @Override
+    public QueryWrapper getDeptMaxOrderNum() {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.orderByDesc("ordernum");
+        return queryWrapper;
+    }
+
 }

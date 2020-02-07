@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.lzh.wms.sys.vo.DeptVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -35,4 +36,9 @@ public interface DeptService extends IService<Dept> {
      */
     QueryWrapper loadAllDept(IPage<Dept> page, DeptVo deptVo);
 
+    /**
+     * 返回最大排序码
+     * @return
+     */
+    QueryWrapper getDeptMaxOrderNum();
 }
