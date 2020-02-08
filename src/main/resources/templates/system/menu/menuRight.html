@@ -234,6 +234,31 @@
         });
 
         /**
+         * 打开添加菜单的弹出层
+         */
+        var mainIndex;
+        var url;
+
+        function openAddMenuLayer() {
+            mainIndex = layer.open({
+                type: 1,
+                content: $("#addOrUpdateDiv"),
+                area: ['800px', '600px'],
+                title: '菜单发布',
+                success: function () {
+                    $("#dataForm")[0].reset();
+                    //上面一句没有把pid置为空
+                    $("#pid").val("");
+                    url = "/menu/addMenu";
+                    $.get("/menu/getMenuMaxOrderNum",function (result) {
+                        $("#ordernum").val(result.value);
+                    });
+                    // dtree.selectVal("parentMenuTree","");
+                }
+            });
+        }
+
+        /**
          * 打开修改菜单的弹出层
          */
         function openUpdateMenuLayer(data) {
@@ -256,32 +281,10 @@
         }
 
         /**
-         * 打开添加菜单的弹出层
-         */
-        var mainIndex;
-        var url;
-
-        function openAddMenuLayer() {
-            mainIndex = layer.open({
-                type: 1,
-                content: $("#addOrUpdateDiv"),
-                area: ['800px', '600px'],
-                title: '菜单发布',
-                success: function () {
-                    $("#dataForm")[0].reset();
-                    url = "/menu/addMenu";
-                    $.get("/menu/getMenuMaxOrderNum",function (result) {
-                        $("#ordernum").val(result.value);
-                    });
-                }
-            });
-        }
-
-        /**
          * 监听添加或修改菜单的提交
          */
         form.on("submit(doSubmit)",function (data) {
-            // alert(data.field);
+            // alert(data.field.pid);
             $.post(url, data.field, function (result) {
                 // alert(JSON.stringify(data.field));
                 if (result.code == 200) {
