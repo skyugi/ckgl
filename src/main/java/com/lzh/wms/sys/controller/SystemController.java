@@ -113,4 +113,31 @@ public class SystemController {
         return "system/menu/menuLeft";
     }
 
+    /**
+     * 跳转到权限管理
+     * @return
+     */
+    @RequestMapping("toPermissionManager")
+    public String toPermissionManager(){
+        return "system/permission/permissionManager";
+    }
+
+    /**
+     * 跳转到权限管理右边页面
+     * @return
+     */
+    @RequestMapping("toPermissionRight")
+    public String toPermissionRight(){
+        return "system/permission/permissionRight";
+    }
+
+    /**
+     * 跳转到权限管理左边页面
+     * @return
+     */
+    @RequestMapping("toPermissionLeft")
+    public String toPermissionLeft(){
+        return "system/permission/permissionLeft";
+    }
+
 }

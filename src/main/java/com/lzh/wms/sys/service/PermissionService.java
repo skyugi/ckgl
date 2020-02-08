@@ -41,4 +41,20 @@ public interface PermissionService extends IService<Permission> {
      */
     QueryWrapper getMenuMaxOrderNum();
 
+    /********************权限***************************/
+
+    /**
+     * 构造queryWrapper对象
+     * @param page
+     * @param permissionVo
+     * @return
+     */
+    QueryWrapper loadAllPermission(IPage<Permission> page, PermissionVo permissionVo);
+
+    /**
+     * 返回最大排序码
+     * @return
+     */
+    QueryWrapper getPermissionMaxOrderNum();
+
 }

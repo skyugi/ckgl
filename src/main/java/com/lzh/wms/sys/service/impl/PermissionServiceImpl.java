@@ -67,4 +67,26 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         //删除权限表sys_permission的数据
         return super.removeById(id);
     }
+    
+    /********************权限开始***************************/
+
+    @Override
+    public QueryWrapper loadAllPermission(IPage<Permission> page, PermissionVo permissionVo) {
+        //组装查询条件
+        QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("type",Constast.TYPE_PERMISSION);//只能查询权限
+        queryWrapper.like(StringUtils.isNotBlank(permissionVo.getTitle()), "title", permissionVo.getTitle());
+        queryWrapper.like(StringUtils.isNotBlank(permissionVo.getPercode()), "percode", permissionVo.getPercode());
+        //点击左边的tree时查询当前节点及其子节点的数据
+        queryWrapper.eq(permissionVo.getId()!=null,"id",permissionVo.getId()).or().eq(permissionVo.getId()!=null,"pid",permissionVo.getId());
+        queryWrapper.orderByAsc("ordernum");
+        return queryWrapper;
+    }
+
+    @Override
+    public QueryWrapper getPermissionMaxOrderNum() {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.orderByDesc("ordernum");
+        return queryWrapper;
+    }
 }
