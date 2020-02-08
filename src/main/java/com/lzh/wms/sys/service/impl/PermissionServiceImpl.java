@@ -13,7 +13,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lzh.wms.sys.vo.PermissionVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,7 @@ import java.util.List;
  * @since 2020-01-30
  */
 @Service
+@Transactional
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission> implements PermissionService {
 
     @Override
@@ -54,5 +57,14 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.orderByDesc("ordernum");
         return queryWrapper;
+    }
+
+    @Override
+    public boolean removeById(Serializable id) {
+        PermissionMapper permissionMapper = this.getBaseMapper();
+        //根据权限或菜单id删除角色权限关系表sys_role_permission的数据
+        permissionMapper.deleteRolePermissionById(id);
+        //删除权限表sys_permission的数据
+        return super.removeById(id);
     }
 }

@@ -187,6 +187,23 @@
                 , {fixed: 'right', title: '操作', align: 'center', toolbar: '#menuRowBar', width: '200'}
             ] ]
             , page: true
+            //done - 数据渲染完的回调
+            , done: function(res, curr, count){ //处理删除某一页最后一条数据的bug
+                //如果是异步请求数据方式，res即为你接口返回的信息。
+                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+                // console.log(res);
+                // //得到当前页码
+                // console.log(curr);
+                // //得到数据总量
+                // console.log(count);
+                if (res.data.length == 0 && curr != 1){
+                    tableInit.reload({
+                        page:{
+                            curr: (curr - 1)
+                        }
+                    });
+                }
+            }
         });
 
         //模糊查询
@@ -253,6 +270,7 @@
                     $.get("/menu/getMenuMaxOrderNum",function (result) {
                         $("#ordernum").val(result.value);
                     });
+                    //TODO 存在：当点击修改有父节点的节点后，点击修改第一父节点时父节点显示上一步中节点的父节点的bug
                     // dtree.selectVal("parentMenuTree","");
                 }
             });
