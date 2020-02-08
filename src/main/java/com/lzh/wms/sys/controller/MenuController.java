@@ -1,10 +1,9 @@
 package com.lzh.wms.sys.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.lzh.wms.sys.common.Constast;
-import com.lzh.wms.sys.common.DataGridView;
-import com.lzh.wms.sys.common.TreeNode;
-import com.lzh.wms.sys.common.WebUtils;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lzh.wms.sys.common.*;
 import com.lzh.wms.sys.domain.Permission;
 import com.lzh.wms.sys.domain.User;
 import com.lzh.wms.sys.service.PermissionService;
@@ -13,8 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * 菜单前端控制器
@@ -76,4 +74,120 @@ public class MenuController {
         System.out.println(new DataGridView(list));
         return new DataGridView(list1);
     }
+
+    /**********************菜单管理开始******************************/
+    /**
+     * 加载菜单左边页面的树
+     * @param permissionVo
+     * @return
+     */
+    @RequestMapping("/loadMenuManagerLeftTreeJson")
+    public DataGridView loadMenuManagerLeftTreeJson(PermissionVo permissionVo){
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("type",Constast.TYPE_MENU);
+        List<Permission> list = permissionService.list(queryWrapper);
+        DataGridView dataGridView = permissionService.loadMenuManagerLeftTreeJson(permissionVo,list);
+        return dataGridView;
+    }
+
+    /**
+     * 查询菜单：全查询、模糊查询
+     * @param permissionVo
+     * @return
+     */
+    @RequestMapping("/loadAllMenu")
+    public DataGridView loadAllMenu(PermissionVo permissionVo){
+        IPage<Permission> page = new Page<>(permissionVo.getPage(), permissionVo.getLimit());
+        QueryWrapper queryWrapper = permissionService.loadAllMenu(page,permissionVo);
+        permissionService.page(page, queryWrapper);
+        return new DataGridView(page.getTotal(), page.getRecords());
+    }
+
+    /**
+     * 获取最大排序码
+     * @return
+     */
+    @RequestMapping("/getMenuMaxOrderNum")
+    public Map<String,Object> getMenuMaxOrderNum(){
+        Map<String,Object> map = new HashMap<>();
+        QueryWrapper queryWrapper = permissionService.getMenuMaxOrderNum();
+        List<Permission> list = permissionService.list(queryWrapper);
+        if (list != null && list.size()>0) {
+            map.put("value",list.get(0).getOrdernum()+1);
+        }else {
+            map.put("value",1);
+        }
+        return map;
+    }
+
+    /**
+     * 添加菜单
+     * @param permissionVo
+     * @return
+     */
+    @RequestMapping("/addMenu")
+    public ResultObj addMenu(PermissionVo permissionVo) {
+        permissionVo.setType(Constast.TYPE_MENU);//设置添加类型为菜单
+        try {
+            permissionService.save(permissionVo);
+            return ResultObj.ADD_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.ADD_ERROR;
+        }
+    }
+
+    /**
+     * 修改菜单
+     * @param permissionVo
+     * @return
+     */
+    @RequestMapping("/updateMenu")
+    public ResultObj updateMenu(PermissionVo permissionVo) {
+        try {
+            permissionService.updateById(permissionVo);
+            return ResultObj.UPDATE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.UPDATE_ERROR;
+        }
+    }
+
+    /**
+     * 判断当前菜单是否有子菜单
+     * @param permissionVo
+     * @return
+     */
+    @RequestMapping("/checkHasChildrenNode")
+//    public Map<String,Object> checkHasChildrenNode(Integer id){
+    public Map<String,Object> checkHasChildrenNode(PermissionVo permissionVo){
+        Map<String,Object> map = new HashMap<>();
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("pid",permissionVo.getId());
+        List<Permission> list = permissionService.list(queryWrapper);
+        if (list != null && list.size() > 0){
+            map.put("value",true);
+        }else {
+            map.put("value",false);
+        }
+        return map;
+    }
+
+    /**
+     * 删除菜单
+     * @param permissionVo
+     * @return
+     */
+    @RequestMapping("/deleteMenu")
+//    public ResultObj deleteMenu(Integer id){
+    public ResultObj deleteMenu(PermissionVo permissionVo){
+        try {
+            permissionService.removeById(permissionVo.getId());
+            return ResultObj.DELETE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.DELETE_ERROR;
+        }
+    }
+    /**********************菜单管理结束******************************/
 }
