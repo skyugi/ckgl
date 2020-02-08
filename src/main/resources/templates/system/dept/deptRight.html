@@ -83,7 +83,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">父级部门</label>
             <div class="layui-input-block">
-                <input type="hidden" name="pid" id="pid">
+                <input type="hidden" name="pid" id="pid" lay-verify="required">
                 <ul id="parentDeptTree"  class="dtree" data-id="0" ></ul>
             </div>
         </div>
@@ -255,6 +255,8 @@
                 title: '部门发布',
                 success: function () {
                     $("#dataForm")[0].reset();
+                    //上面一句没有把pid置为空
+                    $("#pid").val("");
                     url = "/dept/addDept";
                     $.get("/dept/getDeptMaxOrderNum",function (result) {
                         $("#ordernum").val(result.value);
@@ -288,7 +290,22 @@
         /**
          * 监听添加或修改部门的提交
          */
-        $("#doSubmit").click(function () {
+        form.on("submit(doSubmit)",function (data) {
+            $.post(url, data, function (result) {
+                // alert(JSON.stringify(data.field));
+                if (result.code == 200) {
+                    tableInit.reload();
+                    //刷新部门树
+                    window.parent.left.deptTree.reload();
+                    //刷新下拉树
+                    selectDeptTree.reload();
+                }
+                layer.msg(result.msg);
+                layer.close(mainIndex);
+            });
+            return false;
+        })
+        /*$("#doSubmit").click(function () {
             //用于同步编辑器(富文本)内容到textarea（一般用于异步提交）
             //在这个方法调用前也会触发表单验证
             // layedit.sync(editIndex);
@@ -307,7 +324,7 @@
                 layer.msg(result.msg);
                 layer.close(mainIndex);
             });
-        });
+        });*/
         //下面是layui的表单监听方式 用lay-filter过滤 要return false data已经获取到 上面自己监听的方法要自己获取data
         /*form.on("submit(doSubmit)",function (data) {
             //用于同步编辑器(富文本)内容到textarea（一般用于异步提交）
