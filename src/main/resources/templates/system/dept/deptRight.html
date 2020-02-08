@@ -242,28 +242,6 @@
         });
 
         /**
-         * 打开修改部门的弹出层
-         */
-        function openUpdateDeptLayer(data) {
-            mainIndex = layer.open({
-                type: 1,
-                content: $("#addOrUpdateDiv"),
-                area: ['800px', '600px'],
-                title: '部门修改',
-                success: function () {
-                    $("#dataForm")[0].reset();//应该可以不加
-                    //装载数据
-                    form.val("dataForm", data);
-                    //
-                    dtree.dataInit("parentDeptTree", data.pid);
-                    // 也可以在这里指定，第二个参数如果不填，则会自动返显当前选中的数据
-                    var selectParam = dtree.selectVal("parentDeptTree");
-                    url = "/dept/updateDept";
-                }
-            });
-        }
-
-        /**
          * 打开添加部门的弹出层
          */
         var mainIndex;
@@ -281,6 +259,28 @@
                     $.get("/dept/getDeptMaxOrderNum",function (result) {
                         $("#ordernum").val(result.value);
                     });
+                }
+            });
+        }
+
+        /**
+         * 打开修改部门的弹出层
+         */
+        function openUpdateDeptLayer(data) {
+            mainIndex = layer.open({
+                type: 1,
+                content: $("#addOrUpdateDiv"),
+                area: ['800px', '600px'],
+                title: '部门修改',
+                success: function () {
+                    $("#dataForm")[0].reset();//应该可以不加
+                    //装载数据
+                    form.val("dataForm", data);
+                    //
+                    dtree.dataInit("parentDeptTree", data.pid);
+                    // 也可以在这里指定，第二个参数如果不填，则会自动返显当前选中的数据
+                    var selectParam = dtree.selectVal("parentDeptTree");
+                    url = "/dept/updateDept";
                 }
             });
         }
