@@ -44,10 +44,10 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     public QueryWrapper loadAllMenu(IPage<Permission> page, PermissionVo permissionVo) {
         //组装查询条件
         QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("type",Constast.TYPE_MENU);
-        queryWrapper.like(StringUtils.isNotBlank(permissionVo.getTitle()), "title", permissionVo.getTitle());
         //点击左边的tree时查询当前节点及其子节点的数据
         queryWrapper.eq(permissionVo.getId()!=null,"id",permissionVo.getId()).or().eq(permissionVo.getId()!=null,"pid",permissionVo.getId());
+        queryWrapper.eq("type",Constast.TYPE_MENU);//通过sql WHERE (id = ? OR pid = ? AND type = ?)知这里必须放上面判断的下面 解决点击左侧树权限也会显示的bug
+        queryWrapper.like(StringUtils.isNotBlank(permissionVo.getTitle()), "title", permissionVo.getTitle());
         queryWrapper.orderByAsc("ordernum");
         return queryWrapper;
     }
@@ -78,7 +78,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         queryWrapper.like(StringUtils.isNotBlank(permissionVo.getTitle()), "title", permissionVo.getTitle());
         queryWrapper.like(StringUtils.isNotBlank(permissionVo.getPercode()), "percode", permissionVo.getPercode());
         //点击左边的tree时查询当前节点及其子节点的数据
-        queryWrapper.eq(permissionVo.getId()!=null,"id",permissionVo.getId()).or().eq(permissionVo.getId()!=null,"pid",permissionVo.getId());
+        queryWrapper.eq(permissionVo.getId()!=null,"pid",permissionVo.getId());//权限只有一级 通过判断其pid是否=页面传来的菜单id即可
         queryWrapper.orderByAsc("ordernum");
         return queryWrapper;
     }
