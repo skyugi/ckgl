@@ -31,6 +31,13 @@ public class TreeNode {
     private List<TreeNode> children;
 
     /**
+     * dtree开启复选框
+     * 字符串格式，简洁写法，仅支持一级复选框，checked属性直接由checkArr表示
+     * "0"代表不选中 "1"代表选中
+     */
+    private String checkArr;
+
+    /**
      * 左侧导航栏构造器--标准数据格式
      * @param id
      * @param pid
@@ -60,5 +67,21 @@ public class TreeNode {
         this.pid = pid;
         this.title = title;
         this.spread = spread;
+    }
+
+    /**
+     * 兼容dtree开启复选框的构造器
+     * @param id
+     * @param pid
+     * @param title
+     * @param spread
+     * @param checkArr
+     */
+    public TreeNode(Integer id, Integer pid, String title, Boolean spread, String checkArr) {
+        this.id = id;
+        this.pid = pid;
+        this.title = title;
+        this.spread = spread;
+        this.checkArr = checkArr;
     }
 }
