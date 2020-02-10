@@ -10,4 +10,12 @@
     <delete id="deleteRoleUserByRid" parameterType="java.io.Serializable">
         delete from sys_role_user where rid = #{id}
     </delete>
+
+    <select id="queryIdsOfPermissionBelongToRoleByRid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select pid from sys_role_permission where rid = #{value}
+    </select>
+
+    <insert id="saveRolePermission">
+        insert into sys_role_permission values (#{rid},#{pid})
+    </insert>
 </mapper>
