@@ -68,8 +68,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
         //构造返回DataGridView的data
         List<TreeNode> treeNodeList = new ArrayList<>();
-        String checkArr = "0";
         for (Permission allAvailablePermission : allAvailablePermissions) {
+            String checkArr = "0";
             for (Permission currentRolePermission : currentRolePermissions) {
                 if (currentRolePermission.equals(allAvailablePermission)){
                     checkArr = "1";

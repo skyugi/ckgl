@@ -35,7 +35,7 @@ public class TreeNode {
      * 字符串格式，简洁写法，仅支持一级复选框，checked属性直接由checkArr表示
      * "0"代表不选中 "1"代表选中
      */
-    private String checkArr;
+    private String checkArr = "0";
 
     /**
      * 左侧导航栏构造器--标准数据格式
