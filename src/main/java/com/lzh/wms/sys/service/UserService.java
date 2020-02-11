@@ -1,7 +1,10 @@
 package com.lzh.wms.sys.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.lzh.wms.sys.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lzh.wms.sys.vo.UserVo;
 
 /**
  * <p>
@@ -13,4 +16,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface UserService extends IService<User> {
 
+    /**
+     * 构造queryWrapper对象
+     * @param page
+     * @param userVo
+     * @return
+     */
+    QueryWrapper loadAllUser(IPage<User> page, UserVo userVo);
 }
