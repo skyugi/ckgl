@@ -2,6 +2,8 @@ package com.lzh.wms.sys.cache;
 
 import com.lzh.wms.sys.domain.Dept;
 import com.lzh.wms.sys.vo.DeptVo;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -25,6 +27,11 @@ import java.util.Map;
 public class CacheAspect {
 
     /**
+     * 日志出处
+     */
+    private Log log = LogFactory.getLog(CacheAspect.class);
+
+    /**
      * 声明一个缓存容器
      */
     private Map<String,Object> CACHE_CONTAINER = new HashMap<>();
@@ -36,7 +43,7 @@ public class CacheAspect {
     private static final String POINTCUT_DEPT_UPDATE = "execution(* com.lzh.wms.sys.service.impl.DeptServiceImpl.updateById(..))";
     private static final String POINTCUT_DEPT_DELETE = "execution(* com.lzh.wms.sys.service.impl.DeptServiceImpl.removeById(..))";
 
-    private static final String CACHE_DEPT_PROFIX = "dept:";
+    private static final String CACHE_DEPT_PREFIX = "dept:";
 
     /**
      * 查询切入
@@ -49,12 +56,14 @@ public class CacheAspect {
         //取出第一个参数
         Integer arg = (Integer) joinPoint.getArgs()[0];
         //从缓存里面取
-        Object result1 = CACHE_CONTAINER.get(CACHE_DEPT_PROFIX + arg);
+        Object result1 = CACHE_CONTAINER.get(CACHE_DEPT_PREFIX + arg);
         if (result1 != null) {
+            log.info("从缓存里找到部门对象：" + CACHE_DEPT_PREFIX + arg);
             return result1;
         }else {
             Dept result2 = (Dept) joinPoint.proceed();
-            CACHE_CONTAINER.put(CACHE_DEPT_PROFIX+result2.getId(),result2);
+            CACHE_CONTAINER.put(CACHE_DEPT_PREFIX+result2.getId(),result2);
+            log.info("未从缓存里找到部门对象，查询数据库并放入缓存："+CACHE_DEPT_PREFIX+result2.getId());
             return result2;
         }
     }
@@ -68,27 +77,28 @@ public class CacheAspect {
     @Around(value = POINTCUT_DEPT_UPDATE)
     public Object cacheDeptUpdate(ProceedingJoinPoint joinPoint) throws Throwable {
         DeptVo deptVo = (DeptVo) joinPoint.getArgs()[0];
-        /*Boolean isSuccess = (Boolean) joinPoint.proceed();
+        Boolean isSuccess = (Boolean) joinPoint.proceed();
         if (isSuccess) {
-            Dept dept = (Dept) CACHE_CONTAINER.get(CACHE_DEPT_PROFIX + deptVo.getId());
+            Dept dept = (Dept) CACHE_CONTAINER.get(CACHE_DEPT_PREFIX + deptVo.getId());
             if (dept == null){
                 dept = new Dept();
-                BeanUtils.copyProperties(deptVo,dept);
-                CACHE_CONTAINER.put(CACHE_DEPT_PROFIX+dept.getId(),dept);
             }
+            BeanUtils.copyProperties(deptVo,dept);
+            CACHE_CONTAINER.put(CACHE_DEPT_PREFIX+dept.getId(),dept);
+            log.info("部门对象缓存已更新" + CACHE_DEPT_PREFIX + deptVo.getId());
         }
-        return isSuccess;*/
-        Dept dept = (Dept) CACHE_CONTAINER.get(CACHE_DEPT_PROFIX + deptVo.getId());
+        return isSuccess;
+        /*Dept dept = (Dept) CACHE_CONTAINER.get(CACHE_DEPT_PREFIX + deptVo.getId());
         Boolean isSuccess = false;
         if (dept==null){
             isSuccess = (Boolean) joinPoint.proceed();
             if (isSuccess){
                 dept = new Dept();
-                BeanUtils.copyProperties(deptVo,dept);
-                CACHE_CONTAINER.put(CACHE_DEPT_PROFIX+dept.getId(),dept);
             }
+             BeanUtils.copyProperties(deptVo,dept);
+             CACHE_CONTAINER.put(CACHE_DEPT_PREFIX+dept.getId(),dept);
         }
-        return isSuccess;
+        return isSuccess;*/
     }
 
     /**
@@ -104,7 +114,8 @@ public class CacheAspect {
         Boolean isSuccess = (Boolean) joinPoint.proceed();
         if (isSuccess) {
             //删除缓存
-            CACHE_CONTAINER.remove(CACHE_DEPT_PROFIX+id);
+            CACHE_CONTAINER.remove(CACHE_DEPT_PREFIX+id);
+            log.info("部门对象缓存已删除" + CACHE_DEPT_PREFIX + id);
         }
         return isSuccess;
     }
