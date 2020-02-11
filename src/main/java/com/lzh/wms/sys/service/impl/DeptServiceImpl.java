@@ -32,8 +32,13 @@ import java.util.List;
 public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements DeptService {
 
     @Override
-    public Dept getOne(Wrapper<Dept> queryWrapper) {
-        return super.getOne(queryWrapper);
+    public boolean save(Dept entity) {
+        return super.save(entity);
+    }
+
+    @Override
+    public Dept getById(Serializable id) {
+        return super.getById(id);
     }
 
     @Override
