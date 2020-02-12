@@ -90,6 +90,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">所属部门</label>
                 <div class="layui-input-inline">
+                    <input type="hidden" name="id">
                     <input type="hidden" name="deptid" id="deptid" lay-verify="required">
                     <ul id="deptTree"  class="dtree" data-id="0" ></ul>
                 </div>
@@ -352,15 +353,27 @@
                 type: 1,
                 content: $("#addOrUpdateDiv"),
                 area: ['800px', '600px'],
-                title: '用户修改',
+                title: '修改用户',
                 success: function () {
                     $("#dataForm")[0].reset();//应该可以不加
                     //装载数据
                     form.val("dataForm", data);
-                    //
+                    //选中所属部门 nodeId=data.deptid
                     dtree.dataInit("deptTree", data.deptid);
                     // 也可以在这里指定，第二个参数如果不填，则会自动返显当前选中的数据
                     var selectParam = dtree.selectVal("deptTree");
+
+                    //选中领导所属部门
+                    var leaderid = data.mgr;
+                    if (leaderid!=null && leaderid!=''){//todo 直属领导非必填便需要此判断
+                        $.get("/user/loadUserById",{id:leaderid},function (res) {
+                            var d = res.data;
+                            dtree.dataInit("leaderdeptTree", d.deptid);
+                            dtree.selectVal("leaderdeptTree");
+                            //根据用户领导id查询当前部门下面的领导用户
+                            searchLeader(d.deptid,1,leaderid);
+                        });
+                    }
                     url = "/user/updateUser";
                 }
             });
@@ -492,7 +505,8 @@
             var deptid = obj.param.nodeId;
             console.log(obj.param); // 点击当前节点传递的参数
             //根据部门id查询当前部门下面的领导用户
-            $.get("/user/loadUsersByDeptId",{deptid:deptid},function (result) {
+            searchLeader(deptid,0);
+            /*$.get("/user/loadUsersByDeptId",{deptid:deptid},function (result) {
                 var users = result.data;
                 var dom_mgr = $("#mgr");
                 var html = "<option value=\"0\">请选择直属领导</option>";
@@ -502,7 +516,7 @@
                 dom_mgr.html(html);
                 //重新渲染
                 form.render("select");
-            });
+            });*/
         });
 
         //监听用户名的失去焦点事件
@@ -511,7 +525,28 @@
             $.get("/user/changChineseToPinYin",{username: username},function (result) {
                 $("#loginname").val(result.value);
             })
-        })
+        });
+
+        /**
+         * 弹出层选中领导部门后查询该部门下的领导用户的通用方法
+         */
+        var searchLeader = function (deptid,check,leaderid) {
+            $.get("/user/loadUsersByDeptId",{deptid:deptid},function (result) {
+                var users = result.data;
+                var dom_mgr = $("#mgr");
+                var html = "<option value=\"0\">请选择直属领导</option>";
+                $.each(users,function (index,item) {
+                    html += "<option value=\""+item.id+"\">"+item.name+"</option>";
+                });
+                dom_mgr.html(html);
+                if (check == 1) {
+                    //选中
+                    dom_mgr.val(leaderid);
+                }
+                //重新渲染
+                form.render("select");
+            });
+        }
 
     });
 

@@ -61,7 +61,7 @@ public class UserController {
                 user.setDeptname(dept.getTitle());
             }
             Integer mgr = user.getMgr();
-            if (mgr != null) {
+            if (mgr != null && mgr != 0) {//若前端没选直属领导则mgr默认传进去的值是0
                 User userManager = userService.getById(mgr);
                 user.setLeadername(userManager.getName());
             }
@@ -134,6 +134,33 @@ public class UserController {
         }catch (Exception e){
             e.printStackTrace();
             return ResultObj.ADD_ERROR;
+        }
+    }
+
+    /**
+     * 根据用户领导id查询当前部门下面的领导用户
+     * @param id
+     * @return
+     */
+    @RequestMapping("/loadUserById")
+    public DataGridView loadUserById(Integer id){
+        User user = userService.getById(id);
+        return new DataGridView(user);
+    }
+
+    /**
+     * 修改用户
+     * @param userVo
+     * @return
+     */
+    @RequestMapping("updateUser")
+    public ResultObj updateUser(UserVo userVo){
+        try {
+            userService.updateById(userVo);
+            return ResultObj.UPDATE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.UPDATE_ERROR;
         }
     }
 
