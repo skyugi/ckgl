@@ -234,7 +234,7 @@
                 , {field: 'sex', title: '性别', align: 'center', width: '80',templet:function (data) {
                         return data.sex==1?'<font color="">男<font>':'<font color="">女<font>';
                     }}
-                , {field: 'deptname', title: '用户名称', align: 'center', width: '100'}
+                , {field: 'deptname', title: '部门名称', align: 'center', width: '100'}
                 , {field: 'leadername', title: '直属领导', align: 'center', width: '100'}
                 , {field: 'address', title: '用户地址', align: 'center', edit: 'text', width: '100'}
                 , {field: 'remark', title: '用户备注', align: 'center', width: '100'}
@@ -440,11 +440,12 @@
          */
         function deleteUser(data) {
             // console.log(data);
-            layer.confirm('你确定要删除【' + data.title + '】这条用户吗', {icon: 3, title: '提示'}, function (index) {
+            layer.confirm('你确定要删除【' + data.name + '】这个用户吗', {icon: 3, title: '提示'}, function (index) {
                 // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                 layer.close(index);
                 //向服务端发送删除指令
-                $.post("/user/deleteUser", {id: data.id}, function (res) {
+                // $.post("/user/deleteUser", {id: data.id}, function (res) {
+                $.post("/user/deleteUser/"+data.id, function (res) {
                     if (res.code == 200) {
                         tableInit.reload();
                        /* //刷新用户树

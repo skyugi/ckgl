@@ -17,6 +17,7 @@ import com.lzh.wms.sys.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -161,6 +162,22 @@ public class UserController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResultObj.UPDATE_ERROR;
+        }
+    }
+
+    /**
+     * 删除用户--restful风格
+     * @param id
+     * @return
+     */
+    @RequestMapping("deleteUser/{id}")
+    public ResultObj deleteUser(@PathVariable("id") Integer id){
+        try {
+            userService.removeById(id);
+            return ResultObj.DELETE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.DELETE_ERROR;
         }
     }
 
