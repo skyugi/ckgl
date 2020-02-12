@@ -1,5 +1,8 @@
 #配置数据源的属性
 spring:
+  devtools:
+    restart:
+      enabled: false
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
