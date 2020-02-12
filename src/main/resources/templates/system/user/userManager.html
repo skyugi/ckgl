@@ -160,11 +160,19 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">入职时间</label>
+                <div class="layui-input-inline">
+                    <input type="tel" name="hiredate" id="hiredate" readonly="readonly" placeholder="yyyy-MM-dd HH:mm:ss" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
             <div class="layui-input-block" style="text-align: center">
                 <button type="button" lay-submit="" lay-filter="doSubmit" id="doSubmit" class="layui-btn layui-btn-sm">
                     <span class="layui-icon layui-icon-add-1"></span>提交
                 </button>
-                <button type="reset" class="layui-btn layui-btn-sm layui-btn-normal"><span
+                <button type="reset" onclick="javascript:document.getElementById('deptid').value='';" class="layui-btn layui-btn-sm layui-btn-normal"><span
                         class="layui-icon layui-icon-refresh-1"></span>重置
                 </button>
             </div>
@@ -197,12 +205,19 @@
 
     layui.extend({
         dtree: '/resources/layui_ext/dtree/dtree'   // {/}的意思即代表采用自有路径，即不跟随 base 路径
-    }).use(['jquery', 'form', 'table', 'layer', 'dtree'], function () {
+    }).use(['jquery', 'form', 'table', 'layer', 'dtree','laydate'], function () {
         var $ = layui.jquery;
         var form = layui.form;
         var table = layui.table;
         var layer = layui.layer;
         var dtree = layui.dtree;
+        var laydate = layui.laydate;
+
+        //初始化时间选择器
+        laydate.render({
+            elem:'#hiredate',
+            type:'datetime'
+        });
 
         //加载数据表格数据
         tableInit = table.render({
@@ -317,6 +332,10 @@
                     //上面一句没有把deptid置为空
                     $("#deptid").val("");
                     url = "/user/addUser";
+                    var html = "<option value=\"0\">请选择直属领导</option>";
+                    $("#mgr").html(html);
+                    form.render("select");
+                    //初始化排序码
                     $.get("/user/getUserMaxOrderNum",function (result) {
                         $("#ordernum").val(result.value);
                     });
@@ -441,6 +460,58 @@
             $("#search_deptid").val(obj.param.nodeId);
             console.log(obj.param); // 点击当前节点传递的参数
         });
+
+        //初始化添加弹出层所属部门的下拉树
+        var deptTree = dtree.renderSelect({
+            elem: "#deptTree",
+            width: "100%", // 指定树的宽度
+            url: "/dept/loadDeptManagerLeftTreeJson",
+            dataStyle: "layuiStyle",  //使用layui风格的数据格式
+            dataFormat: "list",  //配置data的风格为list
+            response:{message:"msg",statusCode:0}  //修改response中返回数据的定义
+        });
+
+        //监听节点点击
+        dtree.on("node('deptTree')" ,function(obj){
+            $("#deptid").val(obj.param.nodeId);
+            console.log(obj.param); // 点击当前节点传递的参数
+        });
+
+        //初始化添加弹出层领导部门的下拉树
+        var search_deptTree = dtree.renderSelect({
+            elem: "#leaderdeptTree",
+            width: "100%", // 指定树的宽度
+            url: "/dept/loadDeptManagerLeftTreeJson",
+            dataStyle: "layuiStyle",  //使用layui风格的数据格式
+            dataFormat: "list",  //配置data的风格为list
+            response:{message:"msg",statusCode:0}  //修改response中返回数据的定义
+        });
+
+        //监听节点点击
+        dtree.on("node('leaderdeptTree')" ,function(obj){
+            var deptid = obj.param.nodeId;
+            console.log(obj.param); // 点击当前节点传递的参数
+            //根据部门id查询当前部门下面的领导用户
+            $.get("/user/loadUsersByDeptId",{deptid:deptid},function (result) {
+                var users = result.data;
+                var dom_mgr = $("#mgr");
+                var html = "<option value=\"0\">请选择直属领导</option>";
+                $.each(users,function (index,item) {
+                    html += "<option value=\""+item.id+"\">"+item.name+"</option>";
+                });
+                dom_mgr.html(html);
+                //重新渲染
+                form.render("select");
+            });
+        });
+
+        //监听用户名的失去焦点事件
+        $("#username").on("blur",function () {
+            var username = $(this).val();//将this转换为jquery对象
+            $.get("/user/changChineseToPinYin",{username: username},function (result) {
+                $("#loginname").val(result.value);
+            })
+        })
 
     });
 

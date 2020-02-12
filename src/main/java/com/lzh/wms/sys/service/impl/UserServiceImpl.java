@@ -56,4 +56,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper.eq(userVo.getDeptid()!=null, "deptid",userVo.getDeptid());
         return queryWrapper;
     }
+
+    @Override
+    public QueryWrapper getDeptMaxOrderNum() {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.orderByDesc("ordernum");
+        return queryWrapper;
+    }
 }

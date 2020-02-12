@@ -23,4 +23,10 @@ public interface UserService extends IService<User> {
      * @return
      */
     QueryWrapper loadAllUser(IPage<User> page, UserVo userVo);
+
+    /**
+     * 返回最大排序码
+     * @return
+     */
+    QueryWrapper getDeptMaxOrderNum();
 }
