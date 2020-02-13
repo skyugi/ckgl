@@ -96,7 +96,7 @@ public class CacheAspect {
      */
     @Around(value = POINTCUT_DEPT_UPDATE)
     public Object cacheDeptUpdate(ProceedingJoinPoint joinPoint) throws Throwable {
-        DeptVo deptVo = (DeptVo) joinPoint.getArgs()[0];
+        Dept deptVo = (Dept) joinPoint.getArgs()[0];
         Boolean isSuccess = (Boolean) joinPoint.proceed();
         if (isSuccess) {
             Dept dept = (Dept) CACHE_CONTAINER.get(CACHE_DEPT_PREFIX + deptVo.getId());
@@ -140,7 +140,7 @@ public class CacheAspect {
     private static final String CACHE_USER_PREFIX = "user:";
 
     /**
-     * 用户添加迁入
+     * 用户添加切入
      * @param joinPoint
      * @return
      * @throws Throwable
