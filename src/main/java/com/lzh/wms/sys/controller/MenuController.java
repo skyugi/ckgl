@@ -45,11 +45,10 @@ public class MenuController {
             list = permissionService.list(queryWrapper);
         }
 //        System.out.println(list);
-        /**
-         * 构造层级关系,两级菜单
-         */
-        List<TreeNode> list1 = new ArrayList<>();
 
+         //构造层级关系,两级菜单
+        List<TreeNode> assembledTreeNodeList = new ArrayList<>();
+        /*List<TreeNode> list1 = new ArrayList<>();
         for (Permission permission : list) {
             if (permission.getPid() == 0 || permission.getPid() != 1) {
                 continue;
@@ -72,7 +71,9 @@ public class MenuController {
         }
 
         System.out.println(new DataGridView(list));
-        return new DataGridView(list1);
+        return new DataGridView(list1);*/
+        assembledTreeNodeList = TreeBuilderUtils.assembleTreeNode(list, assembledTreeNodeList);
+        return new DataGridView(assembledTreeNodeList);
     }
 
     /**********************菜单管理开始******************************/
