@@ -5,6 +5,7 @@ import com.lzh.wms.sys.domain.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -37,4 +38,19 @@ public interface RoleService extends IService<Role> {
      * @param pids
      */
     void saveRolePermission(Integer rid, Integer[] pids);
+
+    /**
+     * 根据用户id查询当前用户拥有的所有的角色id
+     * @param id
+     * @return
+     */
+    List<Integer> queryIdsOfRoleBelongToUserByUid(Integer id);
+
+    /**
+     * 组装map对象，提供前端数据表格选中所需字段LAY_CHECKED,true代表选中
+     * @param listMaps
+     * @param currentUserRoleIds
+     * @return
+     */
+    List<Map<String, Object>> assembleListMaps(List<Map<String, Object>> listMaps, List<Integer> currentUserRoleIds);
 }

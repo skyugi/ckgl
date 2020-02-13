@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -98,5 +99,31 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                 this.getBaseMapper().saveRolePermission(rid,pId); //todo 了解mybatis xml批处理
             }
         }
+    }
+
+    @Override
+    public List<Integer> queryIdsOfRoleBelongToUserByUid(Integer id) {
+        return this.getBaseMapper().queryIdsOfRoleBelongToUserByUid(id);
+    }
+
+    @Override
+    public List<Map<String, Object>> assembleListMaps(List<Map<String, Object>> listMaps, List<Integer> currentUserRoleIds) {
+        //fixme
+        if (listMaps!=null&&listMaps.size()>0){
+            for (Map<String, Object> map : listMaps) {
+                if (map != null && map.get("id") != null) {
+                    if (currentUserRoleIds!=null&&currentUserRoleIds.size()>0){
+                        for (Integer currentUserRoleId : currentUserRoleIds) {
+                            if (currentUserRoleId != null) {
+                                if (currentUserRoleId.equals(map.get("id"))){
+                                    map.put("LAY_CHECKED",true);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return listMaps;
     }
 }

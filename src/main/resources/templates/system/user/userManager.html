@@ -311,7 +311,7 @@
                     resetPwd(data);
                     break;
                 case 'selectRole':
-                    selectRole(data);
+                    openSelectRoleLayer(data);
                     break;
             }
         });
@@ -460,8 +460,9 @@
         }
 
         /**
-        * 重置密码
-        */
+         * 重置密码
+         * @param data
+         */
         function resetPwd(data){
             layer.confirm('你确定要重置【' + data.name + '】这个用户的密码吗', {icon: 3, title: '提示'}, function (index) {
                 layer.close(index);
@@ -471,6 +472,62 @@
                     layer.msg(res.msg);
                 });
                 layer.close(index);
+            });
+        }
+
+        /**
+         * 打开分配角色的弹出层
+         * @param data
+         */
+        function openSelectRoleLayer(data) {
+            mainIndex = layer.open({
+                type:1,
+                content:$("#selectUserRoleDiv"),
+                area:['600px','520px'],
+                title:'分配【'+data.name+'】的权限',
+                btnAlign: 'c',
+                btn: ['<span class="layui-icon">&#xe605;确认分配</span>', '<span class="layui-icon">&#x1006;关闭窗口</span>']
+                ,yes: function(index, layero){
+                    //按钮【按钮一】的回调
+                    var checkStatus = table.checkStatus('roleTable'); //idTest 即为基础参数 id 对应的值
+                    console.log(checkStatus.data) //获取选中行的数据
+                    var params = "uid=" + data.id;
+                    $.each(checkStatus.data,function (index,item) {
+                        params += "&rids=" + item.id;
+                    });
+                    $.post("/user/saveUserRole",params,function (res) {//todo ajax复习
+                        layer.msg(res.msg);
+                    })
+                }
+                ,btn2: function(index, layero){
+                    //按钮【按钮二】的回调
+                    //return false 开启该代码可禁止点击该按钮关闭
+                },
+                success:function () {
+                    //初始化角色列表
+                    initRoleTable(data);
+                }
+            });
+        }
+
+        /**
+         * 初始化角色列表
+         * @param data
+         */
+        function initRoleTable(data) {
+            var tableInit = table.render({
+                elem: '#roleTable'
+                ,url:'/user/initRoleByUserId'
+                ,where:{
+                    id:data.id
+                }
+                ,cols: [ [
+                    {type: 'checkbox', fixed: 'left'}
+                    ,{field:'id', title:'ID', align: 'center', unresize: true, sort: true}
+                    ,{field:'name', title:'角色名称', align: 'center', edit: 'text'}
+                    ,{field:'remark', title:'角色备注', align: 'center', edit: 'text'}
+                ] ]
+                ,page: true
             });
         }
         

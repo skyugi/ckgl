@@ -10,8 +10,10 @@ import com.lzh.wms.sys.common.DataGridView;
 import com.lzh.wms.sys.common.PinyinUtils;
 import com.lzh.wms.sys.common.ResultObj;
 import com.lzh.wms.sys.domain.Dept;
+import com.lzh.wms.sys.domain.Role;
 import com.lzh.wms.sys.domain.User;
 import com.lzh.wms.sys.service.DeptService;
+import com.lzh.wms.sys.service.RoleService;
 import com.lzh.wms.sys.service.UserService;
 import com.lzh.wms.sys.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
@@ -42,6 +44,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private DeptService deptService;
+    @Autowired
+    private RoleService roleService;
 
     /**
      * 用户查询：全查询、模糊查询
@@ -199,6 +203,48 @@ public class UserController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResultObj.RESET_ERROR;
+        }
+    }
+
+    /**
+     * 根据用户id查询其角色并选中
+     * @param id
+     * @return
+     */
+    @RequestMapping("initRoleByUserId")
+    public DataGridView initRoleByUserId(Integer id){
+        //1.查询所有可用的角色
+        QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("available",Constast.AVAILABLE_TRUE);
+        List<Role> testList = roleService.list(queryWrapper);
+        System.out.println("-----------------------------------------------------------------list里role对象-------------------------------------------------------------------------");
+        System.out.println(testList);
+        System.out.println("-----------------------------------------------------------------list里role对象-------------------------------------------------------------------------");
+        List<Map<String, Object>> listMaps = roleService.listMaps(queryWrapper);
+        System.out.println("-----------------------------------------------------------------list里map对象-------------------------------------------------------------------------");
+        System.out.println(listMaps);
+        System.out.println("-----------------------------------------------------------------list里map对象-------------------------------------------------------------------------");
+        //2.查询当前用户拥有的角色id集合
+        List<Integer> currentUserRoleIds = roleService.queryIdsOfRoleBelongToUserByUid(id);
+//        "LAY_CHECKED": true 则数据表格选中
+        List<Map<String,Object>> assembledListMaps = roleService.assembleListMaps(listMaps,currentUserRoleIds);
+        return new DataGridView((long) assembledListMaps.size(),assembledListMaps);
+    }
+
+    /**
+     * 为用户分配角色，保存用户和角色的关系
+     * @param uid
+     * @param rids
+     * @return
+     */
+    @RequestMapping("saveUserRole")
+    public ResultObj saveUserRole(Integer uid, Integer[] rids){
+        try {
+            userService.saveUserRole(uid,rids);
+            return ResultObj.DISPATCH_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.DISPATCH_ERROR;
         }
     }
 

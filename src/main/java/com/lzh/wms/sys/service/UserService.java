@@ -29,4 +29,11 @@ public interface UserService extends IService<User> {
      * @return
      */
     QueryWrapper getDeptMaxOrderNum();
+
+    /**
+     * 为用户分配角色，保存用户和角色的关系
+     * @param uid
+     * @param rids
+     */
+    void saveUserRole(Integer uid, Integer[] rids);
 }

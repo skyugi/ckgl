@@ -71,4 +71,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper.orderByDesc("ordernum");
         return queryWrapper;
     }
+
+    @Override
+    public void saveUserRole(Integer uid, Integer[] rids) {
+        //先删除sys_role_user表的数据
+        roleMapper.deleteRoleUserByUid(uid);
+        if (rids!=null&&rids.length>0){
+            for (Integer rid : rids) {
+                roleMapper.saveUserRole(uid,rid);
+            }
+        }
+    }
 }
