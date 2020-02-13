@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
     <title>部门管理--右边列表</title>
@@ -61,15 +62,15 @@
 <div>
     <table class="layui-hide" id="deptTable" lay-filter="deptTable"></table>
     <div id="deptToolBar" style="display: none">
-        <button type="button" lay-event="addDept" class="layui-btn layui-btn-sm "><span
+        <button type="button" lay-event="addDept" shiro:hasPermission="dept:create" class="layui-btn layui-btn-sm "><span
                 class="layui-icon layui-icon-add-1"></span>添加部门
         </button>
     </div>
     <div id="deptRowBar" style="display: none">
-        <button type="button" lay-event="updateDept" class="layui-btn layui-btn-sm layui-btn-warm"><span
+        <button type="button" lay-event="updateDept" shiro:hasPermission="dept:update" class="layui-btn layui-btn-sm layui-btn-warm"><span
                 class="layui-icon layui-icon-edit"></span>修改
         </button>
-        <button type="button" lay-event="deleteDept" class="layui-btn layui-btn-sm layui-btn-danger"><span
+        <button type="button" lay-event="deleteDept" shiro:hasPermission="dept:delete" class="layui-btn layui-btn-sm layui-btn-danger"><span
                 class="layui-icon layui-icon-delete"></span>删除
         </button>
 
