@@ -326,7 +326,7 @@
             mainIndex = layer.open({
                 type: 1,
                 content: $("#addOrUpdateDiv"),
-                area: ['800px', '600px'],
+                area: ['700px', '600px'],
                 title: '添加用户',
                 success: function () {
                     $("#dataForm")[0].reset();
@@ -352,7 +352,7 @@
             mainIndex = layer.open({
                 type: 1,
                 content: $("#addOrUpdateDiv"),
-                area: ['800px', '600px'],
+                area: ['700px', '600px'],
                 title: '修改用户',
                 success: function () {
                     $("#dataForm")[0].reset();//应该可以不加
@@ -453,6 +453,21 @@
                         //刷新下拉树
                         selectUserTree.reload();*/
                     }
+                    layer.msg(res.msg);
+                });
+                layer.close(index);
+            });
+        }
+
+        /**
+        * 重置密码
+        */
+        function resetPwd(data){
+            layer.confirm('你确定要重置【' + data.name + '】这个用户的密码吗', {icon: 3, title: '提示'}, function (index) {
+                layer.close(index);
+                //向服务端发送删除指令
+                $.post("/user/resetPwd/"+data.id, function (res) {
+                    //不用刷新表格
                     layer.msg(res.msg);
                 });
                 layer.close(index);

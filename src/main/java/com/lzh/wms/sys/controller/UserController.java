@@ -181,5 +181,26 @@ public class UserController {
         }
     }
 
+    /**
+     * 重置密码--restful风格
+     * @param id
+     * @return
+     */
+    @RequestMapping("resetPwd/{id}")
+    public ResultObj resetPwd(@PathVariable("id") Integer id){
+        try {
+            User user = new User();
+            user.setId(id);
+            String salt = IdUtil.simpleUUID().toUpperCase();
+            user.setSalt(salt);//设置盐
+            user.setPwd(new Md5Hash(Constast.USER_DEFAULT_PWD,salt,2).toString());//设置密码
+            userService.updateById(user);
+            return ResultObj.RESET_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.RESET_ERROR;
+        }
+    }
+
 }
 
