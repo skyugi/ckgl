@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+//todo shiro加强
 public class UserRealm extends AuthorizingRealm {
 
     @Autowired
