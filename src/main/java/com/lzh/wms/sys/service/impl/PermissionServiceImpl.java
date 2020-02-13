@@ -5,11 +5,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.lzh.wms.sys.common.Constast;
 import com.lzh.wms.sys.common.DataGridView;
 import com.lzh.wms.sys.common.TreeNode;
-import com.lzh.wms.sys.domain.Dept;
 import com.lzh.wms.sys.domain.Permission;
 import com.lzh.wms.sys.mapper.PermissionMapper;
 import com.lzh.wms.sys.service.PermissionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lzh.wms.sys.service.RoleService;
 import com.lzh.wms.sys.vo.PermissionVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -88,5 +89,18 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.orderByDesc("ordernum");
         return queryWrapper;
+    }
+
+    @Override
+    public Set<Integer> queryPermissionIdsByRoleIds(List<Integer> currentUserRoleIds, RoleService roleService, Set<Integer> pids) {
+        if (currentUserRoleIds!=null&&currentUserRoleIds.size()>0){
+            for (Integer currentUserRoleId : currentUserRoleIds) {
+                if (currentUserRoleId!=null){
+                    List<Integer> permissionIds = roleService.queryIdsOfPermissionBelongToRoleByRid(currentUserRoleId);
+                    pids.addAll(permissionIds);
+                }
+            }
+        }
+        return pids;
     }
 }

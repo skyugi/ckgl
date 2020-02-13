@@ -7,6 +7,7 @@ import com.lzh.wms.sys.common.*;
 import com.lzh.wms.sys.domain.Permission;
 import com.lzh.wms.sys.domain.User;
 import com.lzh.wms.sys.service.PermissionService;
+import com.lzh.wms.sys.service.RoleService;
 import com.lzh.wms.sys.vo.PermissionVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,8 @@ public class MenuController {
 
     @Autowired
     private PermissionService permissionService;
+    @Autowired
+    private RoleService roleService;
 
     @RequestMapping("/loadIndexLeftMenuJson")
     public DataGridView loadIndexLeftMenuJson(PermissionVo permisssionvo) {
@@ -35,14 +38,26 @@ public class MenuController {
         queryWrapper.eq("type", Constast.TYPE_MENU);
         queryWrapper.eq("available", Constast.AVAILABLE_TRUE);
 
-        //根据用户角色查询菜单
+        //fixme 根据用户角色查询菜单 表现层还能再简化吗
         User user = (User) WebUtils.getSession().getAttribute("user");
         List<Permission> list = null;
         if (user.getType() == Constast.USER_TYPE_SUPER) {
             list = permissionService.list(queryWrapper);
-        } else {
+        } else {//todo 没用连表查询
             //根据用户id+角色+权限去查询
-            list = permissionService.list(queryWrapper);
+            Integer userId = user.getId();
+            //根据用户id查询角色id
+            List<Integer> currentUserRoleIds = roleService.queryIdsOfRoleBelongToUserByUid(userId);
+            //根据角色id查询菜单、权限id
+            Set<Integer> pids = new HashSet<>();
+            pids = permissionService.queryPermissionIdsByRoleIds(currentUserRoleIds,roleService,pids);
+            //根据菜单、权限id查询相应菜单、权限
+            if (pids.size()>0) {
+                queryWrapper.in("id",pids);
+                list = permissionService.list(queryWrapper);
+            }else {
+                list = new ArrayList<>();
+            }
         }
 //        System.out.println(list);
 

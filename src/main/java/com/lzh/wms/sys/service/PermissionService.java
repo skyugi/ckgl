@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.lzh.wms.sys.vo.PermissionVo;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -57,4 +58,12 @@ public interface PermissionService extends IService<Permission> {
      */
     QueryWrapper getPermissionMaxOrderNum();
 
+    /**
+     * 根据登录用户的角色查询其权限，返回权限id
+     * @return
+     * @param currentUserRoleIds
+     * @param roleService
+     * @param pids
+     */
+    Set<Integer> queryPermissionIdsByRoleIds(List<Integer> currentUserRoleIds, RoleService roleService, Set<Integer> pids);
 }
