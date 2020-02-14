@@ -23,7 +23,10 @@ public class NoticeVo extends Notice {
     private Integer page;
     private Integer limit;
 
-    private Integer[] ids;//接收多个id
+    /**
+     * 接收多个id
+     */
+    private Integer[] ids;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
