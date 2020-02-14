@@ -1,7 +1,7 @@
 package com.lzh.wms.business.cache;
 
 import com.lzh.wms.business.domain.Customer;
-import com.lzh.wms.system.cache.CacheAspect;
+import com.lzh.wms.business.domain.Provider;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -149,6 +149,122 @@ public class BusinessCacheAspect {
                 log.info("客户对象缓存已删除:------" + CACHE_CUSTOMER_PREFIX + id + "------");
             }
             log.info("---------------------批量删除客户对象缓存结束--------------------------------------------");
+        }
+        return isSuccess;
+    }
+
+    /**
+     * 声明切面表达式
+     */
+    private static final String POINTCUT_PROVIDER_ADD = "execution(* com.lzh.wms.business.service.impl.ProviderServiceImpl.save(..))";
+    private static final String POINTCUT_PROVIDER_GET = "execution(* com.lzh.wms.business.service.impl.ProviderServiceImpl.getById(..))";
+    private static final String POINTCUT_PROVIDER_UPDATE = "execution(* com.lzh.wms.business.service.impl.ProviderServiceImpl.updateById(..))";
+    private static final String POINTCUT_PROVIDER_DELETE = "execution(* com.lzh.wms.business.service.impl.ProviderServiceImpl.removeById(..))";
+    private static final String POINTCUT_PROVIDER_BATCH_DELETE = "execution(* com.lzh.wms.business.service.impl.ProviderServiceImpl.removeByIds(..))";
+
+    private static final String CACHE_PROVIDER_PREFIX = "provider:";
+
+    /**
+     * 供应商添加迁入
+     * @param joinPoint
+     * @return
+     * @throws Throwable
+     */
+    @Around(value = POINTCUT_PROVIDER_ADD)
+    public Object cacheProviderAdd(ProceedingJoinPoint joinPoint) throws Throwable {
+        //取出第一个参数
+        Provider provider = (Provider) joinPoint.getArgs()[0];
+        Boolean result = (Boolean) joinPoint.proceed();
+        if (result!=null && result){
+            CACHE_CONTAINER.put(CACHE_PROVIDER_PREFIX+provider.getId(),provider);
+            log.info("供应商添加成功，将供应商对象------：" + CACHE_PROVIDER_PREFIX+provider.getId() + "------放入缓存中");
+        }
+        return result;
+    }
+
+    /**
+     * 供应商查询切入
+     * @param joinPoint
+     * @return
+     * @throws Throwable
+     */
+    @Around(value = POINTCUT_PROVIDER_GET)
+    public Object cacheProviderGet(ProceedingJoinPoint joinPoint) throws Throwable {
+        //取出第一个参数
+        Integer arg = (Integer) joinPoint.getArgs()[0];
+        //从缓存里面取
+        Object result1 = CACHE_CONTAINER.get(CACHE_PROVIDER_PREFIX + arg);
+        if (result1 != null) {
+            log.info("从缓存里找到供应商对象------：" + CACHE_PROVIDER_PREFIX + arg + "------");
+            return result1;
+        }else {
+            Provider result2 = (Provider) joinPoint.proceed();
+            CACHE_CONTAINER.put(CACHE_PROVIDER_PREFIX+result2.getId(),result2);
+            log.info("未从缓存里找到供应商对象，查询数据库并放入缓存：------"+CACHE_PROVIDER_PREFIX+result2.getId() + "------");
+            return result2;
+        }
+    }
+
+    /**
+     * 供应商更新切入
+     * @param joinPoint
+     * @return
+     * @throws Throwable
+     */
+    @Around(value = POINTCUT_PROVIDER_UPDATE)
+    public Object cacheProviderUpdate(ProceedingJoinPoint joinPoint) throws Throwable {
+        Provider providerVo = (Provider) joinPoint.getArgs()[0];
+        Boolean isSuccess = (Boolean) joinPoint.proceed();
+        if (isSuccess) {
+            Provider provider = (Provider) CACHE_CONTAINER.get(CACHE_PROVIDER_PREFIX + providerVo.getId());
+            if (provider == null){
+                provider = new Provider();
+            }
+            BeanUtils.copyProperties(providerVo,provider);
+            CACHE_CONTAINER.put(CACHE_PROVIDER_PREFIX+provider.getId(),provider);
+            log.info("供应商对象缓存已更新：------" + CACHE_PROVIDER_PREFIX + providerVo.getId() + "------");
+        }
+        return isSuccess;
+    }
+
+    /**
+     * 供应商删除切入
+     * @param joinPoint
+     * @return
+     * @throws Throwable
+     */
+    @Around(value = POINTCUT_PROVIDER_DELETE)
+    public Object cacheProviderDelete(ProceedingJoinPoint joinPoint) throws Throwable {
+        //取出第一个参数
+        Integer id = (Integer) joinPoint.getArgs()[0];
+        Boolean isSuccess = (Boolean) joinPoint.proceed();
+        if (isSuccess) {
+            //删除缓存
+            CACHE_CONTAINER.remove(CACHE_PROVIDER_PREFIX+id);
+            log.info("供应商对象缓存已删除:------" + CACHE_PROVIDER_PREFIX + id + "------");
+        }
+        return isSuccess;
+    }
+
+    /**
+     * 供应商批量删除切入
+     * @param joinPoint
+     * @return
+     * @throws Throwable
+     */
+    @Around(value = POINTCUT_PROVIDER_BATCH_DELETE)
+    public Object cacheProviderBatchDelete(ProceedingJoinPoint joinPoint) throws Throwable {
+        //取出第一个参数
+        Collection<Serializable> idList = (Collection<Serializable>) joinPoint.getArgs()[0];
+        Boolean isSuccess = (Boolean) joinPoint.proceed();
+        if (isSuccess) {
+            for (Serializable id : idList) {
+                log.info("---------------------批量删除供应商对象缓存开始--------------------------------------------");
+                //删除缓存
+                CACHE_CONTAINER.remove(CACHE_PROVIDER_PREFIX+id);
+                log.info("供应商对象缓存已删除:------" + CACHE_PROVIDER_PREFIX + id + "------");
+            }
+            log.info("---------------------批量删除供应商对象缓存结束--------------------------------------------");
         }
         return isSuccess;
     }
