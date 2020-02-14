@@ -6,7 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-//@RestController
+/**
+ * @author lzh
+ */ //@RestController
 @SpringBootApplication
 @MapperScan(basePackages = {"com.lzh.wms.sys.mapper"})
 public class WmsApplication {
