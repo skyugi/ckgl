@@ -79,56 +79,89 @@
 <div style="display: none;padding: 10px" id="addOrUpdateDiv">
     <form action="" method="post" class="layui-form layui-form-pane" id="dataForm" lay-filter="dataForm">
         <div class="layui-form-item">
-            <label class="layui-form-label">父级客户</label>
-            <div class="layui-input-block">
-                <input type="hidden" name="pid" id="pid" lay-verify="required">
-                <ul id="parentCustomerTree"  class="dtree" data-id="0" ></ul>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">客户名称</label>
-            <div class="layui-input-block">
-                <input type="hidden" name="id" id="id">
-                <input type="text" name="customername" lay-verify="required" autocomplete="off" placeholder="请输入客户名称" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">客户地址</label>
-            <div class="layui-input-block">
-                <input type="text" name="phone" lay-verify="required"  autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">客户备注</label>
-            <div class="layui-input-block">
-                <textarea class="layui-textarea" name="connectionperson" id="content"></textarea>
-            </div>
-        </div>
-        <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">是否展开</label>
+                <label class="layui-form-label">客户名称</label>
                 <div class="layui-input-inline">
-                    <input type="radio" name="open" value="1" title="展开" checked="">
-                    <input type="radio" name="open" value="0" title="不展开">
+                    <input type="hidden" name="id">
+                    <input type="text" name="customername" lay-verify="required" autocomplete="off" placeholder="请输入客户名称" class="layui-input">
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">是否可用</label>
+                <label class="layui-form-label">公司电话</label>
                 <div class="layui-input-inline">
-                    <input type="radio" name="available" value="1" title="可用" checked="">
-                    <input type="radio" name="available" value="0" title="不可用" >
+                    <input type="hidden" name="id">
+                    <input type="text" name="telephone" lay-verify="required" autocomplete="off" placeholder="请输入公司电话" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">邮编</label>
+                <div class="layui-input-inline">
+                    <input type="hidden" name="id">
+                    <input type="text" name="zip"  autocomplete="off" placeholder="请输入客户邮编" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">公司地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="address" autocomplete="off" placeholder="请输入公司地址" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">联系人</label>
+                <div class="layui-input-inline">
+                    <input type="hidden" name="id">
+                    <input type="text" name="connectionperson" lay-verify="required" autocomplete="off" placeholder="请输入联系人" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">联系人电话</label>
+                <div class="layui-input-inline">
+                    <input type="hidden" name="id">
+                    <input type="text" name="phone" lay-verify="required" autocomplete="off" placeholder="请输入联系人电话" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">邮箱</label>
+                <div class="layui-input-inline">
+                    <input type="hidden" name="id">
+                    <input type="text" name="email" lay-verify="required" autocomplete="off" placeholder="请输入客户邮箱" class="layui-input">
                 </div>
             </div>
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">排序码</label>
-                <div class="layui-input-block">
-                    <input type="text" name="ordernum" id="ordernum" lay-verify="required|number" placeholder="请输入排序码[>0]"  autocomplete="off" class="layui-input">
+                <label class="layui-form-label">开户银行</label>
+                <div class="layui-input-inline">
+                    <input type="hidden" name="id">
+                    <input type="text" name="bank" lay-verify="required" autocomplete="off" placeholder="请输入开户银行" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">帐号</label>
+                <div class="layui-input-inline">
+                    <input type="hidden" name="id">
+                    <input type="text" name="account" lay-verify="required" autocomplete="off" placeholder="请输入客户帐号" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">传真</label>
+                <div class="layui-input-inline">
+                    <input type="hidden" name="id">
+                    <input type="text" name="fax" lay-verify="required" autocomplete="off" placeholder="请输入客户传真" class="layui-input">
                 </div>
             </div>
         </div>
-
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">是否有效</label>
+                <div class="layui-input-inline">
+                    <input type="radio" name="available" value="1" title="是" checked="">
+                    <input type="radio" name="available" value="0" title="否" >
+                </div>
+            </div>
+        </div>
         <div class="layui-form-item">
             <div class="layui-input-block" style="text-align: center">
                 <button type="button" lay-submit="" lay-filter="doSubmit" id="doSubmit" class="layui-btn layui-btn-sm">
@@ -186,8 +219,8 @@
                 ,{field:'account', title:'账号',align:'center',width:'180'}
                 ,{field:'email', title:'邮箱',align:'center',width:'150'}
                 ,{field:'fax', title:'传真',align:'center',width:'120'}
-                ,{field:'available', title:'是否可用',align:'center',width:'120',templet:function(d){
-                        return d.available==1?'<font color=blue>可用</font>':'<font color=red>不可用</font>';
+                ,{field:'available', title:'是否有效',align:'center',width:'120',templet:function(d){
+                        return d.available==1?'<font color=blue>是</font>':'<font color=red>否</font>';
                     }}
                 , {fixed: 'right', title: '操作', align: 'center', toolbar: '#customerRowBar', width: '200'}
             ] ]
@@ -229,10 +262,9 @@
             var checkStatus = table.checkStatus('customerTable');
             // alert(checkStatus);
             switch (obj.event) {
-                // case 'batchDeleteCustomer':
-                // layer.msg('批量删除');
-                // batchDeleteCustomer(checkStatus);
-                // break;
+                case 'batchDeleteCustomer':
+                batchDeleteCustomer(checkStatus);
+                break;
                 case 'addCustomer':
                     openAddCustomerLayer();
                     break;
@@ -266,16 +298,10 @@
                 type: 1,
                 content: $("#addOrUpdateDiv"),
                 area: ['800px', '600px'],
-                title: '客户发布',
+                title: '添加客户',
                 success: function () {
                     $("#dataForm")[0].reset();
-                    //上面一句没有把pid置为空
-                    $("#pid").val("");
                     url = "/customer/addCustomer";
-                    $.get("/customer/getCustomerMaxOrderNum",function (result) {
-                        $("#ordernum").val(result.value);
-                    });
-                    //TODO 存在：当点击修改有父节点的节点后，点击修改第一父节点时父节点显示上一步中节点的父节点的bug
                 }
             });
         }
@@ -293,10 +319,6 @@
                     $("#dataForm")[0].reset();//应该可以不加
                     //装载数据
                     form.val("dataForm", data);
-                    //
-                    dtree.dataInit("parentCustomerTree", data.pid);
-                    // 也可以在这里指定，第二个参数如果不填，则会自动返显当前选中的数据
-                    var selectParam = dtree.selectVal("parentCustomerTree");
                     url = "/customer/updateCustomer";
                 }
             });
@@ -310,10 +332,6 @@
                 // alert(JSON.stringify(data.field));
                 if (result.code == 200) {
                     tableInit.reload();
-                    //刷新客户树
-                    window.parent.left.customerTree.reload();
-                    //刷新下拉树
-                    selectCustomerTree.reload();
                 }
                 layer.msg(result.msg);
                 layer.close(mainIndex);
@@ -363,47 +381,52 @@
          */
         function deleteCustomer(data) {
             // console.log(data);
-            $.post("/customer/checkHasChildrenNode",{id: data.id},function (result) {
-                if (result.value){
-                    layer.msg("当前客户有下级客户，请先删除下级客户");
-                }else {
-                    layer.confirm('你确定要删除【' + data.title + '】这条客户吗', {icon: 3, title: '提示'}, function (index) {
-                        // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                        layer.close(index);
-                        //向服务端发送删除指令
-                        $.post("/customer/deleteCustomer", {id: data.id}, function (res) {
-                            if (res.code == 200) {
-                                tableInit.reload();
-                                //刷新客户树
-                                window.parent.left.customerTree.reload();
-                                //刷新下拉树
-                                selectCustomerTree.reload();
-                            }
-                            layer.msg(res.msg);
-                        });
-                        layer.close(index);
-                    });
-                }
+            layer.confirm('你确定要删除【' + data.customername + '】这个客户吗', {icon: 3, title: '提示'}, function (index) {
+                // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                layer.close(index);
+                //向服务端发送删除指令
+                $.post("/customer/deleteCustomer", {id: data.id}, function (res) {
+                    if (res.code == 200) {
+                        tableInit.reload();
+                    }
+                    layer.msg(res.msg);
+                });
+                layer.close(index);
             });
-
         }
-        
-        //初始化下拉树
-        var selectCustomerTree = dtree.renderSelect({
-            elem: "#parentCustomerTree",
-            width: "100%", // 指定树的宽度
-            url: "/customer/loadCustomerManagerLeftTreeJson",
-            dataStyle: "layuiStyle",  //使用layui风格的数据格式
-            dataFormat: "list",  //配置data的风格为list
-            response:{message:"msg",statusCode:0}  //修改response中返回数据的定义
-        });
 
-        //监听节点点击
-        dtree.on("node('parentCustomerTree')" ,function(obj){
-            $("#pid").val(obj.param.nodeId);
-            console.log(obj.param); // 点击当前节点传递的参数
-        });
-
+        /**
+         * 批量删除客户
+         * @param checkStatus
+         */
+        function batchDeleteCustomer(checkStatus) {
+            var length = checkStatus.data.length;
+            if (length > 0) {
+                layer.confirm("你确定要删除这些客户吗",{icon: 3, title: '提示'},function (index) {
+                    layer.close(index);
+                    //获取选中行的数据
+                    var data = checkStatus.data;
+                    var ids="";
+                    $.each(data,function (index,item) {
+                        if (index == 0){
+                            ids = "ids=" + item.id;
+                        }else {
+                            ids += "&ids=" + item.id;
+                        }
+                    });
+                    // alert(ids);
+                    //向服务端发送请求
+                    $.post("/customer/batchDeleteCustomer",ids,function (result) {
+                        if (result.code == 200){
+                            tableInit.reload();
+                        }
+                        layer.msg(result.msg);
+                    });
+                });
+            }else {
+                layer.msg("请至少选择一行数据");
+            }
+        }
     });
 
 </script>
