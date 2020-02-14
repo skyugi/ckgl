@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 //@RestController
 @SpringBootApplication
-@MapperScan(basePackages = {"com.lzh.wms.sys.mapper"})
+@MapperScan(basePackages = {"com.lzh.wms.system.mapper"})
 public class WmsApplication {
 
     public static void main(String[] args) {
