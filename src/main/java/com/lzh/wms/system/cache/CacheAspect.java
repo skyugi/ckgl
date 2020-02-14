@@ -38,10 +38,10 @@ public class CacheAspect {
     /**
      * 声明切面表达式
      */
-    private static final String POINTCUT_DEPT_ADD = "execution(* com.lzh.wms.sys.service.impl.DeptServiceImpl.save(..))";
-    private static final String POINTCUT_DEPT_GET = "execution(* com.lzh.wms.sys.service.impl.DeptServiceImpl.getById(..))";
-    private static final String POINTCUT_DEPT_UPDATE = "execution(* com.lzh.wms.sys.service.impl.DeptServiceImpl.updateById(..))";
-    private static final String POINTCUT_DEPT_DELETE = "execution(* com.lzh.wms.sys.service.impl.DeptServiceImpl.removeById(..))";
+    private static final String POINTCUT_DEPT_ADD = "execution(* com.lzh.wms.system.service.impl.DeptServiceImpl.save(..))";
+    private static final String POINTCUT_DEPT_GET = "execution(* com.lzh.wms.system.service.impl.DeptServiceImpl.getById(..))";
+    private static final String POINTCUT_DEPT_UPDATE = "execution(* com.lzh.wms.system.service.impl.DeptServiceImpl.updateById(..))";
+    private static final String POINTCUT_DEPT_DELETE = "execution(* com.lzh.wms.system.service.impl.DeptServiceImpl.removeById(..))";
 
     private static final String CACHE_DEPT_PREFIX = "dept:";
 
@@ -130,10 +130,10 @@ public class CacheAspect {
     /**
      * 声明切面表达式
      */
-    private static final String POINTCUT_USER_ADD = "execution(* com.lzh.wms.sys.service.impl.UserServiceImpl.save(..))";
-    private static final String POINTCUT_USER_GET = "execution(* com.lzh.wms.sys.service.impl.UserServiceImpl.getById(..))";
-    private static final String POINTCUT_USER_UPDATE = "execution(* com.lzh.wms.sys.service.impl.UserServiceImpl.updateById(..))";
-    private static final String POINTCUT_USER_DELETE = "execution(* com.lzh.wms.sys.service.impl.UserServiceImpl.removeById(..))";
+    private static final String POINTCUT_USER_ADD = "execution(* com.lzh.wms.system.service.impl.UserServiceImpl.save(..))";
+    private static final String POINTCUT_USER_GET = "execution(* com.lzh.wms.system.service.impl.UserServiceImpl.getById(..))";
+    private static final String POINTCUT_USER_UPDATE = "execution(* com.lzh.wms.system.service.impl.UserServiceImpl.updateById(..))";
+    private static final String POINTCUT_USER_DELETE = "execution(* com.lzh.wms.system.service.impl.UserServiceImpl.removeById(..))";
 
     private static final String CACHE_USER_PREFIX = "user:";
 

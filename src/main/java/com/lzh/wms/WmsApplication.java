@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author lzh
- */ //@RestController
+ */
+//@RestController
 @SpringBootApplication
 @MapperScan(basePackages = {"com.lzh.wms.sys.mapper"})
 public class WmsApplication {
