@@ -22,4 +22,10 @@ public class BusinessController {
     public String toProvider(){
         return "/business/provider/providerManager";
     }
+
+    @RequestMapping("/toGoodsManager")
+    public String toGoods(){
+        return "/business/goods/goodsManager";
+    }
+
 }

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lzh.wms.business.domain.Provider;
 import com.lzh.wms.business.service.ProviderService;
 import com.lzh.wms.business.vo.ProviderVo;
+import com.lzh.wms.system.common.Constast;
 import com.lzh.wms.system.common.DataGridView;
 import com.lzh.wms.system.common.ResultObj;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * <p>
@@ -116,6 +118,19 @@ public class ProviderController {
             e.printStackTrace();
             return ResultObj.DELETE_ERROR;
         }
+    }
+
+    /**
+     * 为商品查询提供查询所有有效的供应商
+     * @return
+     */
+    @RequestMapping("/loadAllProviderDropDownList")
+    public DataGridView loadAllProviderDropDownList(){
+        //组装查询条件
+        QueryWrapper<Provider> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("available", Constast.AVAILABLE_TRUE);
+        List<Provider> list = providerService.list(queryWrapper);
+        return new  DataGridView(list);
     }
     
 }

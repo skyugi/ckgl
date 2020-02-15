@@ -55,7 +55,7 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
     public DataGridView loadDeptManagerLeftTreeJson(DeptVo deptVo, List<Dept> list) {
         List<TreeNode> treeNodeList = new ArrayList<>();
         for (Dept dept : list) {
-            treeNodeList.add(new TreeNode(dept.getId(),dept.getPid(),dept.getTitle(),dept.getOpen()== Constast.OPEN_TRUE ?true:false));
+            treeNodeList.add(new TreeNode(dept.getId(),dept.getPid(),dept.getTitle(), dept.getOpen().equals(Constast.OPEN_TRUE) ?true:false));
         }
         return new DataGridView(treeNodeList);
     }
