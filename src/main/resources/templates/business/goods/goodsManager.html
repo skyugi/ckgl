@@ -101,98 +101,100 @@
 <!--添加和修改的弹出层开始-->
 <div style="display: none;padding: 10px" id="addOrUpdateDiv">
     <form action="" method="post" class="layui-form layui-form-pane" id="dataForm" lay-filter="dataForm" >
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">商品名称</label>
-                <div class="layui-input-inline">
-                    <input type="hidden" name="id">
-                    <input type="text" name="goodsname" lay-verify="required" autocomplete="off" placeholder="请输入商品名称" class="layui-input">
+        <div class="layui-col-md12 layui-col-xs12">
+            <div class="layui-row layui-col-space10">
+                <div class="layui-col-md9 layui-col-xs7">
+                    <div class="layui-form-item magt3">
+                        <label class="layui-form-label">供应商</label>
+                        <div class="layui-input-block">
+                            <select name="providerid" id="providerid">
+                                <option value="0">请选择供应商</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">商品名称</label>
+                        <div class="layui-input-block">
+                            <input type="hidden" name="id">
+                            <input type="text" class="layui-input" name="goodsname" lay-verify="required" placeholder="请输入商品名称">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">商品描述</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input" name="description" lay-verify="required" placeholder="请输入商品描述">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md3 layui-col-xs5">
+                    <div class="layui-upload-list thumbBox mag0 magt3">
+                        <input type="hidden" name="goodsimg" id="goodsimg" value="images/defaultgoodsimg.png">
+                        <img class="layui-upload-img thumbImg" src="/file/showImageByPath?path=images/defaultgoodsimg.png">
+                    </div>
                 </div>
             </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">公司电话</label>
-                <div class="layui-input-inline">
-                    <input type="hidden" name="id">
-                    <input type="text" name="telephone" lay-verify="required" autocomplete="off" placeholder="请输入公司电话" class="layui-input">
+            <div class="layui-form-item magb0">
+                <div class="layui-inline">
+                    <label class="layui-form-label">产地</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" name="produceplace" lay-verify="" placeholder="请输入商品产地">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">包装</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" name="goodspackage" lay-verify="" placeholder="请输入商品包装">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">规格</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" name="size" lay-verify="" placeholder="请输入商品规格">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">生产批号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" name="productcode" lay-verify="" placeholder="请输入商品生产批号">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">批准文号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" name="promitcode" lay-verify="" placeholder="请输入商品批准文号">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">销售价格</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" name="price" lay-verify="" placeholder="请输入商品销售价格">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">库存量</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" name="number" lay-verify="" placeholder="请输入商品库存量">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">库存预警值</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" name="dangernum" lay-verify="" placeholder="请输入预警值">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">是否有效</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="available" value="1" title="有效" checked="">
+                        <input type="radio" name="available" value="0" title="无效" >
+                    </div>
                 </div>
             </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">邮编</label>
-                <div class="layui-input-inline">
-                    <input type="hidden" name="id">
-                    <input type="text" name="zip"  autocomplete="off" placeholder="请输入商品邮编" class="layui-input">
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="text-align: center;">
+                    <button type="button" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="doSubmit" id="doSubmit" ><span class="layui-icon layui-icon-add-1"></span>提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary "><span class="layui-icon layui-icon-refresh-1"></span>重置</button>
                 </div>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">公司地址</label>
-            <div class="layui-input-block">
-                <input type="text" name="address" autocomplete="off" placeholder="请输入公司地址" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">联系人</label>
-                <div class="layui-input-inline">
-                    <input type="hidden" name="id">
-                    <input type="text" name="connectionperson" lay-verify="required" autocomplete="off" placeholder="请输入联系人" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">联系人电话</label>
-                <div class="layui-input-inline">
-                    <input type="hidden" name="id">
-                    <input type="text" name="phone" lay-verify="required" autocomplete="off" placeholder="请输入联系人电话" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">邮箱</label>
-                <div class="layui-input-inline">
-                    <input type="hidden" name="id">
-                    <input type="text" name="email" lay-verify="required" autocomplete="off" placeholder="请输入商品邮箱" class="layui-input">
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">开户银行</label>
-                <div class="layui-input-inline">
-                    <input type="hidden" name="id">
-                    <input type="text" name="bank" lay-verify="required" autocomplete="off" placeholder="请输入开户银行" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">帐号</label>
-                <div class="layui-input-inline">
-                    <input type="hidden" name="id">
-                    <input type="text" name="account" lay-verify="required" autocomplete="off" placeholder="请输入商品帐号" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">传真</label>
-                <div class="layui-input-inline">
-                    <input type="hidden" name="id">
-                    <input type="text" name="fax" lay-verify="required" autocomplete="off" placeholder="请输入商品传真" class="layui-input">
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">是否有效</label>
-                <div class="layui-input-inline">
-                    <input type="radio" name="available" value="1" title="是" checked="">
-                    <input type="radio" name="available" value="0" title="否" >
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-input-block" style="text-align: center">
-                <button type="button" lay-submit="" lay-filter="doSubmit" id="doSubmit" class="layui-btn layui-btn-sm">
-                    <span class="layui-icon layui-icon-add-1"></span>提交
-                </button>
-                <button type="reset" class="layui-btn layui-btn-sm layui-btn-normal"><span
-                        class="layui-icon layui-icon-refresh-1"></span>重置
-                </button>
             </div>
         </div>
     </form>
@@ -216,11 +218,12 @@
         });
     }
 
-    layui.use(['jquery', 'form', 'table', 'layer'], function () {
+    layui.use(['jquery', 'form', 'table', 'layer', 'upload'], function () {
         var $ = layui.jquery;
         var form = layui.form;
         var table = layui.table;
         var layer = layui.layer;
+        var upload = layui.upload;
 
         //加载数据表格数据
         tableInit = table.render({
@@ -334,11 +337,21 @@
             mainIndex = layer.open({
                 type: 1,
                 content: $("#addOrUpdateDiv"),
-                area: ['1000px', '600px'],
+                area: ['800px', '600px'],
                 title: '添加商品',
                 success: function () {
                     $("#dataForm")[0].reset();
                     url = "/goods/addGoods";
+                    //加载查询条件供应商的下拉列表
+                    $.get("/provider/loadAllProviderDropDownList",function (res) {
+                        var data = res.data;
+                        var content = "<option value=\"0\">请选择供应商</option>";
+                        $.each(data,function (index,item) {
+                            content += "<option value=\""+item.id+"\">"+item.providername+"</option>"
+                        });
+                        $("#providerid").html(content);
+                        form.render("select");
+                    });
                 }
             });
         }
@@ -350,7 +363,7 @@
             mainIndex = layer.open({
                 type: 1,
                 content: $("#addOrUpdateDiv"),
-                area: ['1000px', '600px'],
+                area: ['800px', '600px'],
                 title: '商品修改',
                 success: function () {
                     $("#dataForm")[0].reset();//应该可以不加
@@ -360,6 +373,24 @@
                 }
             });
         }
+
+        /**
+         * 文件上传
+         */
+        //上传缩略图
+        upload.render({
+            elem: '.thumbBox',
+            url: '/file/uploadFile',
+            acceptMime: 'image/*',
+            field: 'mf',
+            method : "get",  //此处是为了演示之用，实际使用中请将此删除，默认用post方式提交
+            done: function(res, index, upload){
+                var  path = res.path;
+                alert(path);
+                $('.thumbImg').attr('src','/file/showImageByPath?path='+path);
+                $('.thumbBox').css("background","#fff");
+            }
+        });
 
         /**
          * 监听添加或修改商品的提交
