@@ -2,7 +2,7 @@ package com.lzh.wms.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.lzh.wms.system.common.Constast;
+import com.lzh.wms.system.common.Constant;
 import com.lzh.wms.system.common.DataGridView;
 import com.lzh.wms.system.common.TreeNode;
 import com.lzh.wms.system.domain.Dept;
@@ -55,7 +55,7 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
     public DataGridView loadDeptManagerLeftTreeJson(DeptVo deptVo, List<Dept> list) {
         List<TreeNode> treeNodeList = new ArrayList<>();
         for (Dept dept : list) {
-            treeNodeList.add(new TreeNode(dept.getId(),dept.getPid(),dept.getTitle(), dept.getOpen().equals(Constast.OPEN_TRUE) ?true:false));
+            treeNodeList.add(new TreeNode(dept.getId(),dept.getPid(),dept.getTitle(), dept.getOpen().equals(Constant.OPEN_TRUE) ?true:false));
         }
         return new DataGridView(treeNodeList);
     }

@@ -20,7 +20,7 @@ public class TreeBuilderUtils {
             }
             //一级菜单节点
             TreeNode treeNode = new TreeNode(permission.getId(), permission.getPid(),
-                    permission.getTitle(), permission.getIcon(), permission.getHref(), permission.getOpen() == Constast.OPEN_TRUE ? true : false);
+                    permission.getTitle(), permission.getIcon(), permission.getHref(), permission.getOpen() == Constant.OPEN_TRUE ? true : false);
             //创建children节点集合
             List<TreeNode> children = new ArrayList<>();
             for (Permission permission1 : list) {

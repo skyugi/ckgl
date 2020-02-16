@@ -2,7 +2,7 @@ package com.lzh.wms.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.lzh.wms.system.common.Constast;
+import com.lzh.wms.system.common.Constant;
 import com.lzh.wms.system.common.DataGridView;
 import com.lzh.wms.system.common.TreeNode;
 import com.lzh.wms.system.domain.Permission;
@@ -36,7 +36,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     public DataGridView loadMenuManagerLeftTreeJson(PermissionVo permissionVo, List<Permission> list) {
         List<TreeNode> treeNodeList = new ArrayList<>();
         for (Permission permission : list) {
-            treeNodeList.add(new TreeNode(permission.getId(),permission.getPid(),permission.getTitle(),permission.getOpen()== Constast.OPEN_TRUE ?true:false));
+            treeNodeList.add(new TreeNode(permission.getId(),permission.getPid(),permission.getTitle(),permission.getOpen()== Constant.OPEN_TRUE ?true:false));
         }
         return new DataGridView(treeNodeList);
     }
@@ -47,7 +47,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
         //点击左边的tree时查询当前节点及其子节点的数据
         queryWrapper.eq(permissionVo.getId()!=null,"id",permissionVo.getId()).or().eq(permissionVo.getId()!=null,"pid",permissionVo.getId());
-        queryWrapper.eq("type",Constast.TYPE_MENU);//通过sql WHERE (id = ? OR pid = ? AND type = ?)知这里必须放上面判断的下面 解决点击左侧树权限也会显示的bug
+        queryWrapper.eq("type", Constant.TYPE_MENU);//通过sql WHERE (id = ? OR pid = ? AND type = ?)知这里必须放上面判断的下面 解决点击左侧树权限也会显示的bug
         queryWrapper.like(StringUtils.isNotBlank(permissionVo.getTitle()), "title", permissionVo.getTitle());
         queryWrapper.orderByAsc("ordernum");
         return queryWrapper;
@@ -75,7 +75,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     public QueryWrapper loadAllPermission(IPage<Permission> page, PermissionVo permissionVo) {
         //组装查询条件
         QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("type",Constast.TYPE_PERMISSION);//只能查询权限
+        queryWrapper.eq("type", Constant.TYPE_PERMISSION);//只能查询权限
         queryWrapper.like(StringUtils.isNotBlank(permissionVo.getTitle()), "title", permissionVo.getTitle());
         queryWrapper.like(StringUtils.isNotBlank(permissionVo.getPercode()), "percode", permissionVo.getPercode());
         //点击左边的tree时查询当前节点及其子节点的数据

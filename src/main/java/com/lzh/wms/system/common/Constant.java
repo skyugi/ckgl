@@ -6,7 +6,7 @@ package com.lzh.wms.system.common;
  * @author lzh
  * @date 2020-01-04 22:53
  */
-public interface Constast {
+public interface Constant {
 
     /**
      * 状态码
@@ -38,4 +38,8 @@ public interface Constast {
      * 商品默认图片
      */
     String IMAGES_DEFAULTGOODSIMG_PNG = "images/defaultgoodsimg.png";
+    /**
+     * 临时图片后缀
+     */
+    String TEMP_IMAGE_SUFFIX = "_temp";
 }

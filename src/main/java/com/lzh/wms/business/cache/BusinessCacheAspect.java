@@ -1,6 +1,7 @@
 package com.lzh.wms.business.cache;
 
 import com.lzh.wms.business.domain.Customer;
+import com.lzh.wms.business.domain.Goods;
 import com.lzh.wms.business.domain.Provider;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -265,6 +266,99 @@ public class BusinessCacheAspect {
                 log.info("供应商对象缓存已删除:------" + CACHE_PROVIDER_PREFIX + id + "------");
             }
             log.info("---------------------批量删除供应商对象缓存结束--------------------------------------------");
+        }
+        return isSuccess;
+    }
+
+    /**
+     * 声明切面表达式
+     */
+    private static final String POINTCUT_GOODS_ADD = "execution(* com.lzh.wms.business.service.impl.GoodsServiceImpl.save(..))";
+    private static final String POINTCUT_GOODS_GET = "execution(* com.lzh.wms.business.service.impl.GoodsServiceImpl.getById(..))";
+    private static final String POINTCUT_GOODS_UPDATE = "execution(* com.lzh.wms.business.service.impl.GoodsServiceImpl.updateById(..))";
+    private static final String POINTCUT_GOODS_DELETE = "execution(* com.lzh.wms.business.service.impl.GoodsServiceImpl.removeById(..))";
+//    private static final String POINTCUT_GOODS_BATCH_DELETE = "execution(* com.lzh.wms.business.service.impl.GoodsServiceImpl.removeByIds(..))";
+
+    private static final String CACHE_GOODS_PREFIX = "goods:";
+
+    /**
+     * 商品添加迁入
+     * @param joinPoint
+     * @return
+     * @throws Throwable
+     */
+    @Around(value = POINTCUT_GOODS_ADD)
+    public Object cacheGoodsAdd(ProceedingJoinPoint joinPoint) throws Throwable {
+        //取出第一个参数
+        Goods goods = (Goods) joinPoint.getArgs()[0];
+        Boolean result = (Boolean) joinPoint.proceed();
+        if (result!=null && result){
+            CACHE_CONTAINER.put(CACHE_GOODS_PREFIX+goods.getId(),goods);
+            log.info("商品添加成功，将商品对象------：" + CACHE_GOODS_PREFIX+goods.getId() + "------放入缓存中");
+        }
+        return result;
+    }
+
+    /**
+     * 商品查询切入
+     * @param joinPoint
+     * @return
+     * @throws Throwable
+     */
+    @Around(value = POINTCUT_GOODS_GET)
+    public Object cacheGoodsGet(ProceedingJoinPoint joinPoint) throws Throwable {
+        //取出第一个参数
+        Integer arg = (Integer) joinPoint.getArgs()[0];
+        //从缓存里面取
+        Object result1 = CACHE_CONTAINER.get(CACHE_GOODS_PREFIX + arg);
+        if (result1 != null) {
+            log.info("从缓存里找到商品对象------：" + CACHE_GOODS_PREFIX + arg + "------");
+            return result1;
+        }else {
+            Goods result2 = (Goods) joinPoint.proceed();
+            CACHE_CONTAINER.put(CACHE_GOODS_PREFIX+result2.getId(),result2);
+            log.info("未从缓存里找到商品对象，查询数据库并放入缓存：------"+CACHE_GOODS_PREFIX+result2.getId() + "------");
+            return result2;
+        }
+    }
+
+    /**
+     * 商品更新切入
+     * @param joinPoint
+     * @return
+     * @throws Throwable
+     */
+    @Around(value = POINTCUT_GOODS_UPDATE)
+    public Object cacheGoodsUpdate(ProceedingJoinPoint joinPoint) throws Throwable {
+        Goods goodsVo = (Goods) joinPoint.getArgs()[0];
+        Boolean isSuccess = (Boolean) joinPoint.proceed();
+        if (isSuccess) {
+            Goods goods = (Goods) CACHE_CONTAINER.get(CACHE_GOODS_PREFIX + goodsVo.getId());
+            if (goods == null){
+                goods = new Goods();
+            }
+            BeanUtils.copyProperties(goodsVo,goods);
+            CACHE_CONTAINER.put(CACHE_GOODS_PREFIX+goods.getId(),goods);
+            log.info("商品对象缓存已更新：------" + CACHE_GOODS_PREFIX + goodsVo.getId() + "------");
+        }
+        return isSuccess;
+    }
+
+    /**
+     * 商品删除切入
+     * @param joinPoint
+     * @return
+     * @throws Throwable
+     */
+    @Around(value = POINTCUT_GOODS_DELETE)
+    public Object cacheGoodsDelete(ProceedingJoinPoint joinPoint) throws Throwable {
+        //取出第一个参数
+        Integer id = (Integer) joinPoint.getArgs()[0];
+        Boolean isSuccess = (Boolean) joinPoint.proceed();
+        if (isSuccess) {
+            //删除缓存
+            CACHE_CONTAINER.remove(CACHE_GOODS_PREFIX+id);
+            log.info("商品对象缓存已删除:------" + CACHE_GOODS_PREFIX + id + "------");
         }
         return isSuccess;
     }

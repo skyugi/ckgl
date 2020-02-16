@@ -2,7 +2,7 @@ package com.lzh.wms.system.realm;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lzh.wms.system.common.ActiverUser;
-import com.lzh.wms.system.common.Constast;
+import com.lzh.wms.system.common.Constant;
 import com.lzh.wms.system.domain.Permission;
 import com.lzh.wms.system.domain.User;
 import com.lzh.wms.system.service.PermissionService;
@@ -64,8 +64,8 @@ public class UserRealm extends AuthorizingRealm {
             //查询所有菜单
             QueryWrapper<Permission> qw = new QueryWrapper<>();
             //设置只能查询菜单
-            qw.eq("type", Constast.TYPE_PERMISSION);
-            queryWrapper.eq("available", Constast.AVAILABLE_TRUE);
+            qw.eq("type", Constant.TYPE_PERMISSION);
+            queryWrapper.eq("available", Constant.AVAILABLE_TRUE);
             //todo 没用连表查询
             //根据用户id+角色+权限去查询
             Integer userId = user.getId();
@@ -108,7 +108,7 @@ public class UserRealm extends AuthorizingRealm {
         User user = activerUser.getUser();
         List<String> permissions = activerUser.getPermissions();
         //包装类型之间的判断应该用equals
-        if (user.getType().equals(Constast.USER_TYPE_SUPER)){
+        if (user.getType().equals(Constant.USER_TYPE_SUPER)){
             authorizationInfo.addStringPermission("*:*");
         }else {
             if (permissions!=null&&permissions.size()>0){

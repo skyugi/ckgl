@@ -96,7 +96,7 @@ public class MyFileUtils {
      * @param originalGoodsimg
      */
     public static void removeFileByPath(String originalGoodsimg) {
-        if (!originalGoodsimg.equals(Constast.IMAGES_DEFAULTGOODSIMG_PNG)){
+        if (!originalGoodsimg.equals(Constant.IMAGES_DEFAULTGOODSIMG_PNG)){
             File file = new File(UPLOAD_PATH,originalGoodsimg);
             if (file.exists()){
                 file.delete();

@@ -4,7 +4,7 @@ package com.lzh.wms.system.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lzh.wms.system.common.Constast;
+import com.lzh.wms.system.common.Constant;
 import com.lzh.wms.system.common.DataGridView;
 import com.lzh.wms.system.common.ResultObj;
 import com.lzh.wms.system.domain.Permission;
@@ -71,7 +71,7 @@ public class PermissionController {
      */
     @RequestMapping("/addPermission")
     public ResultObj addPermission(PermissionVo permissionVo) {
-        permissionVo.setType(Constast.TYPE_PERMISSION);//设置添加类型为权限
+        permissionVo.setType(Constant.TYPE_PERMISSION);//设置添加类型为权限
         try {
             permissionService.save(permissionVo);
             return ResultObj.ADD_SUCCESS;

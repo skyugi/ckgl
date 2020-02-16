@@ -5,10 +5,12 @@ import com.lzh.wms.business.domain.Goods;
 import com.lzh.wms.business.mapper.GoodsMapper;
 import com.lzh.wms.business.service.GoodsService;
 import com.lzh.wms.business.vo.GoodsVo;
-import com.lzh.wms.system.common.Constast;
+import com.lzh.wms.system.common.Constant;
 import com.lzh.wms.system.common.MyFileUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -21,6 +23,26 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements GoodsService {
+
+    @Override
+    public boolean save(Goods entity) {
+        return super.save(entity);
+    }
+
+    @Override
+    public Goods getById(Serializable id) {
+        return super.getById(id);
+    }
+
+    @Override
+    public boolean updateById(Goods entity) {
+        return super.updateById(entity);
+    }
+
+    @Override
+    public boolean removeById(Serializable id) {
+        return super.removeById(id);
+    }
 
     @Override
     public GoodsVo changeImageNameBeforeAddGoods(GoodsVo goodsVo) {
@@ -36,7 +58,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     public GoodsVo judgeImageBeforeUpdateGoods(GoodsVo goodsVo, GoodsService goodsService) {
         //fixme 思考别的判段方法
         //修改过的话后缀一定有temp，修改过或者原来不是默认图片的进if
-        if (!(goodsVo.getGoodsimg()!=null&&goodsVo.getGoodsimg().equals(Constast.IMAGES_DEFAULTGOODSIMG_PNG))){
+        if (!(goodsVo.getGoodsimg()!=null&&goodsVo.getGoodsimg().equals(Constant.IMAGES_DEFAULTGOODSIMG_PNG))){
             //再判断是否是修改过的临时文件
             if (goodsVo.getGoodsimg().endsWith("_temp")){
                 //是-->去掉后缀temp

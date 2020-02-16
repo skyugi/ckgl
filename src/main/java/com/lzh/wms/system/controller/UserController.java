@@ -5,7 +5,7 @@ import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lzh.wms.system.common.Constast;
+import com.lzh.wms.system.common.Constant;
 import com.lzh.wms.system.common.DataGridView;
 import com.lzh.wms.system.common.PinyinUtils;
 import com.lzh.wms.system.common.ResultObj;
@@ -100,8 +100,8 @@ public class UserController {
     public DataGridView loadUsersByDeptId(Integer deptid){
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(deptid!=null,"deptid",deptid);
-        queryWrapper.eq("available", Constast.AVAILABLE_TRUE);
-        queryWrapper.eq("type",Constast.USER_TYPE_NORMAL);
+        queryWrapper.eq("available", Constant.AVAILABLE_TRUE);
+        queryWrapper.eq("type", Constant.USER_TYPE_NORMAL);
         List<User> list = userService.list(queryWrapper);
         return new DataGridView(list);
     }
@@ -130,10 +130,10 @@ public class UserController {
     @RequestMapping("/addUser")
     public ResultObj addUser(UserVo userVo){
         try {
-            userVo.setType(Constast.USER_TYPE_NORMAL);
+            userVo.setType(Constant.USER_TYPE_NORMAL);
             String salt = IdUtil.simpleUUID().toUpperCase();
             userVo.setSalt(salt);//设置盐
-            userVo.setPwd(new Md5Hash(Constast.USER_DEFAULT_PWD,salt,2).toString());//设置密码
+            userVo.setPwd(new Md5Hash(Constant.USER_DEFAULT_PWD,salt,2).toString());//设置密码
             userService.save(userVo);
             return ResultObj.ADD_SUCCESS;
         }catch (Exception e){
@@ -197,7 +197,7 @@ public class UserController {
             user.setId(id);
             String salt = IdUtil.simpleUUID().toUpperCase();
             user.setSalt(salt);//设置盐
-            user.setPwd(new Md5Hash(Constast.USER_DEFAULT_PWD,salt,2).toString());//设置密码
+            user.setPwd(new Md5Hash(Constant.USER_DEFAULT_PWD,salt,2).toString());//设置密码
             userService.updateById(user);
             return ResultObj.RESET_SUCCESS;
         } catch (Exception e) {
@@ -215,7 +215,7 @@ public class UserController {
     public DataGridView initRoleByUserId(Integer id){
         //1.查询所有可用的角色
         QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("available",Constast.AVAILABLE_TRUE);
+        queryWrapper.eq("available", Constant.AVAILABLE_TRUE);
         List<Role> testList = roleService.list(queryWrapper);
         System.out.println("-----------------------------------------------------------------list里role对象-------------------------------------------------------------------------");
         System.out.println(testList);

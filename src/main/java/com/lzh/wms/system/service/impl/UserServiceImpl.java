@@ -2,7 +2,7 @@ package com.lzh.wms.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.lzh.wms.system.common.Constast;
+import com.lzh.wms.system.common.Constant;
 import com.lzh.wms.system.domain.User;
 import com.lzh.wms.system.mapper.RoleMapper;
 import com.lzh.wms.system.mapper.UserMapper;
@@ -59,7 +59,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(StringUtils.isNotBlank(userVo.getName()), "loginname", userVo.getName()).or().eq(StringUtils.isNotBlank(userVo.getName()), "name", userVo.getName());
         queryWrapper.eq(StringUtils.isNotBlank(userVo.getAddress()), "address", userVo.getAddress());
-        queryWrapper.eq("type", Constast.USER_TYPE_NORMAL);//查询系统用户
+        queryWrapper.eq("type", Constant.USER_TYPE_NORMAL);//查询系统用户
         queryWrapper.eq(userVo.getDeptid()!=null, "deptid",userVo.getDeptid());
         return queryWrapper;
     }

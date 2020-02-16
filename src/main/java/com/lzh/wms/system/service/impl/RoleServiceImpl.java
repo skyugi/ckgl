@@ -1,7 +1,7 @@
 package com.lzh.wms.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.lzh.wms.system.common.Constast;
+import com.lzh.wms.system.common.Constant;
 import com.lzh.wms.system.common.TreeNode;
 import com.lzh.wms.system.domain.Permission;
 import com.lzh.wms.system.domain.Role;
@@ -53,7 +53,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     public List<TreeNode> initPermissionByRoleId(Integer roleId, RoleService roleService) {
         //查询所有可用的菜单和权限
         QueryWrapper<Permission> queryWrapper = new QueryWrapper();
-        queryWrapper.eq("available", Constast.AVAILABLE_TRUE);
+        queryWrapper.eq("available", Constant.AVAILABLE_TRUE);
         List<Permission> allAvailablePermissions = permissionService.list(queryWrapper);
         //根据角色ID查询当前角色拥有的权限和菜单//todo 目前不采用连表查询
         //1.根据角色id查询当前角色拥有的所有的权限或菜单id

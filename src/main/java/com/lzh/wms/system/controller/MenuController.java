@@ -35,13 +35,13 @@ public class MenuController {
         //查询所有菜单
         QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
         //设置只能查询菜单
-        queryWrapper.eq("type", Constast.TYPE_MENU);
-        queryWrapper.eq("available", Constast.AVAILABLE_TRUE);
+        queryWrapper.eq("type", Constant.TYPE_MENU);
+        queryWrapper.eq("available", Constant.AVAILABLE_TRUE);
 
         //fixme 根据用户角色查询菜单 表现层还能再简化吗
         User user = (User) WebUtils.getSession().getAttribute("user");
         List<Permission> list = null;
-        if (user.getType() == Constast.USER_TYPE_SUPER) {
+        if (user.getType() == Constant.USER_TYPE_SUPER) {
             list = permissionService.list(queryWrapper);
         } else {//todo 没用连表查询
             //根据用户id+角色+权限去查询
@@ -100,7 +100,7 @@ public class MenuController {
     @RequestMapping("/loadMenuManagerLeftTreeJson")
     public DataGridView loadMenuManagerLeftTreeJson(PermissionVo permissionVo){
         QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("type",Constast.TYPE_MENU);
+        queryWrapper.eq("type", Constant.TYPE_MENU);
         List<Permission> list = permissionService.list(queryWrapper);
         DataGridView dataGridView = permissionService.loadMenuManagerLeftTreeJson(permissionVo,list);
         return dataGridView;
@@ -143,7 +143,7 @@ public class MenuController {
      */
     @RequestMapping("/addMenu")
     public ResultObj addMenu(PermissionVo permissionVo) {
-        permissionVo.setType(Constast.TYPE_MENU);//设置添加类型为菜单
+        permissionVo.setType(Constant.TYPE_MENU);//设置添加类型为菜单
         try {
             permissionService.save(permissionVo);
             return ResultObj.ADD_SUCCESS;

@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lzh.wms.business.domain.Provider;
 import com.lzh.wms.business.service.ProviderService;
 import com.lzh.wms.business.vo.ProviderVo;
-import com.lzh.wms.system.common.Constast;
+import com.lzh.wms.system.common.Constant;
 import com.lzh.wms.system.common.DataGridView;
 import com.lzh.wms.system.common.ResultObj;
 import org.apache.commons.lang3.StringUtils;
@@ -128,7 +128,7 @@ public class ProviderController {
     public DataGridView loadAllProviderDropDownList(){
         //组装查询条件
         QueryWrapper<Provider> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("available", Constast.AVAILABLE_TRUE);
+        queryWrapper.eq("available", Constant.AVAILABLE_TRUE);
         List<Provider> list = providerService.list(queryWrapper);
         return new  DataGridView(list);
     }
