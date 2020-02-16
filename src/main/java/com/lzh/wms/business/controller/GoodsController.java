@@ -107,10 +107,10 @@ public class GoodsController {
      * @return
      */
     @RequestMapping("deleteGoods")
-    public ResultObj deleteGoods(Integer id, String goodsimage){
+    public ResultObj deleteGoods(Integer id, String goodsimg){
         try {
-            //删除原图片
-            MyFileUtils.removeFileByPath(goodsimage);
+            //如果商品图片不是默认图片则删除
+            MyFileUtils.removeFileByPath(goodsimg);
             goodsService.removeById(id);
             return ResultObj.DELETE_SUCCESS;
         } catch (Exception e) {
