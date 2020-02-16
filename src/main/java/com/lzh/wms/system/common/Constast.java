@@ -34,4 +34,8 @@ public interface Constast {
      * 用户默认密码
      */
     String USER_DEFAULT_PWD = "123456";
+    /**
+     * 商品默认图片
+     */
+    String IMAGES_DEFAULTGOODSIMG_PNG = "images/defaultgoodsimg.png";
 }

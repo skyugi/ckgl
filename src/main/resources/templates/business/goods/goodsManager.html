@@ -167,19 +167,19 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">销售价格</label>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input" name="price" lay-verify="" placeholder="请输入商品销售价格">
+                        <input type="text" class="layui-input" name="price" lay-verify="required|number" placeholder="请输入商品销售价格">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">库存量</label>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input" name="number" lay-verify="" placeholder="请输入商品库存量">
+                        <input type="text" class="layui-input" name="number" lay-verify="required|number" placeholder="请输入商品库存量">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">库存预警值</label>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input" name="dangernum" lay-verify="" placeholder="请输入预警值">
+                        <input type="text" class="layui-input" name="dangernum" lay-verify="required|number" placeholder="请输入预警值">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -205,19 +205,6 @@
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
 <script type="text/javascript">
     var tableInit;
-
-    //给其它页面刷新当前页面数据表格的方法
-    function reloadTable(id) {
-        tableInit.reload({
-            where:{
-                id:id
-            },
-            page:{//比如，当前数据表格在非第一页，点击左边的树节点，数据表格显示的是当前节点和其子节点的数据，如果这些数据只有一页，则显示不出数据
-                curr:1
-            }
-        });
-    }
-
     layui.use(['jquery', 'form', 'table', 'layer', 'upload'], function () {
         var $ = layui.jquery;
         var form = layui.form;
@@ -231,7 +218,7 @@
             , url: '/goods/loadAllGoods'
             , toolbar: '#goodsToolBar' //开启头部工具栏，并为其绑定左侧模板
             , title: '商品数据表'
-            , height: 'full-147'
+            , height: 'full-163'
             , cols: [ [
                 {field:'id', title:'ID',align:'center' ,width:'80'}
                 ,{field:'goodsname', title:'商品名称',align:'center',width:'150'}
@@ -352,6 +339,9 @@
                         $("#providerid").html(content);
                         form.render("select");
                     });
+                    //设置默认图片
+                    $('.thumbImg').attr('src','/file/showImageByPath?path=images/defaultgoodsimg.png');
+                    $("#goodsimg").val('images/defaultgoodsimg.png');
                 }
             });
         }
@@ -370,6 +360,21 @@
                     //装载数据
                     form.val("dataForm", data);
                     url = "/goods/updateGoods";
+                    //加载查询条件供应商的下拉列表
+                    $.get("/provider/loadAllProviderDropDownList",function (res) {
+                        var res_data = res.data;
+                        var content = "<option value=\"0\">请选择供应商</option>";
+                        $.each(res_data,function (index,item) {
+                            if (data.providerid==item.id){
+                                content += "<option value=\""+item.id+"\" selected >"+item.providername+"</option>"
+                            }else {
+                                content += "<option value=\""+item.id+"\">"+item.providername+"</option>"
+                            }
+                        });
+                        $("#providerid").html(content);
+                        form.render("select");
+                    });
+                    $('.thumbImg').attr('src','/file/showImageByPath?path='+data.goodsimg);
                 }
             });
         }
@@ -383,12 +388,14 @@
             url: '/file/uploadFile',
             acceptMime: 'image/*',
             field: 'mf',
-            method : "get",  //此处是为了演示之用，实际使用中请将此删除，默认用post方式提交
+            method : "post",  //此处是为了演示之用，实际使用中请将此删除，默认用post方式提交
             done: function(res, index, upload){
                 var  path = res.path;
                 alert(path);
                 $('.thumbImg').attr('src','/file/showImageByPath?path='+path);
                 $('.thumbBox').css("background","#fff");
+                //给隐藏域赋值
+                $("#goodsimg").val(path);
             }
         });
 
@@ -453,7 +460,7 @@
                 // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                 layer.close(index);
                 //向服务端发送删除指令
-                $.post("/goods/deleteGoods", {id: data.id}, function (res) {
+                $.post("/goods/deleteGoods", {id: data.id, goodsimg: data.goodsimg}, function (res) {
                     if (res.code == 200) {
                         tableInit.reload();
                     }

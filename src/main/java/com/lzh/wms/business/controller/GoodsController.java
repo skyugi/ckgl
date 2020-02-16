@@ -9,7 +9,9 @@ import com.lzh.wms.business.domain.Provider;
 import com.lzh.wms.business.service.GoodsService;
 import com.lzh.wms.business.service.ProviderService;
 import com.lzh.wms.business.vo.GoodsVo;
+import com.lzh.wms.system.common.Constast;
 import com.lzh.wms.system.common.DataGridView;
+import com.lzh.wms.system.common.MyFileUtils;
 import com.lzh.wms.system.common.ResultObj;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +75,8 @@ public class GoodsController {
     @RequestMapping("/addGoods")
     public ResultObj addGoods(GoodsVo goodsVo){
         try {
-            goodsService.save(goodsVo);
+           GoodsVo goodsVo1 = goodsService.changeImageNameBeforeAddGoods(goodsVo);
+            goodsService.save(goodsVo1);
             return ResultObj.ADD_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
@@ -89,7 +92,8 @@ public class GoodsController {
     @RequestMapping("/updateGoods")
     public ResultObj updateGoods(GoodsVo goodsVo){
         try {
-            goodsService.updateById(goodsVo);
+            GoodsVo goodsVo1 = goodsService.judgeImageBeforeUpdateGoods(goodsVo,goodsService);
+            goodsService.updateById(goodsVo1);
             return ResultObj.UPDATE_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
@@ -103,8 +107,10 @@ public class GoodsController {
      * @return
      */
     @RequestMapping("deleteGoods")
-    public ResultObj deleteGoods(Integer id){
+    public ResultObj deleteGoods(Integer id, String goodsimage){
         try {
+            //删除原图片
+            MyFileUtils.removeFileByPath(goodsimage);
             goodsService.removeById(id);
             return ResultObj.DELETE_SUCCESS;
         } catch (Exception e) {

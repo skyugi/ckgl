@@ -5,6 +5,7 @@ import com.lzh.wms.business.domain.Provider;
 import com.lzh.wms.business.mapper.ProviderMapper;
 import com.lzh.wms.business.service.ProviderService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -18,6 +19,7 @@ import java.util.Collection;
  * @since 2020-02-15
  */
 @Service
+@Transactional
 public class ProviderServiceImpl extends ServiceImpl<ProviderMapper, Provider> implements ProviderService {
 
     @Override

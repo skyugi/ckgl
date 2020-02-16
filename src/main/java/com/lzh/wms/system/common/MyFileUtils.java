@@ -76,4 +76,31 @@ public class MyFileUtils {
         }
         return null;
     }
+
+    /**
+     * 将_temp文件重命名去掉后缀_temp
+     * @param goodsimg
+     * @return
+     */
+    public static String renameTempFile(String goodsimg) {
+        File file = new File(UPLOAD_PATH,goodsimg);
+        String replacedName = goodsimg.replace("_temp", "");
+        if (file.exists()){
+            file.renameTo(new File(UPLOAD_PATH,replacedName));
+        }
+        return replacedName;
+    }
+
+    /**
+     * 删除原来商品图片
+     * @param originalGoodsimg
+     */
+    public static void removeFileByPath(String originalGoodsimg) {
+        if (!originalGoodsimg.equals(Constast.IMAGES_DEFAULTGOODSIMG_PNG)){
+            File file = new File(UPLOAD_PATH,originalGoodsimg);
+            if (file.exists()){
+                file.delete();
+            }
+        }
+    }
 }

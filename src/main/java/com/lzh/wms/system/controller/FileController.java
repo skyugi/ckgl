@@ -44,16 +44,16 @@ public class FileController {
             dirFile.mkdirs();
         }
         //6.构造文件对象
-        File file = new File(dirFile,newName);
+        File file = new File(dirFile,newName + "_temp");
         //7.将mf里的图片信息写入file
         try {
             mf.transferTo(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> map = new HashMap<>(16);
         //返回相对的路径
-        map.put("path",dirName+"/"+newName);
+        map.put("path",dirName+"/"+newName + "_temp");
         return map;
     }
 
