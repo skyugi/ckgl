@@ -9,6 +9,7 @@ import com.lzh.wms.business.domain.Provider;
 import com.lzh.wms.business.service.GoodsService;
 import com.lzh.wms.business.service.ProviderService;
 import com.lzh.wms.business.vo.GoodsVo;
+import com.lzh.wms.system.common.Constant;
 import com.lzh.wms.system.common.DataGridView;
 import com.lzh.wms.system.common.MyFileUtils;
 import com.lzh.wms.system.common.ResultObj;
@@ -113,6 +114,24 @@ public class GoodsController {
             e.printStackTrace();
             return ResultObj.DELETE_ERROR;
         }
+    }
+
+    /**
+     * 为商品进货查询提供查询所有商品
+     * @return
+     */
+    @RequestMapping("/loadAllGoodsDropDownList")
+    public DataGridView loadAllProviderDropDownList(){
+        //组装查询条件
+        QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("available", Constant.AVAILABLE_TRUE);
+        List<Goods> list = goodsService.list(queryWrapper);
+        //兼容前端显示，从缓存里面取，效率影响不大
+        for (Goods goods : list) {
+            Provider provider = providerService.getById(goods.getProviderid());
+            goods.setProvidername(provider.getProvidername());
+        }
+        return new  DataGridView(list);
     }
 
 }
