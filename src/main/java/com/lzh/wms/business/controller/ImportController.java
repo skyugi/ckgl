@@ -10,15 +10,20 @@ import com.lzh.wms.business.domain.Provider;
 import com.lzh.wms.business.service.GoodsService;
 import com.lzh.wms.business.service.ImportService;
 import com.lzh.wms.business.service.ProviderService;
+import com.lzh.wms.business.vo.GoodsVo;
 import com.lzh.wms.business.vo.ImportVo;
 import com.lzh.wms.business.vo.ProviderVo;
 import com.lzh.wms.system.common.DataGridView;
+import com.lzh.wms.system.common.ResultObj;
+import com.lzh.wms.system.common.WebUtils;
+import com.lzh.wms.system.domain.User;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -71,6 +76,41 @@ public class ImportController {
             }
         }
         return new  DataGridView(page.getTotal(),records);
+    }
+
+    /**
+     * 添加商品进货
+     * @param importVo
+     * @return
+     */
+    @RequestMapping("/addImport")
+    public ResultObj addImport(ImportVo importVo){
+        try {
+            importVo.setImporttime(new Date());
+            User user = (User) WebUtils.getSession().getAttribute("user");
+            importVo.setOperateperson(user.getName());
+            importService.save(importVo);
+            return ResultObj.ADD_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.ADD_ERROR;
+        }
+    }
+
+    /**
+     * 修改商品进货
+     * @param importVo
+     * @return
+     */
+    @RequestMapping("/updateImport")
+    public ResultObj updateImport(ImportVo importVo){
+        try {
+            importService.updateById(importVo);
+            return ResultObj.UPDATE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.UPDATE_ERROR;
+        }
     }
     
 }

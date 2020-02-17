@@ -95,7 +95,7 @@
         <button type="button" lay-event="deleteImport"  class="layui-btn layui-btn-sm layui-btn-danger"><span
                 class="layui-icon layui-icon-delete"></span>删除
         </button>
-        <button type="button" lay-event="back"  class="layui-btn layui-btn-sm layui-btn-normal"><span
+        <button type="button" lay-event="openBackLayer"  class="layui-btn layui-btn-sm layui-btn-normal"><span
                 class="layui-icon layui-icon-delete"></span>退货
         </button>
 
@@ -106,100 +106,61 @@
 <!--添加和修改的弹出层开始-->
 <div style="display: none;padding: 10px" id="addOrUpdateDiv">
     <form action="" method="post" class="layui-form layui-form-pane" id="dataForm" lay-filter="dataForm" >
-        <div class="layui-col-md12 layui-col-xs12">
-            <div class="layui-row layui-col-space10">
-                <div class="layui-col-md9 layui-col-xs7">
-                    <div class="layui-form-item magt3">
-                        <label class="layui-form-label">供应商</label>
-                        <div class="layui-input-block">
-                            <select name="providerid" id="providerid">
-                                <option value="0">请选择供应商</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">商品进货名称</label>
-                        <div class="layui-input-block">
-                            <input type="hidden" name="id">
-                            <input type="text" class="layui-input" name="importname" lay-verify="required" placeholder="请输入商品进货名称">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">商品进货描述</label>
-                        <div class="layui-input-block">
-                            <input type="text" class="layui-input" name="description" lay-verify="required" placeholder="请输入商品进货描述">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-col-md3 layui-col-xs5">
-                    <div class="layui-upload-list thumbBox mag0 magt3">
-                        <input type="hidden" name="importimg" id="importimg" value="images/defaultimportimg.png">
-                        <img class="layui-upload-img thumbImg" src="/file/showImageByPath?path=images/defaultimportimg.png">
-                    </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">供应商</label>
+                <div class="layui-input-inline">
+                    <select name="providerid" id="providerid" lay-filter="providerid">
+                        <option value="0">请选择供应商</option>
+                    </select>
                 </div>
             </div>
-            <div class="layui-form-item magb0">
-                <div class="layui-inline">
-                    <label class="layui-form-label">产地</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input" name="produceplace" lay-verify="" placeholder="请输入商品进货产地">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">包装</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input" name="importpackage" lay-verify="" placeholder="请输入商品进货包装">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">规格</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input" name="size" lay-verify="" placeholder="请输入商品进货规格">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">生产批号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input" name="productcode" lay-verify="" placeholder="请输入商品进货生产批号">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">批准文号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input" name="promitcode" lay-verify="" placeholder="请输入商品进货批准文号">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">销售价格</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input" name="price" lay-verify="required|number" placeholder="请输入商品进货销售价格">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">库存量</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input" name="number" lay-verify="required|number" placeholder="请输入商品进货库存量">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">库存预警值</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input" name="dangernum" lay-verify="required|number" placeholder="请输入预警值">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">是否有效</label>
-                    <div class="layui-input-inline">
-                        <input type="radio" name="available" value="1" title="有效" checked="">
-                        <input type="radio" name="available" value="0" title="无效" >
-                    </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">商品名称</label>
+                <div class="layui-input-inline">
+                    <select name="goodsid" id="goodsid">
+                        <option value="0">请选择商品</option>
+                    </select>
                 </div>
             </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block" style="text-align: center;">
-                    <button type="button" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="doSubmit" id="doSubmit" ><span class="layui-icon layui-icon-add-1"></span>提交</button>
-                    <button type="reset" class="layui-btn layui-btn-primary "><span class="layui-icon layui-icon-refresh-1"></span>重置</button>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">进货数量</label>
+                <div class="layui-input-inline">
+                    <input type="hidden" name="id">
+                    <input type="text" class="layui-input"  name="number" lay-verify="number" placeholder="请输入商品进货包装">
                 </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">进货价格</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" name="importprice" lay-verify="number" placeholder="请输入商品进货规格">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">支付类型</label>
+            <div class="layui-input-block">
+                <input type="radio" name="paytype" value="支付宝" title="支付宝">
+                <input type="radio" name="paytype" value="微信" title="微信">
+                <input type="radio" name="paytype" value="信用卡" title="信用卡">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">进货备注</label>
+            <div class="layui-input-block">
+                <textarea  name="remark" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="text-align: center;">
+                <button type="button" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="doSubmit"
+                        id="doSubmit"><span class="layui-icon layui-icon-add-1"></span>提交
+                </button>
+                <button type="reset" class="layui-btn layui-btn-primary "><span
+                        class="layui-icon layui-icon-refresh-1"></span>重置
+                </button>
             </div>
         </div>
     </form>
@@ -236,7 +197,7 @@
             , cols: [ [
                 {field:'id', title:'进货ID',align:'center' ,sort:true, width:'100'}
                 ,{field:'providername', title:'供应商',align:'center',width:'120'}
-                ,{field:'goodsname', title:'商品进货名称',align:'center',width:'120'}
+                ,{field:'goodsname', title:'商品名称',align:'center',width:'120'}
                 ,{field:'size', title:'规格',align:'center',width:'100'}
                 ,{field:'paytype', title:'支付类型',align:'center',width:'100'}
                 ,{field:'importtime', title:'进货时间',align:'center',width:'150'}
@@ -328,6 +289,9 @@
                 case 'updateImport':
                     openUpdateImportLayer(data);
                     break;
+                case 'updateImport':
+                    openBackLayer(data);
+                    break;
             }
         });
 
@@ -346,20 +310,52 @@
                 success: function () {
                     $("#dataForm")[0].reset();
                     url = "/import/addImport";
-                    //加载查询条件供应商的下拉列表
-                    $.get("/provider/loadAllProviderDropDownList",function (res) {
-                        var data = res.data;
-                        var content = "<option value=\"0\">请选择供应商</option>";
-                        $.each(data,function (index,item) {
-                            content += "<option value=\""+item.id+"\">"+item.providername+"</option>"
-                        });
-                        $("#providerid").html(content);
-                        form.render("select");
-                    });
-                    //设置默认图片
-                    $('.thumbImg').attr('src','/file/showImageByPath?path=images/defaultimportimg.png');
-                    $("#importimg").val('images/defaultimportimg.png');
+                    //加载查询供应商的下拉列表
+                    initProviderForSelect();
+
                 }
+            });
+        }
+
+        //加载添加或修改弹出层的查询供应商的下拉列表
+        function initProviderForSelect(providerid) {
+            //点击修改后再添加需清空
+            $("#goodsid").html("");
+            $.get("/provider/loadAllProviderDropDownList",function (res) {
+                var data = res.data;
+                var content = "<option value=\"0\">请选择供应商</option>";
+                $.each(data,function (index,item) {
+                    content += "<option value=\""+item.id+"\">"+item.providername+"</option>"
+                });
+                $("#providerid").html(content);
+                if (providerid!=undefined){
+                    $("#providerid").val(providerid);
+                }
+                form.render("select");
+            });
+        }
+
+        //监听添加页面的供应商下拉框的改变事件 lay-filter="providerid"
+        form.on('select(providerid)', function(data){
+            console.log(data);
+            var providerid = data.value;
+            initGoodsSelect(providerid);
+        });
+
+        //加载商品下拉列表
+        function initGoodsSelect(providerid,goodsid) {
+            $.get("/goods/loadGoodsDropDownListByProviderId",{providerid:providerid},function (res) {
+                var data = res.data;
+                var content = "<option value=\"0\">请选择商品</option>";
+                $.each(data,function (index,item) {
+                    content += "<option value=\""+item.id+"\">"+item.goodsname+"["+item.size+"]"+"【"+item.providername+"】"+"</option>"
+                });
+                $("#goodsid").html(content);
+                //如果goodsid有值就反选
+                if (goodsid!=undefined){
+                    $("#goodsid").val(goodsid);
+                }
+                form.render("select");
             });
         }
 
@@ -377,21 +373,9 @@
                     //装载数据
                     form.val("dataForm", data);
                     url = "/import/updateImport";
-                    //加载查询条件供应商的下拉列表
-                    $.get("/provider/loadAllProviderDropDownList",function (res) {
-                        var res_data = res.data;
-                        var content = "<option value=\"0\">请选择供应商</option>";
-                        $.each(res_data,function (index,item) {
-                            if (data.providerid==item.id){
-                                content += "<option value=\""+item.id+"\" selected >"+item.providername+"</option>"
-                            }else {
-                                content += "<option value=\""+item.id+"\">"+item.providername+"</option>"
-                            }
-                        });
-                        $("#providerid").html(content);
-                        form.render("select");
-                    });
-                    $('.thumbImg').attr('src','/file/showImageByPath?path='+data.importimg);
+                    //加载查询供应商的下拉列表并选中
+                    initProviderForSelect(data.providerid);
+                    initGoodsSelect(data.providerid,data.goodsid);
                 }
             });
         }

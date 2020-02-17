@@ -134,5 +134,29 @@ public class GoodsController {
         return new  DataGridView(list);
     }
 
+    /**
+     * 为添加商品进货选定供货商后根据供货商id查询商品
+     * @return
+     */
+    @RequestMapping("/loadGoodsDropDownListByProviderId")
+    public DataGridView loadGoodsDropDownListByProviderId(Integer providerid){
+        if (providerid!=null&&providerid!=0){
+            //组装查询条件
+            QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("available", Constant.AVAILABLE_TRUE);
+            queryWrapper.eq("providerid",providerid);
+            List<Goods> list = goodsService.list(queryWrapper);
+            //兼容前端显示，从缓存里面取，效率影响不大
+            for (Goods goods : list) {
+                Provider provider = providerService.getById(goods.getProviderid());
+                goods.setProvidername(provider.getProvidername());
+            }
+            return new  DataGridView(list);
+        }else {
+            return null;
+        }
+
+    }
+
 }
 
