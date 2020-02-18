@@ -112,6 +112,22 @@ public class ImportController {
             return ResultObj.UPDATE_ERROR;
         }
     }
+
+    /**
+     * 删除商品进货
+     * @param id
+     * @return
+     */
+    @RequestMapping("/deleteImport")
+    public ResultObj deleteImport(Integer id){
+        try {
+            importService.removeById(id);
+            return ResultObj.DELETE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.DELETE_ERROR;
+        }
+    }
     
 }
 

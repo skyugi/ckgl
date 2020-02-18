@@ -113,6 +113,7 @@
                     <select name="providerid" id="providerid" lay-filter="providerid">
                         <option value="0">请选择供应商</option>
                     </select>
+                    <div class="mydiv" title="不可修改" style="position:absolute;width:100%;height:100%;left:0px;top:0px;background:#fff;opacity:0;filter:alpha(opacity=0)"> </div>
                 </div>
             </div>
             <div class="layui-inline">
@@ -121,6 +122,7 @@
                     <select name="goodsid" id="goodsid">
                         <option value="0">请选择商品</option>
                     </select>
+                    <div class="mydiv" title="不可修改" style="position:absolute;width:100%;height:100%;left:0px;top:0px;background:#fff;opacity:0;filter:alpha(opacity=0)"> </div>
                 </div>
             </div>
         </div>
@@ -312,7 +314,8 @@
                     url = "/import/addImport";
                     //加载查询供应商的下拉列表
                     initProviderForSelect();
-
+                    //隐藏禁用供应商和商品的下拉框的div
+                    $(".mydiv").hide();
                 }
             });
         }
@@ -376,6 +379,8 @@
                     //加载查询供应商的下拉列表并选中
                     initProviderForSelect(data.providerid);
                     initGoodsSelect(data.providerid,data.goodsid);
+                    //禁用供应商和商品的下拉框
+                    $(".mydiv").show();
                 }
             });
         }
@@ -437,11 +442,11 @@
          */
         function deleteImport(data) {
             // console.log(data);
-            layer.confirm('你确定要删除【' + data.importname + '】这个商品进货吗', {icon: 3, title: '提示'}, function (index) {
+            layer.confirm('你确定要删除这个商品进货吗', {icon: 3, title: '提示'}, function (index) {
                 // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                 layer.close(index);
                 //向服务端发送删除指令
-                $.post("/import/deleteImport", {id: data.id, importimg: data.importimg}, function (res) {
+                $.post("/import/deleteImport", {id: data.id}, function (res) {
                     if (res.code == 200) {
                         tableInit.reload();
                     }
