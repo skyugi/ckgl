@@ -50,4 +50,13 @@ public class BusinessController {
         return "/business/import/importManager";
     }
 
+    /**
+     * 跳转到退货查询
+     * @return
+     */
+    @RequestMapping("/toReturnsManager")
+    public String toReturnsManager(){
+        return "/business/returns/returnsManager";
+    }
+
 }
