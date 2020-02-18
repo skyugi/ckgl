@@ -28,7 +28,7 @@ import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ *  进货前端控制器
  * </p>
  *
  * @author 刘样

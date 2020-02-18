@@ -13,4 +13,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ReturnsService extends IService<Returns> {
 
+    /**
+     * 退货
+     * @param id 进货单id
+     * @param number 退货数量
+     * @param remark 备注
+     */
+    void addReturns(Integer id, Integer number, String remark);
 }

@@ -95,7 +95,7 @@
         <button type="button" lay-event="deleteImport"  class="layui-btn layui-btn-sm layui-btn-danger"><span
                 class="layui-icon layui-icon-delete"></span>删除
         </button>
-        <button type="button" lay-event="openBackLayer"  class="layui-btn layui-btn-sm layui-btn-normal"><span
+        <button type="button" lay-event="back"  class="layui-btn layui-btn-sm layui-btn-normal"><span
                 class="layui-icon layui-icon-delete"></span>退货
         </button>
 
@@ -169,6 +169,34 @@
 </div>
 <!--添加和修改的弹出层结束-->
 
+<!--退货的弹出层开始-->
+<div id="backGoodsDiv" style="display: none;padding: 5px">
+    <form action="" method="post" class="layui-form layui-form-pane" id="dataBackForm" lay-filter="dataBackForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">退货数量</label>
+            <div class="layui-input-block">
+                <!-- 进货单ID -->
+                <input type="hidden" name="id">
+                <!-- 当前进货单的数量 -->
+                <input type="hidden" name="currentNumber" id="currentNumber">
+                <input type="text" class="layui-input"  name="number" lay-verify="required|number|checkNumber" placeholder="请输入退货数量">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">退货备注</label>
+            <div class="layui-input-block">
+                <textarea  name="remark" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="text-align: center;">
+                <button type="button" class="layui-btn" lay-submit="" lay-filter="doBackSubmit" id="doBackSubmit" ><span class="layui-icon layui-icon-add-1"></span>提交</button>
+                <button type="reset" class="layui-btn layui-btn-warm"><span class="layui-icon layui-icon-refresh-1"></span>重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<!--退货的弹出层结束-->
 
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
 <script type="text/javascript">
@@ -270,8 +298,8 @@
             // alert(checkStatus);
             switch (obj.event) {
                 case 'batchDeleteImport':
-                batchDeleteImport(checkStatus);
-                break;
+                    batchDeleteImport(checkStatus);
+                    break;
                 case 'addImport':
                     openAddImportLayer();
                     break;
@@ -291,8 +319,8 @@
                 case 'updateImport':
                     openUpdateImportLayer(data);
                     break;
-                case 'updateImport':
-                    openBackLayer(data);
+                case 'back':
+                    openBackGoodsLayer(data);
                     break;
             }
         });
@@ -488,6 +516,50 @@
                 layer.msg("请至少选择一行数据");
             }
         }
+
+        /**
+         * 打开退货的弹出层
+         */
+        function openBackGoodsLayer(data) {
+            mainIndex = layer.open({
+                type: 1,
+                content: $("#backGoodsDiv"),
+                area: ['800px', '600px'],
+                title: '商品退货',
+                success: function () {
+                    $("#dataBackForm")[0].reset();
+                    //装载数据
+                    form.val("dataBackForm", {id:data.id,currentNumber:data.number});
+                }
+            });
+        }
+
+        //自定义验证规则
+        form.verify({
+            checkNumber: function(value){
+                //fixme tip:得转换为数值才能比较
+                var currentNumber = parseInt($("#currentNumber").val());
+                if(parseInt(value) > currentNumber || parseInt(value) < 1){
+                    return '退货数量只能在【0】-【'+currentNumber+'】数量之间';
+                }
+            }
+        });
+
+        /**
+         * 监听退货提交
+         */
+        form.on("submit(doBackSubmit)",function (data) {
+            $.post("/returns/addReturns", data.field, function (result) {
+                // alert(JSON.stringify(data.field));
+                if (result.code == 200) {
+                    tableInit.reload();
+                }
+                layer.msg(result.msg);
+                layer.close(mainIndex);
+            });
+            return false;
+        });
+
     });
 
 </script>
