@@ -24,6 +24,8 @@
         <hutool.version>4.6.6</hutool.version>
         <lang3.version>3.9</lang3.version>
         <pinyin4j.version>2.5.1</pinyin4j.version>
+        <fastjson.version>1.2.62</fastjson.version>
+
     </properties>
 
     <dependencies>
@@ -128,6 +130,14 @@
             <artifactId>pinyin4j</artifactId>
             <version>${pinyin4j.version}</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+
 
 
 

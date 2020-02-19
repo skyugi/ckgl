@@ -3,6 +3,7 @@ package com.lzh.wms.business.cache;
 import com.lzh.wms.business.domain.Customer;
 import com.lzh.wms.business.domain.Goods;
 import com.lzh.wms.business.domain.Provider;
+import com.lzh.wms.system.cache.CachePool;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -36,7 +37,7 @@ public class BusinessCacheAspect {
     /**
      * 声明一个缓存容器
      */
-    private Map<String,Object> CACHE_CONTAINER = new HashMap<>();
+    private Map<String,Object> CACHE_CONTAINER = CachePool.CACHE_CONTAINER;
 
     /**
      * 声明切面表达式

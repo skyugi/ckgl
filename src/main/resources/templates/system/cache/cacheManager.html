@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>缓存管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="/resources/favicon.ico">
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/resources/css/public.css" media="all"/>
+</head>
+<body class="childrenBody">
+<!--查询条件开始-->
+<!--<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">-->
+<!--    <legend>查询条件</legend>-->
+<!--</fieldset>-->
+
+<!--查询条件结束-->
+
+<!--数据表格开始-->
+<div>
+    <table class="layui-hide" id="cacheTable" lay-filter="cacheTable"></table>
+    <div id="cacheToolBar" style="display: none">
+        <button type="button" lay-event="syncCache" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-add-1"></span>同步缓存</button>
+        <button type="button" lay-event="removeAllCache" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>清空缓存</button>
+    </div>
+    <div id="cacheRowBar" style="display: none">
+        <button type="button" lay-event="deleteCache" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
+    </div>
+</div>
+<!--数据表格结束-->
+
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.use(['jquery', 'form', 'table', 'layer'], function () {
+        var $ = layui.jquery;
+        var form = layui.form;
+        var table = layui.table;
+        var layer = layui.layer;
+
+        //加载数据表格数据
+        var tableInit = table.render({
+            elem: '#cacheTable'
+            ,url:'/cache/loadAllCache'
+            ,toolbar: '#cacheToolBar' //开启头部工具栏，并为其绑定左侧模板
+            ,title: '缓存数据表'
+            ,height: 'full'
+            ,cols: [ [
+                {field:'key', title:'ID', align: 'center', unresize: true, sort: true, width:'100'}
+                ,{field:'value', title:'缓存', align: 'center', edit: 'text', width:'1100'}
+                ,{fixed: 'right', title:'操作',align: 'center', toolbar: '#cacheRowBar', width:'110'}
+            ] ]
+            ,page: true
+        });
+
+        //监听头工具栏事件
+        table.on('toolbar(cacheTable)', function(obj){
+            //得到选中行
+            // var checkStatus = table.checkStatus(obj.config.id);
+            // var checkStatus = table.checkStatus('cacheTable');
+            // alert(checkStatus);
+            switch(obj.event){
+                case 'removeAllCache':
+                    // layer.msg('批量删除');
+                    removeAllCache();
+                    break;
+                case 'syncCache':
+                    syncCache();
+            };
+         });
+
+        //监听行工具条的事件
+        table.on('tool(cacheTable)', function(obj){ //注：tool 是工具条事件名，deleteCache 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            // var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+            switch (layEvent) {
+                case 'deleteCache':
+                    // layer.msg("删除");
+                    deleteCache(data);
+                    break;
+            }
+        });
+
+        //同步缓存
+        function syncCache() {
+            layer.confirm("你确定要同步所有缓存吗",{icon: 3, title: '提示'},function (index) {
+                $.post("/cache/syncCache",function (result) {
+                    if (result.code == 200){
+                        tableInit.reload();
+                    }
+                    layer.msg(result.msg);
+                });
+                layer.close(index);
+            });
+        }
+
+        /**
+         * 清空缓存
+         */
+        function removeAllCache() {
+            layer.confirm("你确定要清空所有缓存数据吗",{icon: 3, title: '提示'},function (index) {
+                $.post("/cache/removeAllCache",function (result) {
+                    if (result.code == 200){
+                        tableInit.reload();
+                    }
+                    layer.msg(result.msg);
+                });
+                layer.close(index);
+            });
+        }
+
+        /**
+         * 删除缓存
+         * @param data
+         */
+        function deleteCache(data) {
+            layer.confirm('你确定要删除【'+data.key+'】这条缓存数据吗',{icon: 3, title: '提示'},function (index) {
+                // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                layer.close(index);
+                //向服务端发送删除指令
+                $.post("/cache/deleteCache", {key: data.key}, function (result) {
+                    if (result.code == 200){
+                        tableInit.reload();
+                    }
+                    layer.msg(result.msg);
+                });
+            });
+        }
+
+    });
+</script>
+</body>
+</html>

@@ -33,7 +33,7 @@ public class CacheAspect {
     /**
      * 声明一个缓存容器
      */
-    private Map<String,Object> CACHE_CONTAINER = new HashMap<>();
+    private Map<String,Object> CACHE_CONTAINER = CachePool.CACHE_CONTAINER;
 
     /**
      * 声明切面表达式
