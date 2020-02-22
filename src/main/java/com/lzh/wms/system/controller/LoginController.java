@@ -4,6 +4,7 @@ import com.lzh.wms.system.common.ActiverUser;
 import com.lzh.wms.system.common.ResultObj;
 import com.lzh.wms.system.common.WebUtils;
 import com.lzh.wms.system.domain.LogInfo;
+import com.lzh.wms.system.domain.User;
 import com.lzh.wms.system.service.LogInfoService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -49,6 +50,26 @@ public class LoginController {
         } catch (AuthenticationException e) {
             e.printStackTrace();
             return ResultObj.LOGIN_ERROR_PASS;
+        }
+    }
+
+    /**
+     * 退出系统
+     * @return
+     */
+    @RequestMapping("/logout")
+    public ResultObj logout(){
+        try {
+            //注销session，跳转到登录界面
+            User user = (User) WebUtils.getSession().getAttribute("user");
+            if (user != null) {
+                WebUtils.getSession().removeAttribute("user");
+                System.out.println("------------------------------------session已注销，用户已退出------------------------------------");
+            }
+            return ResultObj.LOGOUT_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.LOGOUT_ERROR;
         }
     }
 }

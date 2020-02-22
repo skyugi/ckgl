@@ -21,6 +21,8 @@ public class ResultObj {
     public static final ResultObj LOGIN_SUCCESS = new ResultObj(Constant.OK, "登录成功");
     public static final ResultObj LOGIN_ERROR_PASS = new ResultObj(Constant.ERROR, "登录失败,用户名或密码错误");
     public static final ResultObj LOGIN_ERROR_CODE = new ResultObj(Constant.ERROR, "登录失败,验证码错误");
+    public static final ResultObj LOGOUT_SUCCESS = new ResultObj(Constant.OK, "退出成功");
+    public static final ResultObj LOGOUT_ERROR = new ResultObj(Constant.ERROR, "退出失败");
 
     public static final ResultObj DELETE_SUCCESS = new ResultObj(Constant.OK, "删除成功");
     public static final ResultObj DELETE_ERROR = new ResultObj(Constant.ERROR, "删除失败");
