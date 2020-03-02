@@ -59,4 +59,8 @@ public class BusinessController {
         return "/business/returns/returnsManager";
     }
 
+    @RequestMapping("/toDepotManager")
+    public String toDepotManager(){
+        return "/business/depot/depotManager";
+    }
 }
