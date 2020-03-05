@@ -6,7 +6,7 @@ spring:
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://192.168.25.129:3306/0520erp?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=UTC
+      url: jdbc:mysql://192.168.25.129:3306/medicine-wms-lzh?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=UTC
       username: root
       password: 666
       max-active: 20
