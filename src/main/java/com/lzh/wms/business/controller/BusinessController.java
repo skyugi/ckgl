@@ -59,8 +59,21 @@ public class BusinessController {
         return "/business/returns/returnsManager";
     }
 
+    /**
+     * 跳转到仓库管理
+     * @return
+     */
     @RequestMapping("/toDepotManager")
     public String toDepotManager(){
         return "/business/depot/depotManager";
+    }
+
+    /**
+     * 跳转到医药分类管理
+     * @return
+     */
+    @RequestMapping("/toKindManager")
+    public String toKindManager(){
+        return "/business/kind/kindManager";
     }
 }

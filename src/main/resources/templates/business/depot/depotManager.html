@@ -126,7 +126,7 @@
             type:'datetime'
         });
         //初始化富文本
-        var editIndex = layedit.build('content');
+        // var editIndex = layedit.build('content');
 
         //加载数据表格数据
         var tableInit = table.render({
@@ -207,7 +207,7 @@
                     $("#dataForm")[0].reset();//应该可以不加
                     //装载数据
                     form.val("dataForm",data);
-                    layedit.setContent(editIndex,data.content);//一定要加 不然富文本异步渲染出来有延迟 是个坑
+                    // layedit.setContent(editIndex,data.content);//一定要加 不然富文本异步渲染出来有延迟 是个坑
                     url = "/depot/updateDepot";
                 }
             });
@@ -226,7 +226,7 @@
                 title:'添加仓库',
                 success:function () {
                     $("#dataForm")[0].reset();
-                    layedit.setContent(editIndex,"");
+                    // layedit.setContent(editIndex,"");
                     url = "/depot/addDepot";
                 }
             });
@@ -238,7 +238,7 @@
         $("#doSubmit").click(function () {
             //用于同步编辑器(富文本)内容到textarea（一般用于异步提交）
             //在这个方法调用前也会触发表单验证
-            layedit.sync(editIndex);
+            // layedit.sync(editIndex);
             //表单序列化
             var data = $("#dataForm").serialize();
             // alert(data);
