@@ -76,4 +76,13 @@ public class BusinessController {
     public String toKindManager(){
         return "/business/kind/kindManager";
     }
+
+    /**
+     * 跳转到医药货品管理
+     * @return
+     */
+    @RequestMapping("/toProductManager")
+    public String toProductManager(){
+        return "/business/product/productManager";
+    }
 }

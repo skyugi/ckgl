@@ -37,7 +37,7 @@ public interface Constant {
     /**
      * 商品默认图片
      */
-    String IMAGES_DEFAULTGOODSIMG_PNG = "images/defaultgoodsimg.png";
+    String IMAGES_DEFAULTGOODSIMG_PNG = "images/defaultProductImgPath.png";
     /**
      * 临时图片后缀
      */
