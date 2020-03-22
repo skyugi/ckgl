@@ -166,4 +166,22 @@ public class SystemController {
     public String toCacheManager() {
         return "system/cache/cacheManager";
     }
+
+    /**
+     * 跳转到请假单管理
+     * @return
+     */
+    @RequestMapping("toLeaveBillManager")
+    public String toLeavebillManager(){
+        return "system/leaveBill/leaveBillManager";
+    }
+
+    /**
+     * 跳转到流程管理
+     * @return
+     */
+    @RequestMapping("toWorkFlowManager")
+    public String toWorkFlowManager(){
+        return "system/workFlow/workFlowManager";
+    }
 }
