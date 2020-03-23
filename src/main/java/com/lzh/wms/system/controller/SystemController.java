@@ -187,9 +187,19 @@ public class SystemController {
         return "system/workFlow/workFlowManager";
     }
 
+    /**
+     * 跳转到查看流程图的界面
+     * @param workFlowVo
+     * @return
+     */
     @RequestMapping("toViewFlowDiagram")
     public String toViewFlowDiagram(WorkFlowVo workFlowVo){
         WebUtils.getSession().setAttribute("viewFlowDiagramPath","/workFlow/viewFlowDiagram?deploymentId="+workFlowVo.getDeploymentId());
         return "/system/workFlow/viewFlowDiagram";
+    }
+
+    @RequestMapping("toMyTaskManager")
+    public String toMyTaskManager(){
+        return "system/workFlow/MyTaskManager";
     }
 }

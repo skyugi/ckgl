@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.crypto.Data;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -136,6 +137,16 @@ public class WorkFlowController {
             e.printStackTrace();
             return ResultObj.START_ERROR;
         }
+    }
+
+    /**
+     * 查询当前用户的待办任务
+     * @param workFlowVo
+     * @return
+     */
+    @RequestMapping("loadCurrentUserTask")
+    public DataGridView loadCurrentUserTask(WorkFlowVo workFlowVo){
+        return workFlowService.queryCurrentUserTask(workFlowVo);
     }
 
 }

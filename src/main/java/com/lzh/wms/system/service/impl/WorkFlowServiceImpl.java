@@ -10,6 +10,7 @@ import com.lzh.wms.system.service.WorkFlowService;
 import com.lzh.wms.system.vo.WorkFlowVo;
 import com.lzh.wms.system.vo.camunda.EnableJsonDeploymentEntity;
 import com.lzh.wms.system.vo.camunda.EnableJsonProcessDefinitionEntity;
+import com.lzh.wms.system.vo.camunda.EnableJsonTaskEntity;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
@@ -152,6 +153,22 @@ public class WorkFlowServiceImpl implements WorkFlowService {
         //审批中
         leaveBill.setState(Constant.STATE_LEAVEBILL_ONE);
         leaveBillMapper.updateByPrimaryKeySelective(leaveBill);
+    }
+
+    @Override
+    public DataGridView queryCurrentUserTask(WorkFlowVo workFlowVo) {
+        User user = (User) WebUtils.getSession().getAttribute("user");
+        long count = taskService.createTaskQuery().taskAssignee(user.getName()).count();
+        int firstResult = (workFlowVo.getPage()-1)*workFlowVo.getLimit();
+        int maxResults = workFlowVo.getLimit();
+        List<Task> tasks = taskService.createTaskQuery().taskAssignee(user.getName()).listPage(firstResult, maxResults);
+        List<EnableJsonTaskEntity> data = new ArrayList<>();
+        for (Task task : tasks) {
+            EnableJsonTaskEntity enableJsonTaskEntity = new EnableJsonTaskEntity();
+            BeanUtils.copyProperties(task,enableJsonTaskEntity);
+            data.add(enableJsonTaskEntity);
+        }
+        return new DataGridView(count,data);
     }
 
     public List<String> queryOutComeByTaskId(String taskId) {
