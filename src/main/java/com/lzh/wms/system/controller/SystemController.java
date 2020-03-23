@@ -1,5 +1,7 @@
 package com.lzh.wms.system.controller;
 
+import com.lzh.wms.system.common.WebUtils;
+import com.lzh.wms.system.vo.WorkFlowVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -183,5 +185,11 @@ public class SystemController {
     @RequestMapping("toWorkFlowManager")
     public String toWorkFlowManager(){
         return "system/workFlow/workFlowManager";
+    }
+
+    @RequestMapping("toViewFlowDiagram")
+    public String toViewFlowDiagram(WorkFlowVo workFlowVo){
+        WebUtils.getSession().setAttribute("viewFlowDiagramPath","/workFlow/viewFlowDiagram?deploymentId="+workFlowVo.getDeploymentId());
+        return "/system/workFlow/viewFlowDiagram";
     }
 }

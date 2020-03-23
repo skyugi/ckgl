@@ -25,11 +25,16 @@ public class WorkFlowVo {
 
     /**
      * 接收多个id
+     * 这里是多个流程部署的id，故用String
      */
-    private Integer[] ids;
+    private String[] ids;
     /**
      * 流程部署名称
      */
     private String deploymentName;
+    /**
+     * 流程部署id
+     */
+    private String deploymentId;
 
 }

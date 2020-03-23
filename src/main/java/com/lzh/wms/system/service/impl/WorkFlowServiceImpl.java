@@ -1,6 +1,11 @@
 package com.lzh.wms.system.service.impl;
 
+import com.lzh.wms.system.common.Constant;
 import com.lzh.wms.system.common.DataGridView;
+import com.lzh.wms.system.common.WebUtils;
+import com.lzh.wms.system.domain.LeaveBill;
+import com.lzh.wms.system.domain.User;
+import com.lzh.wms.system.mapper.LeaveBillMapper;
 import com.lzh.wms.system.service.WorkFlowService;
 import com.lzh.wms.system.vo.WorkFlowVo;
 import com.lzh.wms.system.vo.camunda.EnableJsonDeploymentEntity;
@@ -8,8 +13,6 @@ import com.lzh.wms.system.vo.camunda.EnableJsonProcessDefinitionEntity;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.impl.ExecutionQueryImpl;
-import org.camunda.bpm.engine.impl.cmd.ActivityCancellationCmd;
 import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.camunda.bpm.engine.impl.pvm.PvmTransition;
 import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
@@ -19,14 +22,13 @@ import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
+import java.util.zip.ZipInputStream;
 
 /**
  * @author lzh
@@ -42,6 +44,8 @@ public class WorkFlowServiceImpl implements WorkFlowService {
     private TaskService taskService;
     @Autowired
     private RuntimeService runtimeService;
+    @Autowired
+    private LeaveBillMapper leaveBillMapper;
 
     @Override
     public DataGridView queryAllProcessDeployment(WorkFlowVo workFlowVo) {
@@ -109,10 +113,47 @@ public class WorkFlowServiceImpl implements WorkFlowService {
     }
 
     @Override
-    public void addWorkFlow() {
-        repositoryService.createDeployment().name("测试").addClasspathResource("myproject.bpmn").deploy();
-//        repositoryService.createDeployment().addZipInputStream()
+    public void addWorkFlow(InputStream inputStream, String deploymentName) throws IOException {
+        ZipInputStream zipInputStream = new ZipInputStream(inputStream);
+        repositoryService.createDeployment().name(deploymentName).addZipInputStream(zipInputStream).deploy();
+        zipInputStream.close();
+        inputStream.close();
     }
+
+    @Override
+    public void deleteWorkFlow(String deploymentId) {
+        repositoryService.deleteDeployment(deploymentId,true);
+    }
+
+    @Override
+    public InputStream queryFlowDiagram(String deploymentId) {
+        //1、根据部署id查询流程定义对象
+        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deploymentId).singleResult();
+        //2、根据流程定义对象得到图片的名称
+        String diagramResourceName = processDefinition.getDiagramResourceName();
+        //3、根据部署id和流程图片名查询图片流
+        InputStream inputStream = repositoryService.getResourceAsStream(deploymentId, diagramResourceName);
+        return inputStream;
+    }
+
+    @Override
+    public void startProcess(Integer leaveBillId, String type) {
+//        String processDefinitionKey = type.replace("","").getClass().getSimpleName();
+        String processDefinitionKey = type;
+        //LeaveBill:1
+        String businessKey = processDefinitionKey + ":" +leaveBillId;
+        Map<String, Object> variables = new HashMap<>();
+        User user = (User) WebUtils.getSession().getAttribute("user");
+        //设置流程变量，下个任务的办理人
+        variables.put("username",user.getName());
+        runtimeService.startProcessInstanceByKey(processDefinitionKey,businessKey,variables);
+        //更新请假单的状态
+        LeaveBill leaveBill = leaveBillMapper.selectByPrimaryKey(leaveBillId);
+        //审批中
+        leaveBill.setState(Constant.STATE_LEAVEBILL_ONE);
+        leaveBillMapper.updateByPrimaryKeySelective(leaveBill);
+    }
+
     public List<String> queryOutComeByTaskId(String taskId) {
         List<String> names = new ArrayList<>();
         // 1,根据任务ID查询任务实例

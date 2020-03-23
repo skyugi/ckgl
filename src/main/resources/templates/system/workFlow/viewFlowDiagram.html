@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>查看流程图的弹出层</title>
+    <style type="text/css">
+        div{
+            border: 2px solid blue;
+            padding: 4px;
+        }
+    </style>
+</head>
+<body>
+    <img alt="流程图" th:src="@{${session.viewFlowDiagramPath}}">
+<!--    <img id="flowDiagram">-->
+<!--    left=x-160+width/2 top=y-120+height/2 width=width+12-->
+    <div style="position: absolute;left: 170px;top: 90px;width: 92px;height: 50px"></div>
+</body>
+<script>
+    $()
+</script>
+</html>

@@ -21,13 +21,13 @@
 <!--<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">-->
 <!--    <legend>查询条件</legend>-->
 <!--</fieldset>-->
-<blockquote class="layui-elem-quote">
+<!--<blockquote class="layui-elem-quote">-->
     <form action="" method="post" id="searchForm" lay-filter="searchForm" class="layui-form layui-form-pane">
         <div class="layui-form-item" >
             <div class="layui-inline">
-                <label class="layui-form-label">流程部署名称</label>
+                <label class="layui-form-label">部署名称</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="deploymentName" id="deploymentName" autocomplete="off" class="layui-input">
+                    <input type="text" name="deploymentName" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-inline">
@@ -44,14 +44,14 @@
             <!--            </div>-->
         </div>
     </form>
-</blockquote>
+<!--</blockquote>-->
 <!--查询条件结束-->
 
 <!--流程部署数据表格开始-->
 <div>
     <table class="layui-hide" id="deploymentTable" lay-filter="deploymentTable"></table>
     <div id="deploymentToolBar" style="display: none">
-        <button type="button" lay-event="addWorkFlow" class="layui-btn layui-btn-sm layui-btn-warm"><span class="layui-icon layui-icon-add-1"></span>添加流程</button>
+        <button type="button" lay-event="addWorkFlow" class="layui-btn layui-btn-sm layui-btn-normal"><span class="layui-icon layui-icon-upload-drag"></span>部署流程</button>
         <button type="button" lay-event="batchDeleteWorkFlow" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-add-1"></span>批量删除</button>
     </div>
     <div id="deploymentRowBar" style="display: none">
@@ -62,38 +62,35 @@
 </div>
 <!--流程部署数据表格结束-->
 
+<div>
+    <h2 style="color: #2D93CA"></h2>
+</div>
+
 <!--流程定义数据表格开始-->
 <table id="processDefinitionTable" lay-filter="processDefinitionTable"></table>
 <!--流程定义数据表格结束-->
 
-<!--添加和修改的弹出层开始-->
+<!--部署流程的弹出层开始-->
 <div style="display: none;padding: 10px" id="addOrUpdateDiv">
     <form action="" method="post" class="layui-form layui-form-pane" id="dataForm" lay-filter="dataForm">
         <div class="layui-form-item">
-            <label class="layui-form-label">流程名称</label>
+            <label class="layui-form-label">部署名称</label>
             <div class="layui-input-block">
-                <input type="hidden" name="id">
-                <input type="text" name="deploymentName" lay-verify="required" autocomplete="off" placeholder="请输入流程名称" class="layui-input">
+                <input type="text" name="deploymentName" lay-verify="required" autocomplete="off"
+                       placeholder="请输入流程名称" id="deploymentName" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">流程备注</label>
+            <label class="layui-form-label">流程图文件</label>
             <div class="layui-input-block">
-                <textarea class="layui-textarea" name="remark"  id="content"></textarea>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">是否可用</label>
-                <div class="layui-input-inline">
-                    <input type="radio" name="available" value="1" title="可用" checked="">
-                    <input type="radio" name="available" value="0" title="不可用" >
+                <div class="layui-upload">
+                    <button type="button" class="layui-btn layui-btn-normal" id="uploadProcess">请选择流程图文件</button>
                 </div>
             </div>
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block" style="text-align: center">
-                <button type="button" lay-submit="" lay-filter="doSubmit" id="doSubmit" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-add-1"></span>提交</button>
+                <button type="button" lay-submit="" lay-filter="doSubmit" id="doSubmit" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-add-1"></span>部署</button>
                 <button type="reset" class="layui-btn layui-btn-sm layui-btn-normal"><span class="layui-icon layui-icon-refresh-1"></span>重置</button>
             </div>
         </div>
@@ -108,19 +105,24 @@
     var processDefinitionTableInit;
     layui.extend({
         dtree: '/resources/layui_ext/dtree/dtree'   // {/}的意思即代表采用自有路径，即不跟随 base 路径
-    }).use(['jquery', 'form', 'table', 'layer', 'dtree'], function () {
+    }).use(['jquery', 'form', 'table', 'layer', 'dtree','upload'], function () {
         var $ = layui.jquery;
         var form = layui.form;
         var table = layui.table;
         var layer = layui.layer;
+        //--------------------------------------------------------------
+        // var layer = parent.layer === undefined ? layui.layer : top.layer;
+        // var laytpl = layui.laytpl;
+        //--------------------------------------------------------------
         var dtree = layui.dtree;
+        var upload = layui.upload;
         //流程部署列表
         deploymentTableInit = table.render({
             elem: '#deploymentTable'
             ,url:'/workFlow/loadAllDeployment'
             ,toolbar: '#deploymentToolBar' //开启头部工具栏，并为其绑定左侧模板
             ,title: '流程部署数据表'
-            ,height: 'full-350'
+            ,height: 'full-335'
             ,limits : [5,10,15,20]
             ,limit : 5
             ,cols: [ [
@@ -136,7 +138,7 @@
             elem: '#processDefinitionTable'
             ,url:'/workFlow/loadAllProcessDefinition'
             ,title: '流程定义数据表'
-            ,height: 'full-380'
+            ,height: 'full-335'
             ,cols: [ [
                 {field:'id', title:'流程定义ID', align: 'center', unresize: true, sort: true, width:220}
                 ,{field:'deploymentId', title:'流程部署id', align: 'center', sort: true, width:220}
@@ -147,6 +149,41 @@
                 ,{field:'diagramResourceName', title:'部署资源文件名(*.png)', align: 'center'}
             ] ]
             ,page: true
+        });
+        //选完文件后不自动上传
+        upload.render({
+            elem: '#uploadProcess'
+            ,url: '/workFlow/addWorkFlow'
+            ,auto: false
+            ,accept:'file'//选择上传文件
+            ,acceptMime:'application/zip'//打开文件选择框默认显示压缩文件
+            ,exts: 'zip'//校验类型
+            ,field:'mf'
+            ,data:{
+                deploymentName:function(){
+                    return $('#deploymentName').val();
+                }
+            }
+            ,bindAction: '#doSubmit'
+            ,done: function(data){
+                layer.msg(data.msg);
+                //关闭部署的弹出层
+                /*var addIndex = parent.layer.getFrameIndex(window.name);
+                window.parent.layer.close(addIndex);
+                //刷新父页面的table
+                window.parent.tableDeploymentIns.reload();
+                window.parent.tableprocessDefinitionIns.reload();*/
+                deploymentTableInit.reload();
+                processDefinitionTableInit.reload();
+                layer.close(mainIndex);
+            }
+            ,error:function(){
+                layer.msg('部署失败');
+                //关闭部署的弹出层
+               /* var addIndex = parent.layer.getFrameIndex(window.name);
+                window.parent.layer.close(addIndex);*/
+                layer.close(mainIndex);
+            }
         });
 
         //模糊查询
@@ -193,7 +230,7 @@
                     deleteWorkFlow(data);
                     break;
                 case 'viewFlowDiagram':
-                    openUpdateWorkFlowLayer(data);
+                    openviewFlowDiagramLayer(data);
                     break;
             }
         });
@@ -207,48 +244,67 @@
             mainIndex = layer.open({
                 type:1,
                 content:$("#addOrUpdateDiv"),
-                area:['800px','520px'],
-                title:'添加流程',
+                area:['600px','300px'],
+                title:'部署流程',
                 success:function () {
                     $("#dataForm")[0].reset();
-                    url = "/workFlow/addWorkFlow";
+                    // url = "/workFlow/addWorkFlow";
                 }
             });
         }
 
         /**
-         * 打开修改流程的弹出层
+         * 打开查看流程图的弹出层
          */
-        function openUpdateWorkFlowLayer(data) {
-            mainIndex = layer.open({
-                type:1,
-                content:$("#addOrUpdateDiv"),
-                area:['800px','520px'],
-                title:'修改流程',
-                success:function () {
-                    $("#dataForm")[0].reset();
-                    //装载数据
-                    form.val("dataForm",data);
-                    url = "/workFlow/viewFlowDiagram";
+        function openviewFlowDiagramLayer(data) {
+            // mainIndex = layer.open({
+            //     type:1,
+            //     // content:$("#viewFlowDiagramDiv"),
+            //     content:"/workFlow/toViewFlowDiagram?deploymentId="+data.id,
+            //     area:['800px','520px'],
+            //     title:'【'+data.name+'】的流程图',
+            //     success:function () {
+            //         // $("#dataForm")[0].reset();
+            //         //装载数据
+            //         // form.val("dataForm",data);
+            //         url = "/workFlow/viewFlowDiagram";
+            //     }
+            // });
+            var index = layer.open({
+                title : "查看["+data.name+"]流程图",
+                type : 2,//ifream层
+                area:["500px","600px"],//442+10,464+57
+                content : "/sys/toViewFlowDiagram?deploymentId="+data.id,
+                success : function(layero, index){
+                    setTimeout(function(){
+                        layui.layer.tips('点击此处返回流程列表', '.layui-layer-setwin .layui-layer-close', {
+                            tips: 3
+                        });
+                    },500)
                 }
-            });
+            })
+            //layui.layer.full(index);
+            //改变窗口大小时，重置弹窗的宽高，防止超出可视区域（如F12调出debug的操作）
+            $(window).on("resize",function(){
+                layui.layer.full(index);
+            })
         }
 
-        /**
-        * 监听添加或修改流程的提交
-        */
-        form.on("submit(doSubmit)",function (data) {
-            // alert(data);
-            $.post(url,data.field,function (result) {
-                // alert(JSON.stringify(data.field));
-                if (result.code == 200){
-                    deploymentTableInit.reload();
-                }
-                layer.msg(result.msg);
-                layer.close(mainIndex);
-            });
-            return false;
-        });
+        // /**
+        // * 监听添加或修改流程的提交
+        // */
+        // form.on("submit(doSubmit)",function (data) {
+        //     // alert(data);
+        //     $.post(url,data.field,function (result) {
+        //         // alert(JSON.stringify(data.field));
+        //         if (result.code == 200){
+        //             deploymentTableInit.reload();
+        //         }
+        //         layer.msg(result.msg);
+        //         layer.close(mainIndex);
+        //     });
+        //     return false;
+        // });
        /* $("#doSubmit").click(function () {
             //表单序列化
             var data = $("#dataForm").serialize();
@@ -323,9 +379,10 @@
                 // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                 layer.close(index);
                 //向服务端发送删除指令
-                $.post("/workFlow/deleteWorkFlow", {id: data.id}, function (result) {
+                $.post("/workFlow/deleteWorkFlow", {deploymentId: data.id}, function (result) {
                     if (result.code == 200){
                         deploymentTableInit.reload();
+                        processDefinitionTableInit.reload();
                     }
                     layer.msg(result.msg);
                 });

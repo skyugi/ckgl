@@ -19,7 +19,7 @@
 <!--<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">-->
 <!--    <legend>查询条件</legend>-->
 <!--</fieldset>-->
-<blockquote class="layui-elem-quote">
+<!--<blockquote class="layui-elem-quote">-->
     <form action="" method="post" id="searchForm" lay-filter="searchForm" class="layui-form layui-form-pane">
         <div class="layui-form-item" style="text-align: center">
             <div class="layui-inline">
@@ -49,12 +49,12 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block" style="text-align: center">
-                <button type="button" class="layui-btn" lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>查询</button>
-                <button type="reset" class="layui-btn layui-btn-normal"><span class="layui-icon layui-icon-refresh"></span>重置</button>
+                <button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>查询</button>
+                <button type="reset" class="layui-btn layui-btn-sm layui-btn-normal"><span class="layui-icon layui-icon-refresh"></span>重置</button>
             </div>
         </div>
     </form>
-</blockquote>
+<!--</blockquote>-->
 <!--查询条件结束-->
 
 <!--数据表格开始-->
@@ -175,7 +175,7 @@
             ,url:'/leaveBill/loadAllLeaveBill'
             ,toolbar: '#leaveBillToolBar' //开启头部工具栏，并为其绑定左侧模板
             ,title: '用户请假单数据表'
-            ,height: 'full-205'
+            ,height: 'full-130'
             ,cols: [ [
                 {type: 'checkbox', fixed: 'left', width:50}
                 ,{field:'id', title:'ID', align: 'center', unresize: true, sort: true, width:80}
@@ -244,7 +244,7 @@
                     openUpdateLeaveBillLayer(data);
                     break;
                 case 'startProcess':
-                    openShowLeaveBillLayer(data);
+                    startProcess(data);
                     break;
             }
         });
@@ -252,18 +252,16 @@
         /**
          * 打开查看请假单的弹出层
          */
-        function openShowLeaveBillLayer(data) {
-            mainIndex = layer.open({
-                type:1,
-                content:$("#showLeaveBillDiv"),
-                area:['800px','520px'],
-                title:'查看请假单',
-                success:function () {
-                    $("#show_title").html(data.title);
-                    $("#show_reason").html(data.content);
-                    $("#show_createtime").html(data.createtime);
-                    $("#show_content").html(data.content);
-                }
+        function startProcess(data) {
+            layer.confirm('你确定要提交【'+data.title+'】这条请假单吗',{icon: 3, title: '提示'},function (index) {
+                layer.close(index);
+                //向服务端发送删除指令
+                $.post("/workFlow/startProcess", {leaveBillId: data.id,type:'LeaveBill'}, function (result) {
+                    if (result.code == 200){
+                        tableInit.reload();
+                    }
+                    layer.msg(result.msg);
+                });
             });
         }
 
