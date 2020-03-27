@@ -36,5 +36,22 @@ public class WorkFlowVo {
      * 流程部署id
      */
     private String deploymentId;
+    /**
+     * 请假单id
+     */
+    private Integer leaveBillId;
+    /**
+     * 任务id
+      */
+    private String taskId;
 
+    /**
+     * 连线名
+     */
+    private String outgoingName;
+
+    /**
+     * 批注
+     */
+    private String comment;
 }

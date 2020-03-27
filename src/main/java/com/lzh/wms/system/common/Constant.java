@@ -51,6 +51,6 @@ public interface Constant {
     public static final String STATE_LEAVEBILL_ONE = "1";
     //审批完成
     public static final String STATE_LEAVEBILL_TWO = "2";
-    //已放弃
+    //取消
     public static final String STATE_LEAVEBILL_THREE = "3";
 }

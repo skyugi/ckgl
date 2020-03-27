@@ -149,4 +149,32 @@ public class WorkFlowController {
         return workFlowService.queryCurrentUserTask(workFlowVo);
     }
 
+    /**
+     * 根据任务id查询批注信息
+     * @param taskId
+     * @return
+     */
+    @RequestMapping("queryAllCommentByTaskId")
+    public DataGridView queryAllCommentByTaskId(String taskId){
+//    public DataGridView queryAllCommentByTaskId(WorkFlowVo workFlowVo){
+//        DataGridView dataGridView = workFlowService.queryCommentByTaskId(workFlowVo.getTaskId());
+        DataGridView dataGridView = workFlowService.queryCommentByTaskId(taskId);
+        return dataGridView;
+    }
+
+    /**
+     * 完成任务
+     * @param workFlowVo
+     * @return
+     */
+    @RequestMapping("completeTask")
+    public ResultObj completeTask(WorkFlowVo workFlowVo){
+        try {
+            workFlowService.completeTask(workFlowVo);
+            return ResultObj.OPERATE_SUCCESS;
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultObj.OPERATE_ERROR;
+        }
+    }
 }

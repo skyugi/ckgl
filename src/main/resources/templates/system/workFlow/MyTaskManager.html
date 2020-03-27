@@ -37,59 +37,61 @@
 <!--        <button type="button" lay-event="addRole" class="layui-btn layui-btn-sm "><span class="layui-icon layui-icon-add-1"></span>添加待处理任务</button>-->
 <!--    </div>-->
     <div id="myTaskRowBar" style="display: none">
-        <button type="button" lay-event="updateRole" class="layui-btn layui-btn-sm layui-btn-warm"><span class="layui-icon layui-icon-edit"></span>修改</button>
-        <button type="button" lay-event="selectPermission" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-about"></span>分配权限</button>
+        <button type="button" lay-event="doTask" class="layui-btn layui-btn-sm layui-btn-normal"><span class="layui-icon"></span>办理任务</button>
+        <button type="button" lay-event="viewProcess" class="layui-btn layui-btn-sm"><span class="layui-icon"></span>查看进度</button>
 <!--        <button type="button" lay-event="deleteRole" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>-->
 
     </div>
 </div>
 <!--数据表格结束-->
 
-<!--添加和修改的弹出层开始-->
-<div style="display: none;padding: 10px" id="addOrUpdateDiv">
-    <form action="" method="post" class="layui-form layui-form-pane" id="dataForm" lay-filter="dataForm">
-        <div class="layui-form-item">
-            <label class="layui-form-label">待处理任务名称</label>
-            <div class="layui-input-block">
-                <input type="hidden" name="id">
-                <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入待处理任务名称" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">待处理任务备注</label>
-            <div class="layui-input-block">
-                <textarea class="layui-textarea" name="remark"  id="content"></textarea>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">是否可用</label>
-                <div class="layui-input-inline">
-                    <input type="radio" name="available" value="1" title="可用" checked="">
-                    <input type="radio" name="available" value="0" title="不可用" >
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-input-block" style="text-align: center">
-                <button type="button" lay-submit="" lay-filter="doSubmit" id="doSubmit" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-add-1"></span>提交</button>
-                <button type="reset" class="layui-btn layui-btn-sm layui-btn-normal"><span class="layui-icon layui-icon-refresh-1"></span>重置</button>
-            </div>
-        </div>
-    </form>
-</div>
-<!--添加和修改的弹出层结束-->
+<!--添加和办理任务的弹出层开始-->
+<!--<div style="display: none;padding: 10px" id="addOrUpdateDiv">-->
+<!--    <form action="" method="post" class="layui-form layui-form-pane" id="dataForm" lay-filter="dataForm">-->
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">待处理任务名称</label>-->
+<!--            <div class="layui-input-block">-->
+<!--                <input type="hidden" name="id">-->
+<!--                <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入待处理任务名称" class="layui-input">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">待处理任务备注</label>-->
+<!--            <div class="layui-input-block">-->
+<!--                <textarea class="layui-textarea" name="remark"  id="content"></textarea>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="layui-form-item">-->
+<!--            <div class="layui-inline">-->
+<!--                <label class="layui-form-label">是否可用</label>-->
+<!--                <div class="layui-input-inline">-->
+<!--                    <input type="radio" name="available" value="1" title="可用" checked="">-->
+<!--                    <input type="radio" name="available" value="0" title="不可用" >-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="layui-form-item">-->
+<!--            <div class="layui-input-block" style="text-align: center">-->
+<!--                <button type="button" lay-submit="" lay-filter="doSubmit" id="doSubmit" class="layui-btn layui-btn-sm"><span class="layui-icon layui-icon-add-1"></span>提交</button>-->
+<!--                <button type="reset" class="layui-btn layui-btn-sm layui-btn-normal"><span class="layui-icon layui-icon-refresh-1"></span>重置</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </form>-->
+<!--</div>-->
+<!--添加和办理任务的弹出层结束-->
 
-<!--分配权限的弹出层开始-->
+<!--查看进度的弹出层开始-->
 <div style="display: none" id="selectRolePermissionDiv">
     <!--存放树的容器-->
     <ul id="rolePermissionTree" class="dtree" data-id="0"></ul>
 </div>
-<!--分配权限的弹出层结束-->
+<!--查看进度的弹出层结束-->
 
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
 <script type="text/javascript" src="/resources/layui_ext/dtree/dtree.js"></script>
 <script type="text/javascript">
+    var tableInit;
+
     layui.extend({
         dtree: '/resources/layui_ext/dtree/dtree'   // {/}的意思即代表采用自有路径，即不跟随 base 路径
     }).use(['jquery', 'form', 'table', 'layer', 'dtree'], function () {
@@ -99,7 +101,7 @@
         var layer = layui.layer;
         var dtree = layui.dtree;
         //加载数据表格数据
-        var tableInit = table.render({
+        tableInit = table.render({
             elem: '#myTaskManager'
             ,url:'/workFlow/loadCurrentUserTask'
             // ,toolbar: '#roleToolBar' //开启头部工具栏，并为其绑定左侧模板
@@ -115,7 +117,7 @@
             ,page: true
         });
 
-        //模糊查询
+        //模糊查询--对应刷新的按钮
         form.on("submit(doSearch)",function (data) {
             tableInit.reload({
                 where:data.field,
@@ -148,66 +150,67 @@
                 //     // layer.msg("删除");
                 //     deleteRole(data);
                 //     break;
-                case 'updateRole':
-                    openUpdateRoleLayer(data);
+                case 'doTask':
+                    openDoTaskLayer(data);
                     break;
-                case 'selectPermission':
-                    openSelectRolePermissionLayer(data);
+                case 'viewProcess':
+                    openViewProcessLayer(data);
                     break;
             }
         });
 
-        /**
-         * 打开添加待处理任务的弹出层
-         */
+
         var mainIndex;
         var url;
-        function openAddRoleLayer() {
-            mainIndex = layer.open({
-                type:1,
-                content:$("#addOrUpdateDiv"),
-                area:['800px','520px'],
-                title:'添加待处理任务',
-                success:function () {
-                    $("#dataForm")[0].reset();
-                    url = "/role/addRole";
-                }
-            });
-        }
 
         /**
-         * 打开修改待处理任务的弹出层
+         * 打开办理任务待处理任务的弹出层
          */
-        function openUpdateRoleLayer(data) {
+        function openDoTaskLayer(data) {
             mainIndex = layer.open({
-                type:1,
-                content:$("#addOrUpdateDiv"),
+                type:2,
+                content:"/sys/toDoTask?taskId="+data.id,
                 area:['800px','520px'],
-                title:'修改待处理任务',
+                title:'办理任务',
                 success:function () {
-                    $("#dataForm")[0].reset();
-                    //装载数据
-                    form.val("dataForm",data);
-                    url = "/role/updateRole";
+                    // $("#dataForm")[0].reset();
+                    // 装载数据
+                    // form.val("dataForm",data);
+                    // url = "/role/doTask";
+                }
+            });
+        }
+
+        function openViewProcessLayer(data) {
+            mainIndex = layer.open({
+                type:2,
+                content:"/sys/toViewProcessByTaskId?taskId="+data.id,
+                area:['560px','520px'],
+                title:'查看任务办理进度',
+                success:function () {
+                    // $("#dataForm")[0].reset();
+                    // 装载数据
+                    // form.val("dataForm",data);
+                    // url = "/role/doTask";
                 }
             });
         }
 
         /**
-        * 监听添加或修改待处理任务的提交
+        * 监听添加或提交
         */
-        form.on("submit(doSubmit)",function (data) {
-            // alert(data);
-            $.post(url,data.field,function (result) {
-                // alert(JSON.stringify(data.field));
-                if (result.code == 200){
-                    tableInit.reload();
-                }
-                layer.msg(result.msg);
-                layer.close(mainIndex);
-            });
-            return false;
-        });
+        // form.on("submit(doSubmit)",function (data) {
+        //     // alert(data);
+        //     $.post(url,data.field,function (result) {
+        //         // alert(JSON.stringify(data.field));
+        //         if (result.code == 200){
+        //             tableInit.reload();
+        //         }
+        //         layer.msg(result.msg);
+        //         layer.close(mainIndex);
+        //     });
+        //     return false;
+        // });
        /* $("#doSubmit").click(function () {
             //表单序列化
             var data = $("#dataForm").serialize();
@@ -237,66 +240,6 @@
             });
             return false;
         })*/
-
-        /**
-         * 删除待处理任务
-         * @param data
-         */
-        function deleteRole(data) {
-            layer.confirm('你确定要删除【'+data.name+'】这条待处理任务吗',{icon: 3, title: '提示'},function (index) {
-                // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                layer.close(index);
-                //向服务端发送删除指令
-                $.post("/role/deleteRole", {id: data.id}, function (result) {
-                    if (result.code == 200){
-                        tableInit.reload();
-                    }
-                    layer.msg(result.msg);
-                });
-            });
-        }
-
-
-        // function openSelectRolePermissionLayer(data) {
-        //     mainIndex = layer.open({
-        //         type:1,
-        //         content:$("#selectRolePermissionDiv"),
-        //         area:['460px','520px'],
-        //         title:'分配【'+data.name+'】的权限',
-        //         btnAlign: 'c',
-        //         btn: ['<span class="layui-icon">&#xe605;确认分配</span>', '<span class="layui-icon">&#x1006;关闭窗口</span>']
-        //         ,yes: function(index, layero){
-        //         //按钮【按钮一】的回调
-        //             //得到选中树的所有节点
-        //             var permissionData = dtree.getCheckbarNodesParam("rolePermissionTree");
-        //             console.log(permissionData);
-        //             //还要得到当前待处理任务的id
-        //             var params = "rid=" + data.id;
-        //             $.each(permissionData,function (index,item) {
-        //                 params += "&pids=" + item.nodeId;
-        //             });
-        //             $.post("/role/saveRolePermission",params,function (res) {//todo ajax复习
-        //                 layer.msg(res.msg);
-        //             })
-        //         }
-        //         ,btn2: function(index, layero){
-        //         //按钮【按钮二】的回调
-        //         //return false 开启该代码可禁止点击该按钮关闭
-        //         },
-        //         success:function () {
-        //             //根据待处理任务ID请求rolePermissionTree的json数据
-        //             dtree.render({
-        //                 elem: "#rolePermissionTree",
-        //                 url: "/role/initPermissionByRoleId?roleId="+data.id,
-        //                 checkbar: true,
-        //                 checkbarType: "all" ,// 默认就是all，其他的值为： no-all  p-casc   self  only
-        //                 dataStyle: "layuiStyle",  //使用layui风格的数据格式
-        //                 dataFormat: "list",  //配置data的风格为list
-        //                 response:{message:"msg",statusCode:0}  //修改response中返回数据的定义
-        //             });
-        //         }
-        //     });
-        // }
 
     });
 </script>

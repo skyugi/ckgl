@@ -1,10 +1,14 @@
 package com.lzh.wms.system.service;
 
 import com.lzh.wms.system.common.DataGridView;
+import com.lzh.wms.system.domain.LeaveBill;
 import com.lzh.wms.system.vo.WorkFlowVo;
+import org.camunda.bpm.engine.repository.ProcessDefinition;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author lzh
@@ -58,4 +62,45 @@ public interface WorkFlowService {
      * @return
      */
     DataGridView queryCurrentUserTask(WorkFlowVo workFlowVo);
+
+    /**
+     * 根据任务id查询请假单id
+     * @param taskId
+     * @return
+     */
+    LeaveBill queryLeaveBillByTaskId(String taskId);
+
+    /**
+     * 根据任务id查询连线信息
+     * @param taskId
+     * @return
+     */
+    List<String> queryOutgoingNameByTaskId(String taskId);
+
+    /**
+     * 根据任务id查询任务批注信息
+     * @param taskId
+     * @return
+     */
+    DataGridView queryCommentByTaskId(String taskId);
+
+    /**
+     * 完成任务
+     * @param workFlowVo
+     */
+    void completeTask(WorkFlowVo workFlowVo);
+
+    /**
+     * 根据任务id查流程定义
+     * @param taskId
+     * @return
+     */
+    ProcessDefinition queryProcessDefinitionByTaskId(String taskId);
+
+    /**
+     * 根据任务id查节点坐标
+     * @param taskId
+     * @return
+     */
+    Map<String, Object> queryTaskCoordinateByTaskId(String taskId);
 }

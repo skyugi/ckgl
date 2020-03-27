@@ -70,11 +70,11 @@
         <button type="button" lay-event="updateLeaveBill" class="layui-btn layui-btn-xs layui-btn-warm"><span class="layui-icon layui-icon-edit"></span>修改</button>
         <button type="button" lay-event="deleteLeaveBill" class="layui-btn layui-btn-xs layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
         {{#  } else if (d.state==1) { }}
-        <button type="button" lay-event="view" class="layui-btn layui-btn-xs"><span class="layui-icon "></span>审批进度</button>
+        <button type="button" lay-event="viewSpProcess" class="layui-btn layui-btn-xs"><span class="layui-icon "></span>审批进度</button>
         {{#  } else if (d.state==2) { }}
-        <button type="button" lay-event="view" class="layui-btn layui-btn-xs"><span class="layui-icon "></span>审批进度</button>
+        <button type="button" lay-event="viewSpProcess" class="layui-btn layui-btn-xs"><span class="layui-icon "></span>审批进度</button>
         {{#  } else if (d.state==3) { }}
-        <button type="button" lay-event="view" class="layui-btn layui-btn-xs"><span class="layui-icon "></span>审批进度</button>
+        <button type="button" lay-event="viewSpProcess" class="layui-btn layui-btn-xs"><span class="layui-icon "></span>审批进度</button>
         <button type="button" lay-event="deleteLeaveBill" class="layui-btn layui-btn-xs layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
         {{#  } }}
 <!--        <button type="button" lay-event="startProcess" class="layui-btn layui-btn-xs"><span class="layui-icon layui-icon-about"></span>提交</button>-->
@@ -246,11 +246,14 @@
                 case 'startProcess':
                     startProcess(data);
                     break;
+                case 'viewSpProcess':
+                    viewSpProcess(data);
+                    break;
             }
         });
 
         /**
-         * 打开查看请假单的弹出层
+         * 打开启动请假单的弹出层
          */
         function startProcess(data) {
             layer.confirm('你确定要提交【'+data.title+'】这条请假单吗',{icon: 3, title: '提示'},function (index) {
