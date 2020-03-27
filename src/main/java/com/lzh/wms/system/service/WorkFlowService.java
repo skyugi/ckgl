@@ -103,4 +103,19 @@ public interface WorkFlowService {
      * @return
      */
     Map<String, Object> queryTaskCoordinateByTaskId(String taskId);
+
+    /**
+     * 根据请假单id查询批注信息
+     * @param leaveBillId
+     * @return
+     */
+    DataGridView queryCommentByLeaveBillId(Integer leaveBillId);
+
+    /**
+     * 查看我的审批记录
+     * @param workFlowVo
+     * @return
+     */
+    DataGridView queryCurrentUserHistoryTask(WorkFlowVo workFlowVo);
+
 }

@@ -8,14 +8,13 @@ import com.lzh.wms.system.domain.User;
 import com.lzh.wms.system.mapper.LeaveBillMapper;
 import com.lzh.wms.system.service.WorkFlowService;
 import com.lzh.wms.system.vo.WorkFlowVo;
-import com.lzh.wms.system.vo.camunda.EnableJsonCommentEntity;
-import com.lzh.wms.system.vo.camunda.EnableJsonDeploymentEntity;
-import com.lzh.wms.system.vo.camunda.EnableJsonProcessDefinitionEntity;
-import com.lzh.wms.system.vo.camunda.EnableJsonTaskEntity;
+import com.lzh.wms.system.vo.camunda.*;
 import org.camunda.bpm.engine.*;
+import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
 import org.camunda.bpm.engine.impl.identity.Authentication;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
+import org.camunda.bpm.engine.impl.persistence.entity.CommentEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.camunda.bpm.engine.impl.pvm.PvmTransition;
 import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
@@ -247,7 +246,8 @@ public class WorkFlowServiceImpl implements WorkFlowService {
                     //已完成的不能通过taskService去查
                     //观察act_hi_taskinst表,通过办理人和执行实例id或流程实例id锁定唯一的历史任务名
                     //!!!!!!!!!!!!这里注意查出来的历史实例不一定是singleResult(),驳回一次，就会有两个，驳回两次，就会有三个，但任务名是一样的
-                    List<HistoricTaskInstance> historicTaskInstanceList = historyService.createHistoricTaskInstanceQuery().taskAssignee(userId).executionId(task.getExecutionId()).list();
+                    List<HistoricTaskInstance> historicTaskInstanceList = historyService.createHistoricTaskInstanceQuery()
+                            .taskAssignee(userId).executionId(task.getExecutionId()).list();
                     //这里可以不用非空判断,还是写上吧
                     if (historicTaskInstanceList!=null&&historicTaskInstanceList.size()>0){
                         enableJsonCommentEntity.setTaskName(historicTaskInstanceList.get(0).getName());
@@ -361,4 +361,75 @@ public class WorkFlowServiceImpl implements WorkFlowService {
         coordinate.put("height",activityImpl.getHeight());
         return coordinate;
     }
+
+    @Override
+    public DataGridView queryCommentByLeaveBillId(Integer leaveBillId) {
+        //组装businessKey
+        String businessKey = LeaveBill.class.getSimpleName()+":"+leaveBillId;
+        //如果流程结束task为null
+        //Task task = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).singleResult();//因为leaveBillId是唯一的
+        //String taskId = task.getId();
+        HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery()
+                .processInstanceBusinessKey(businessKey).singleResult();
+        HistoricTaskInstance historicTaskInstance = historyService.createHistoricTaskInstanceQuery()
+                .processInstanceBusinessKey(businessKey).list().get(0);
+        //通过流程实例id查
+        List<Comment> processInstanceComments = taskService.getProcessInstanceComments(historicProcessInstance.getId());
+        List<EnableJsonCommentEntity> data = new ArrayList<>();
+        if (processInstanceComments!=null&&processInstanceComments.size()>0){
+            for (Comment processInstanceComment : processInstanceComments) {
+                EnableJsonCommentEntity enableJsonCommentEntity = new EnableJsonCommentEntity();
+                BeanUtils.copyProperties(processInstanceComment,enableJsonCommentEntity);
+
+                String userId = processInstanceComment.getUserId();
+                //已完成的不能通过taskService去查
+                //观察act_hi_taskinst表,通过办理人和执行实例id或流程实例id锁定唯一的历史任务名
+                //!!!!!!!!!!!!这里注意查出来的历史实例不一定是singleResult(),驳回一次，就会有两个，驳回两次，就会有三个，但任务名是一样的
+                List<HistoricTaskInstance> historicTaskInstanceList = historyService.createHistoricTaskInstanceQuery()
+                        //这里没有网关其实也可以用流程实例id查
+                        .taskAssignee(userId).executionId(historicTaskInstance.getExecutionId()).list();
+                //这里可以不用非空判断,还是写上吧
+                if (historicTaskInstanceList!=null&&historicTaskInstanceList.size()>0){
+                    enableJsonCommentEntity.setTaskName(historicTaskInstanceList.get(0).getName());
+                }
+
+                data.add(enableJsonCommentEntity);
+            }
+        }
+        return new DataGridView(Long.valueOf(data.size()),data);
+    }
+
+    @Override
+    public DataGridView queryCurrentUserHistoryTask(WorkFlowVo workFlowVo) {
+        User user = (User) WebUtils.getSession().getAttribute("user");
+        String assigne = user.getName();
+        long count = historyService.createHistoricTaskInstanceQuery().taskAssignee(assigne).count();
+        int firstResult = (workFlowVo.getPage()-1)*workFlowVo.getLimit();
+        int maxResults = workFlowVo.getLimit();
+        List<HistoricTaskInstance> historicTaskInstances = historyService.createHistoricTaskInstanceQuery().taskAssignee(assigne).listPage(firstResult, maxResults);
+        List<ExtendHistoricTaskInstance> data = new ArrayList<>();
+        for (HistoricTaskInstance historicTaskInstance : historicTaskInstances) {
+            ExtendHistoricTaskInstance extendHistoricTaskInstance = new ExtendHistoricTaskInstance();
+            BeanUtils.copyProperties(historicTaskInstance,extendHistoricTaskInstance);
+            //查询对应批注
+
+            //act_hi_comment表的task_id_关联的是act_hi_taskinst表的id
+            String id = historicTaskInstance.getId();
+            String processInstanceId = historicTaskInstance.getProcessInstanceId();
+            List<Comment> processInstanceComments = taskService.getProcessInstanceComments(processInstanceId);
+            for (Comment processInstanceComment : processInstanceComments) {
+                String taskId = processInstanceComment.getTaskId();
+                if (taskId.equals(id)){
+                    //将接口转为实现类
+                    CommentEntity commentEntity = (CommentEntity) processInstanceComment;
+                    extendHistoricTaskInstance.setMessage(commentEntity.getMessage());
+                    break;
+                }
+            }
+
+            data.add(extendHistoricTaskInstance);
+        }
+        return new DataGridView(count,data);
+    }
+
 }

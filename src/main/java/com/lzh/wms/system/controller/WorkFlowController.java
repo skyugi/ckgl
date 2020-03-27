@@ -1,10 +1,14 @@
 package com.lzh.wms.system.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lzh.wms.system.common.DataGridView;
 import com.lzh.wms.system.common.ResultObj;
+import com.lzh.wms.system.domain.LeaveBill;
+import com.lzh.wms.system.service.LeaveBillService;
 import com.lzh.wms.system.service.WorkFlowService;
 import com.lzh.wms.system.vo.WorkFlowVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -176,5 +180,23 @@ public class WorkFlowController {
             e.printStackTrace();
             return ResultObj.OPERATE_ERROR;
         }
+    }
+
+
+
+
+    /**
+     * 根据请假单id查询批注信息
+     * @param workFlowVo
+     * @return
+     */
+    @RequestMapping("queryCommentByLeaveBillId")
+    public DataGridView queryCommentByLeaveBillId(WorkFlowVo workFlowVo){
+         return workFlowService.queryCommentByLeaveBillId(workFlowVo.getLeaveBillId());
+    }
+
+    @RequestMapping("queryCurrentUserHistoryTask")
+    public DataGridView queryCurrentUserHistoryTask(WorkFlowVo workFlowVo){
+        return workFlowService.queryCurrentUserHistoryTask(workFlowVo);
     }
 }

@@ -66,21 +66,21 @@
     </div>
     <div id="leaveBillRowBar" style="display: none">
         {{#  if(d.state==0){ }}
-        <button type="button" lay-event="startProcess" class="layui-btn layui-btn-xs"><span class="layui-icon layui-icon-about"></span>提交</button>
-        <button type="button" lay-event="updateLeaveBill" class="layui-btn layui-btn-xs layui-btn-warm"><span class="layui-icon layui-icon-edit"></span>修改</button>
-        <button type="button" lay-event="deleteLeaveBill" class="layui-btn layui-btn-xs layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
+        <button type="button" lay-event="startProcess" class="layui-btn layui-btn-xs"><span class="layui-icon"></span>提交</button>
+        <button type="button" lay-event="updateLeaveBill" class="layui-btn layui-btn-xs layui-btn-warm"><span class="layui-icon"></span>修改</button>
+        <button type="button" lay-event="deleteLeaveBill" class="layui-btn layui-btn-xs layui-btn-danger"><span class="layui-icon"></span>删除</button>
         {{#  } else if (d.state==1) { }}
-        <button type="button" lay-event="viewSpProcess" class="layui-btn layui-btn-xs"><span class="layui-icon "></span>审批进度</button>
+        <button type="button" lay-event="viewSpProcess" class="layui-btn layui-btn-xs"><span class="layui-icon "></span>审批查询</button>
         {{#  } else if (d.state==2) { }}
-        <button type="button" lay-event="viewSpProcess" class="layui-btn layui-btn-xs"><span class="layui-icon "></span>审批进度</button>
+        <button type="button" lay-event="viewSpProcess" class="layui-btn layui-btn-xs"><span class="layui-icon "></span>审批查询</button>
         {{#  } else if (d.state==3) { }}
-        <button type="button" lay-event="viewSpProcess" class="layui-btn layui-btn-xs"><span class="layui-icon "></span>审批进度</button>
-        <button type="button" lay-event="deleteLeaveBill" class="layui-btn layui-btn-xs layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
+        <button type="button" lay-event="viewSpProcess" class="layui-btn layui-btn-xs"><span class="layui-icon "></span>审批查询</button>
+        <button type="button" lay-event="deleteLeaveBill" class="layui-btn layui-btn-xs layui-btn-danger"><span class="layui-icon"></span>删除</button>
         {{#  } }}
 <!--        <button type="button" lay-event="startProcess" class="layui-btn layui-btn-xs"><span class="layui-icon layui-icon-about"></span>提交</button>-->
 <!--        <button type="button" lay-event="updateLeaveBill" class="layui-btn layui-btn-xs layui-btn-warm"><span class="layui-icon layui-icon-edit"></span>修改</button>-->
 <!--        <button type="button" lay-event="deleteLeaveBill" class="layui-btn layui-btn-xs layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>-->
-<!--        <button type="button" lay-event="view" class="layui-btn layui-btn-xs layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>审批进度</button>-->
+<!--        <button type="button" lay-event="view" class="layui-btn layui-btn-xs layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>审批查询</button>-->
 
     </div>
 </div>
@@ -186,9 +186,9 @@
                 ,{field: 'state', title: '状态', minWidth:100, align:"center",templet:function(d){
                         var html="";
                         if(d.state==0){
-                            html="<font color=red>未提交</font>"
+                            html="<font color=green>未提交</font>"
                         }else if(d.state==1){
-                            html="<font color=yellow>审批中</font>"
+                            html="<font color=blue>审批中</font>"
                         }else if(d.state==2){
                             html="<font color=black>审批完成</font>"
                         }else if(d.state==3){
@@ -251,6 +251,28 @@
                     break;
             }
         });
+    
+        //审批查询
+        function viewSpProcess(data) {
+            var index = layui.layer.open({
+                title : data.title+"的审批进度",
+                type : 2,
+                area:["800px","500px"],
+                content : "/sys/viewSpProcess?leaveBillId="+data.id,
+                success : function(layero, index){
+                    setTimeout(function(){
+                        layui.layer.tips('点击此处返回请假单列表', '.layui-layer-setwin .layui-layer-close', {
+                            tips: 3
+                        });
+                    },500)
+                }
+            })
+            //layui.layer.full(index);
+            //改变窗口大小时，重置弹窗的宽高，防止超出可视区域（如F12调出debug的操作）
+            $(window).on("resize",function(){
+                layui.layer.full(index);
+            })
+        }
 
         /**
          * 打开启动请假单的弹出层

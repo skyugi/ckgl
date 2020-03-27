@@ -3,6 +3,7 @@ package com.lzh.wms.system.controller;
 import com.lzh.wms.system.common.SpringUtils;
 import com.lzh.wms.system.common.WebUtils;
 import com.lzh.wms.system.domain.LeaveBill;
+import com.lzh.wms.system.service.LeaveBillService;
 import com.lzh.wms.system.service.WorkFlowService;
 import com.lzh.wms.system.vo.WorkFlowVo;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
@@ -254,5 +255,29 @@ public class SystemController {
         model.addAttribute("viewFlowDiagramPath","/workFlow/viewFlowDiagram?deploymentId="+workFlowVo.getDeploymentId());
         model.addAttribute("coordinate",coordinate);
         return "/system/workFlow/viewFlowDiagram";
+    }
+
+    @Autowired
+    private LeaveBillService leaveBillService;
+    /**
+     * 根据请假单id查询请假单和对应审批批注的信息
+     * @param workFlowVo
+     * @param model
+     * @return
+     */
+    @RequestMapping("viewSpProcess")
+    public String viewSpProcess(WorkFlowVo workFlowVo, Model model){
+        LeaveBill leaveBill = leaveBillService.getById(workFlowVo.getLeaveBillId());
+        model.addAttribute("leaveBill",leaveBill);
+        return "/system/workFlow/viewSpProcess";
+    }
+
+    /**
+     * 跳转到我的任务处理记录
+     * @return
+     */
+    @RequestMapping("toMySpManager")
+    public String toMySpManager(){
+        return "system/workFlow/mySpManager";
     }
 }

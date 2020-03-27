@@ -18,8 +18,9 @@
 
     <style type="text/css">
         div{
-            border: 2px solid blue;
-            padding: 4px;
+            /*border: 2px solid blue;*/
+            /*padding: 4px;*/
+            /*display: none;*/
         }
     </style>
 </head>
@@ -43,7 +44,7 @@
         var A = document.getElementById("a");
         A.style.left=x-160+width/2+"px";
         A.style.top=y-120+height/2+"px";
-        A.style.width=width+12+"px";
+        A.style.width=width+"px";
         A.style.height=height+"px";
     }
     // $(function () {
@@ -58,6 +59,8 @@
 <!--<img alt="流程图" id="flowDiagram" name="flowDiagram">-->
 <!--    left=x-160+width/2 top=y-120+height/2 width=width+12-->
 <!--<div th:style="position: absolute;left: '@{${coordinate.x}}'px;top: '@{${coordinate.y}}'px;width: '@{${coordinate.width}}'px;height: '@{${coordinate.height}}'px"></div>-->
-<div id="a" style="position: absolute;left:  px;top: px;width:px;height: px"></div>
+<div id="a" style="position: absolute;left:  px;top: px;width:px;height: px;text-align: center">
+    <span style="color: green;font-weight: bold;position: absolute;bottom: 6px;right: 6px">当前节点</span>
+</div>
 </body>
 </html>
