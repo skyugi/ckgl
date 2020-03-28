@@ -280,4 +280,13 @@ public class SystemController {
     public String toMySpManager(){
         return "system/workFlow/mySpManager";
     }
+
+    /**
+     * 跳转到客户地区统计
+     * @return
+     */
+    @RequestMapping("toCustomerInfoStat")
+    public String toCustomerAreaStat(){
+        return "statistics/customerInfoStat";
+    }
 }
