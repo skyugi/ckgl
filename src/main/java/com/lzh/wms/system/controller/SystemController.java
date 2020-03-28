@@ -207,7 +207,7 @@ public class SystemController {
     public String toViewFlowDiagram(WorkFlowVo workFlowVo, Model model){
 //        WebUtils.getSession().setAttribute("viewFlowDiagramPath","/workFlow/viewFlowDiagram?deploymentId="+workFlowVo.getDeploymentId());
         model.addAttribute("viewFlowDiagramPath","/workFlow/viewFlowDiagram?deploymentId="+workFlowVo.getDeploymentId());
-        return "/system/workFlow/viewFlowDiagram";
+        return "system/workFlow/viewFlowDiagramWithoutZb";
     }
 
     /**
