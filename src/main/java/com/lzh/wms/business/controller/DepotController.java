@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -118,6 +119,18 @@ public class DepotController {
             e.printStackTrace();
             return ResultObj.DELETE_ERROR;
         }
+    }
+
+    /**
+     * 为进货提供查询所有仓库
+     * @return
+     */
+    @RequestMapping("/loadAllDepotDropDownList")
+    public DataGridView loadAllKindDropDownList(){
+        //组装查询条件
+        QueryWrapper<Depot> queryWrapper = new QueryWrapper<>();
+        List<Depot> list = depotService.list(queryWrapper);
+        return new  DataGridView(list);
     }
 
 }

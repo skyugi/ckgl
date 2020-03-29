@@ -51,12 +51,21 @@ public class BusinessController {
     }
 
     /**
-     * 跳转到退货查询
+     * 跳转到采购退货查询
      * @return
      */
     @RequestMapping("/toReturnsManager")
     public String toReturnsManager(){
         return "/business/returns/returnsManager";
+    }
+
+    /**
+     * 跳转到采购退货
+     * @return
+     */
+    @RequestMapping("/toImportReturnManager")
+    public String toImportReturnManager(){
+        return "/business/import/importReturnManager";
     }
 
     /**

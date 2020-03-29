@@ -1,7 +1,12 @@
 package com.lzh.wms.business.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.lzh.wms.business.domain.Depot;
+import com.lzh.wms.business.domain.DepotStock;
 import com.lzh.wms.business.domain.Goods;
 import com.lzh.wms.business.domain.Import;
+import com.lzh.wms.business.mapper.DepotMapper;
+import com.lzh.wms.business.mapper.DepotStockMapper;
 import com.lzh.wms.business.mapper.GoodsMapper;
 import com.lzh.wms.business.mapper.ImportMapper;
 import com.lzh.wms.business.service.ImportService;
@@ -11,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -31,11 +38,33 @@ public class ImportServiceImpl extends ServiceImpl<ImportMapper, Import> impleme
      */
     @Autowired
     private GoodsMapper goodsMapper;
+    @Autowired
+    private DepotMapper depotMapper;
+    @Autowired
+    private DepotStockMapper depotStockMapper;
 
     @Override
     public boolean save(Import entity) {
         //根据商品id查询商品
         Goods goods = goodsMapper.selectById(entity.getGoodsid());
+
+        //更新某个仓库的库存bus_depot_stock---------------------------------------------
+//        SELECT goods_name,depot_name,sum(goods_num) FROM `bus_depot_stock` GROUP BY goods_name,depot_name
+        Depot depot = depotMapper.selectById(entity.getDepotId());
+        DepotStock depotStock = new DepotStock();
+        //设置仓库的id
+        depotStock.setDepotId(entity.getDepotId());
+        //设置仓库名
+        depotStock.setDepotName(depot.getName());
+        //设置货品id
+        depotStock.setGoodsId(entity.getGoodsid());
+        //设置货品名
+        depotStock.setGoodsName(goods.getGoodsname());
+        //设置此次存入某库的货品数量
+        depotStock.setGoodsNum(entity.getNumber());
+        depotStockMapper.insert(depotStock);
+        //---------------------------------------------
+
         //更新库存
         goods.setNumber(entity.getNumber()+goods.getNumber());
         goodsMapper.updateById(goods);

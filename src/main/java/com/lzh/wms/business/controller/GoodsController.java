@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lzh.wms.business.domain.Goods;
+import com.lzh.wms.business.domain.Kind;
 import com.lzh.wms.business.domain.Provider;
 import com.lzh.wms.business.service.GoodsService;
+import com.lzh.wms.business.service.KindService;
 import com.lzh.wms.business.service.ProviderService;
 import com.lzh.wms.business.vo.GoodsVo;
 import com.lzh.wms.system.common.Constant;
@@ -36,6 +38,8 @@ public class GoodsController {
     private GoodsService goodsService;
     @Autowired
     private ProviderService providerService;
+    @Autowired
+    private KindService kindService;
 
     /**
      * 查询商品：全查询、模糊查询
@@ -48,6 +52,7 @@ public class GoodsController {
         //组装查询条件
         QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(goodsVo.getProviderid()!=null&&goodsVo.getProviderid()!=0,"providerid",goodsVo.getProviderid());
+        queryWrapper.eq(goodsVo.getKindId()!=null&&goodsVo.getKindId()!=0,"kind_id",goodsVo.getKindId());
         queryWrapper.like(StringUtils.isNotBlank(goodsVo.getGoodsname()), "goodsname", goodsVo.getGoodsname());
         queryWrapper.like(StringUtils.isNotBlank(goodsVo.getProductcode()),"productcode",goodsVo.getProductcode());
         queryWrapper.like(StringUtils.isNotBlank(goodsVo.getPromitcode()),"promitcode",goodsVo.getPromitcode());
@@ -57,8 +62,12 @@ public class GoodsController {
         List<Goods> records = page.getRecords();
         for (Goods goods : records) {
             Provider provider = providerService.getById(goods.getProviderid());
+            Kind kind = kindService.getById(goods.getKindId());
             if (null!=provider){
                 goods.setProvidername(provider.getProvidername());
+            }
+            if (kind!=null){
+                goods.setKindName(kind.getName());
             }
         }
         return new  DataGridView(page.getTotal(),records);

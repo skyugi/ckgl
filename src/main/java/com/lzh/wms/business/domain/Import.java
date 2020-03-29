@@ -47,6 +47,14 @@ public class Import implements Serializable {
 
     private Integer goodsid;
 
+    private Integer depotId;
+
+//    /**
+//     * 进货数量-退货数量
+//     * 方便统计某个仓库的库存量
+//     */
+//    private Integer stocknum;
+
     @TableField(exist = false)
     private String providername;
 
@@ -55,5 +63,8 @@ public class Import implements Serializable {
 
     @TableField(exist = false)
     private String size;
+
+    @TableField(exist = false)
+    private String depotName;
 
 }

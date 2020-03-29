@@ -4,9 +4,11 @@ package com.lzh.wms.business.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lzh.wms.business.domain.Depot;
 import com.lzh.wms.business.domain.Goods;
 import com.lzh.wms.business.domain.Import;
 import com.lzh.wms.business.domain.Provider;
+import com.lzh.wms.business.service.DepotService;
 import com.lzh.wms.business.service.GoodsService;
 import com.lzh.wms.business.service.ImportService;
 import com.lzh.wms.business.service.ProviderService;
@@ -44,6 +46,8 @@ public class ImportController {
     private ProviderService providerService;
     @Autowired
     private GoodsService goodsService;
+    @Autowired
+    private DepotService depotService;
 
     /**
      * 查询进货信息：全查询、模糊查询
@@ -73,6 +77,10 @@ public class ImportController {
             if (goods!=null){
                 import1.setGoodsname(goods.getGoodsname());
                 import1.setSize(goods.getSize());
+            }
+            Depot depot = depotService.getById(import1.getDepotId());
+            if (depot!=null){
+                import1.setDepotName(depot.getName());
             }
         }
         return new  DataGridView(page.getTotal(),records);
