@@ -29,4 +29,14 @@ public class StatServiceImpl implements StatService {
     public List<BaseEntity> queryCustomerNameStatList() {
         return statMapper.queryCustomerNameStatList();
     }
+
+    @Override
+    public List<BaseEntity> queryImportPayTypeYearStat(String year) {
+        return statMapper.queryImportPayTypeYearStat(year);
+    }
+
+    @Override
+    public List<Double> queryImportPayTypeYearEachMonthStat(String year) {
+        return statMapper.queryImportPayTypeYearEachMonthStat(year);
+    }
 }

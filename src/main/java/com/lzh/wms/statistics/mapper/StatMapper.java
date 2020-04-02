@@ -21,4 +21,18 @@ public interface StatMapper {
      * @return
      */
     List<BaseEntity> queryCustomerNameStatList();
+
+    /**
+     * 统计年采购各支付类型所占金额
+     * @param year
+     * @return
+     */
+    List<BaseEntity> queryImportPayTypeYearStat(String year);
+
+    /**
+     * 年度采购各支付类型金额按月统计
+     * @param year
+     * @return
+     */
+    List<Double> queryImportPayTypeYearEachMonthStat(String year);
 }

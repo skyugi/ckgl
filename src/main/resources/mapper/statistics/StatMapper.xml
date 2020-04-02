@@ -10,4 +10,57 @@
         select customername as name,count(1) as value from bus_customer
 		GROUP BY customername
     </select>
+    <select id="queryImportPayTypeYearStat" resultType="com.lzh.wms.statistics.domain.BaseEntity">
+        select paytype as name,sum(importprice) as value from bus_import
+		where
+		DATE_FORMAT(importtime,"%Y")=#{year} GROUP BY paytype
+    </select>
+    <select id="queryImportPayTypeYearEachMonthStat" resultType="java.lang.Double">
+        select sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'01')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'02')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'03')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'04')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'05')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'06')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'07')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'08')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'09')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'10')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'11')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'12')
+    </select>
 </mapper>

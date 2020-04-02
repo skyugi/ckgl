@@ -2,4 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lzh.wms.business.mapper.KindMapper">
 
+    <select id="queryKindNameStatList" resultType="com.lzh.wms.statistics.domain.BaseEntity">
+        select name as name,count(1) as value from bus_kind group by name
+    </select>
 </mapper>
