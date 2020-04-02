@@ -94,4 +94,49 @@ public class BusinessController {
     public String toProductManager(){
         return "/business/product/productManager";
     }
+
+    /**
+     * 跳转到客户地区统计
+     * @return
+     */
+    @RequestMapping("toCustomerInfoStat")
+    public String toCustomerAreaStat(){
+        return "statistics/customerInfoStat";
+    }
+
+    /**
+     * 跳转到采购统计
+     * @return
+     */
+    @RequestMapping("toImportInfoStat")
+    public String toImportInfoStat(){
+        return "statistics/importInfoStat";
+    }
+
+    /**
+     * 跳转到销售出库
+     * @return
+     */
+    @RequestMapping("toSaleManager")
+    public String toSaleManager(){
+        return "business/sale/saleManager";
+    }
+
+    /**
+     * 跳转到退货入库
+     * @return
+     */
+    @RequestMapping("toSaleReturnManager")
+    public String toSaleReturnManager(){
+        return "business/sale/saleReturnManager";
+    }
+
+    /**
+     * 跳转到退货入库记录
+     * @return
+     */
+    @RequestMapping("toSaleBackRecordManager")
+    public String toSaleBackRecordManager(){
+        return "business/sale/saleBackRecordManager";
+    }
 }

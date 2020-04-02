@@ -2,6 +2,7 @@ package com.lzh.wms.business.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lzh.wms.business.domain.DepotStock;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +14,11 @@ import com.lzh.wms.business.domain.DepotStock;
  */
 public interface DepotStockMapper extends BaseMapper<DepotStock> {
 
+    /**
+     * 销售出库时判断销售商品所在仓库库存
+     * @return
+     * @param goodsId
+     * @param depotId
+     */
+    Integer getDepotStockNum(@Param("goodsId") Integer goodsId, @Param("depotId") Integer depotId);
 }

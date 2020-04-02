@@ -2,4 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lzh.wms.business.mapper.DepotStockMapper">
 
+    <select id="getDepotStockNum" resultType="java.lang.Integer">
+        SELECT sum(goods_num) FROM bus_depot_stock WHERE goods_id = #{goodsId} AND depot_id = #{depotId}
+    </select>
 </mapper>

@@ -93,17 +93,17 @@ public class ImportServiceImpl extends ServiceImpl<ImportMapper, Import> impleme
         return super.updateById(entity);
     }
 
-    @Override
-    public boolean removeById(Serializable id) {
-        //进货量
-        Import anImport = this.getBaseMapper().selectById(id);
-        Goods goods = goodsMapper.selectById(anImport.getGoodsid());
-        //库存量
-        Integer number1 = goods.getNumber();
-        Integer number2 = number1 - anImport.getNumber();
-        goods.setNumber(number2);
-        goodsMapper.updateById(goods);
-        //删除进货
-        return super.removeById(id);
-    }
+//    @Override
+//    public boolean removeById(Serializable id) {
+//        //进货量
+//        Import anImport = this.getBaseMapper().selectById(id);
+//        Goods goods = goodsMapper.selectById(anImport.getGoodsid());
+//        //库存量
+//        Integer number1 = goods.getNumber();
+//        Integer number2 = number1 - anImport.getNumber();
+//        goods.setNumber(number2);
+//        goodsMapper.updateById(goods);
+//        //删除进货
+//        return super.removeById(id);
+//    }
 }

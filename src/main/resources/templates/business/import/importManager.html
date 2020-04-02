@@ -212,7 +212,7 @@
 
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
 <script type="text/javascript">
-    var tableInit;
+    var atableInit;
     layui.use(['jquery', 'form', 'table', 'layer', 'laydate'], function () {
         var $ = layui.jquery;
         var form = layui.form;
@@ -230,7 +230,7 @@
         });
 
         //加载数据表格数据
-        tableInit = table.render({
+        atableInit = table.render({
             elem: '#importTable'
             , url: '/import/loadAllImport'
             , toolbar: '#importToolBar' //开启头部工具栏，并为其绑定左侧模板
@@ -261,7 +261,7 @@
                 // //得到数据总量
                 // console.log(count);
                 if (res.data.length == 0 && curr != 1){
-                    tableInit.reload({
+                    atableInit.reload({
                         page:{
                             curr: (curr - 1)
                         }
@@ -294,7 +294,7 @@
 
         //模糊查询
         form.on("submit(doSearch)", function (data) {
-            tableInit.reload({
+            atableInit.reload({
                 where: data.field,
                 page: {
                     curr: 1
@@ -456,7 +456,10 @@
             $.post(url, data.field, function (result) {
                 // alert(JSON.stringify(data.field));
                 if (result.code == 200) {
-                    tableInit.reload();
+                    atableInit.reload();
+                    // if (window.parent.btableInit!=undefined){
+                    //     window.parent.btableInit.reload();
+                    // }
                 }
                 layer.msg(result.msg);
                 layer.close(mainIndex);
@@ -473,7 +476,7 @@
             $.post(url, data, function (result) {
                 // alert(JSON.stringify(data.field));
                 if (result.code == 200) {
-                    tableInit.reload();
+                    atableInit.reload();
                     //刷新商品进货树
                     window.parent.left.importTree.reload();
                     //刷新下拉树
@@ -492,7 +495,7 @@
             $.post(url,data.field,function (result) {
                 // alert(JSON.stringify(data.field));
                 if (result.code == 200){
-                    tableInit.reload();
+                    atableInit.reload();
                 }
                 layer.msg(result.msg);
                 layer.close(mainIndex);
@@ -512,7 +515,7 @@
                 //向服务端发送删除指令
                 $.post("/import/deleteImport", {id: data.id}, function (res) {
                     if (res.code == 200) {
-                        tableInit.reload();
+                        atableInit.reload();
                     }
                     layer.msg(res.msg);
                 });
@@ -543,7 +546,7 @@
                     //向服务端发送请求
                     $.post("/import/batchDeleteImport",ids,function (result) {
                         if (result.code == 200){
-                            tableInit.reload();
+                            atableInit.reload();
                         }
                         layer.msg(result.msg);
                     });
@@ -588,7 +591,7 @@
             $.post("/returns/addReturns", data.field, function (result) {
                 // alert(JSON.stringify(data.field));
                 if (result.code == 200) {
-                    tableInit.reload();
+                    atableInit.reload();
                 }
                 layer.msg(result.msg);
                 layer.close(mainIndex);

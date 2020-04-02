@@ -47,14 +47,14 @@ public class ReturnsServiceImpl extends ServiceImpl<ReturnsMapper, Returns> impl
         depotStock.setDepotName(depot.getName());
         depotStock.setGoodsId(anImport.getGoodsid());
         depotStock.setGoodsName(goods.getGoodsname());
-        //将退货数量用负数插进数据表
+        //将退货出库数量用负数插进数据表
         depotStock.setGoodsNum(-number);
         depotStockMapper.insert(depotStock);
         //-------------------------------------------------------------------
 
         goods.setNumber(goods.getNumber()-number);
         goodsMapper.updateById(goods);
-        //3.添加退货单的信息
+        //3.添加退货出库单的信息
         Returns returns = new Returns();
         returns.setProviderid(anImport.getProviderid());
         returns.setPaytype(anImport.getPaytype());
@@ -65,6 +65,15 @@ public class ReturnsServiceImpl extends ServiceImpl<ReturnsMapper, Returns> impl
         returns.setNumber(number);
         returns.setRemark(remark);
         returns.setGoodsid(anImport.getGoodsid());
+
+        //把进货单的状态改为已退货--------------------------------------------------------------------
+        anImport.setState(2);
+        importMapper.updateById(anImport);
+
+
         this.getBaseMapper().insert(returns);
+
+
+
     }
 }

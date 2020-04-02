@@ -65,6 +65,8 @@ public class ImportController {
         queryWrapper.le(importVo.getEndTime()!=null, "importtime", importVo.getEndTime());
         queryWrapper.like(StringUtils.isNotBlank(importVo.getOperateperson()),"operateperson",importVo.getOperateperson());
         queryWrapper.like(StringUtils.isNotBlank(importVo.getRemark()),"remark",importVo.getRemark());
+        //null为未逻辑删除,1为已逻辑删除,2为已退货出库
+        queryWrapper.isNull("state");
         queryWrapper.orderByDesc("importtime");
         importService.page(page,queryWrapper);
         List<Import> records = page.getRecords();
@@ -87,7 +89,7 @@ public class ImportController {
     }
 
     /**
-     * 添加商品进货
+     * 添加商品进货入库
      * @param importVo
      * @return
      */
@@ -122,14 +124,16 @@ public class ImportController {
     }
 
     /**
-     * 删除商品进货
+     * 删除商品进货入库,将状态改为1，表示记录删除
      * @param id
      * @return
      */
     @RequestMapping("/deleteImport")
     public ResultObj deleteImport(Integer id){
         try {
-            importService.removeById(id);
+            Import anImport = importService.getById(id).setState(1);
+            importService.updateById(anImport);
+//            importService.removeById(id);
             return ResultObj.DELETE_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();

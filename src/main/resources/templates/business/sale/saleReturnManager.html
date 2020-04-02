@@ -3,7 +3,7 @@
       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
-    <title>商品进货管理</title>
+    <title>销售出库管理</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
@@ -24,10 +24,10 @@
     <form action="" method="post" id="searchForm" lay-filter="searchForm" class="layui-form layui-form-pane" style="text-align: center">
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">供应商</label>
+                <label class="layui-form-label">客户</label>
                 <div class="layui-input-inline" style="width: 250px">
-                    <select name="providerid" id="search_providerid" >
-                        <option value="0">请选择供应商</option>
+                    <select name="customerid" id="search_customerid" >
+                        <option value="0">请选择客户</option>
                     </select>
                 </div>
             </div>
@@ -82,21 +82,21 @@
 
 <!--数据表格开始-->
 <div>
-    <table class="layui-hide" id="importTable" lay-filter="importTable"></table>
-    <div id="importToolBar" style="display: none">
-        <!--<button type="button" lay-event="addImport"  class="layui-btn layui-btn-sm "><span
-                class="layui-icon layui-icon-add-1"></span>添加商品进货
-        </button>-->
+    <table class="layui-hide" id="saleTable" lay-filter="saleTable"></table>
+    <div id="saleToolBar" style="display: none">
+<!--        <button type="button" lay-event="addSale"  class="layui-btn layui-btn-sm "><span-->
+<!--                class="layui-icon layui-icon-add-1"></span>添加-->
+<!--        </button>-->
     </div>
-    <div id="importRowBar" style="display: none">
-        <!--<button type="button" lay-event="updateImport"  class="layui-btn layui-btn-sm layui-btn-normal"><span
-                class="layui-icon layui-icon-edit"></span>修改
-        </button>
-        <button type="button" lay-event="deleteImport"  class="layui-btn layui-btn-sm layui-btn-danger"><span
-                class="layui-icon layui-icon-delete"></span>删除
-        </button>-->
-        <button type="button" lay-event="back"  class="layui-btn layui-btn-sm layui-btn-danger"><span
-                class="layui-icon"></span>退货出库
+    <div id="saleRowBar" style="display: none">
+<!--        <button type="button" lay-event="updateSale"  class="layui-btn layui-btn-sm layui-btn-normal"><span-->
+<!--                class="layui-icon layui-icon-edit"></span>修改-->
+<!--        </button>-->
+<!--        <button type="button" lay-event="deleteSale"  class="layui-btn layui-btn-sm layui-btn-danger"><span-->
+<!--                class="layui-icon layui-icon-delete"></span>删除-->
+<!--        </button>-->
+        <button type="button" lay-event="back"  class="layui-btn layui-btn-sm layui-btn-warm"><span
+                class="layui-icon"></span>退货入库
         </button>
 
     </div>
@@ -108,10 +108,10 @@
     <form action="" method="post" class="layui-form layui-form-pane" id="dataForm" lay-filter="dataForm" >
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">供应商</label>
+                <label class="layui-form-label">客户</label>
                 <div class="layui-input-inline">
-                    <select name="providerid" id="providerid" lay-filter="providerid">
-                        <option value="0">请选择供应商</option>
+                    <select name="customerid" id="customerid" lay-filter="customerid">
+                        <option value="0">请选择客户</option>
                     </select>
                     <div class="mydiv" title="不可修改" style="position:absolute;width:100%;height:100%;left:0px;top:0px;background:#fff;opacity:0;filter:alpha(opacity=0)"> </div>
                 </div>
@@ -128,27 +128,28 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">进货数量</label>
+                <label class="layui-form-label">销售数量</label>
                 <div class="layui-input-inline">
                     <input type="hidden" name="id">
-                    <input type="text" class="layui-input"  name="number" lay-verify="number" placeholder="请输入商品进货包装">
+                    <input type="text" class="layui-input"  name="number" lay-verify="number" placeholder="请输入销售出库数量">
+                    <div class="mydiv" title="不可修改" style="position:absolute;width:100%;height:100%;left:0px;top:0px;background:#fff;opacity:0;filter:alpha(opacity=0)"> </div>
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">进货价格</label>
+                <label class="layui-form-label">销售价格</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" name="importprice" lay-verify="number" placeholder="请输入商品进货规格">
+                    <input type="text" class="layui-input" name="saleprice" lay-verify="number" placeholder="请输入销售出库规格">
                 </div>
             </div>
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">入库仓库</label>
+                <label class="layui-form-label">出库仓库</label>
                 <div class="layui-input-inline">
                     <select name="depotId" id="depotId">
                         <option value="0">请选择仓库</option>
                     </select>
-                    <!--                    <div class="mydiv" title="不可修改" style="position:absolute;width:100%;height:100%;left:0px;top:0px;background:#fff;opacity:0;filter:alpha(opacity=0)"> </div>-->
+                    <div class="mydiv" title="不可修改" style="position:absolute;width:100%;height:100%;left:0px;top:0px;background:#fff;opacity:0;filter:alpha(opacity=0)"> </div>
                 </div>
             </div>
             <div class="layui-inline">
@@ -161,7 +162,7 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">进货备注</label>
+            <label class="layui-form-label">销售备注</label>
             <div class="layui-input-block">
                 <textarea  name="remark" class="layui-textarea"></textarea>
             </div>
@@ -181,7 +182,7 @@
 <!--添加和修改的弹出层结束-->
 
 <!--退货的弹出层开始-->
-<div id="backGoodsDiv" style="display: none;padding: 5px;text-align: center">
+<div id="backGoodsDiv" style="display: none;padding: 5px">
     <form action="" method="post" class="layui-form layui-form-pane" id="dataBackForm" lay-filter="dataBackForm">
         <div class="layui-form-item">
             <label class="layui-form-label">所在仓库</label>
@@ -192,11 +193,11 @@
         <div class="layui-form-item">
             <label class="layui-form-label">退货数量</label>
             <div class="layui-input-block">
-                <!-- 进货单ID -->
+                <!-- 销售单ID -->
                 <input type="hidden" name="id">
-                <!-- 当前进货单的数量 -->
+                <!-- 当前销售单的数量 -->
                 <input type="hidden" name="currentNumber" id="currentNumber">
-                <input type="text" class="layui-input" name="number" lay-verify="required|number|checkNumber" placeholder="请输入退货数量">
+                <input type="text" class="layui-input"  name="number" lay-verify="required|number|checkNumber" placeholder="请输入退货数量">
             </div>
         </div>
         <div class="layui-form-item">
@@ -206,7 +207,7 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <div class="layui-input-block">
+            <div class="layui-input-block" style="text-align: center;">
                 <button type="button" class="layui-btn" lay-submit="" lay-filter="doBackSubmit" id="doBackSubmit" ><span class="layui-icon layui-icon-add-1"></span>提交</button>
                 <button type="reset" class="layui-btn layui-btn-warm"><span class="layui-icon layui-icon-refresh-1"></span>重置</button>
             </div>
@@ -217,7 +218,7 @@
 
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
 <script type="text/javascript">
-    var btableInit;
+    var tableInit;
     layui.use(['jquery', 'form', 'table', 'layer', 'laydate'], function () {
         var $ = layui.jquery;
         var form = layui.form;
@@ -235,25 +236,25 @@
         });
 
         //加载数据表格数据
-        btableInit = table.render({
-            elem: '#importTable'
-            , url: '/import/loadAllImport'
-            , toolbar: '#importToolBar' //开启头部工具栏，并为其绑定左侧模板
-            , title: '商品进货数据表'
+        tableInit = table.render({
+            elem: '#saleTable'
+            , url: '/sale/loadAllSale'
+            , toolbar: '#saleToolBar' //开启头部工具栏，并为其绑定左侧模板
+            , title: '销售出库数据表'
             , height: 'full-163'
             , cols: [ [
-                {field:'id', title:'进货ID',align:'center' ,sort:true, width:'100'}
-                ,{field:'providername', title:'供应商',align:'center',width:'120'}
-                ,{field:'depotName', title:'入库仓库',align:'center',width:'120'}
+                {field:'id', title:'销售ID',align:'center' ,sort:true, width:'100'}
+                ,{field:'customername', title:'客户',align:'center',width:'120'}
+                ,{field:'depotName', title:'出库仓库',align:'center',width:'120'}
                 ,{field:'goodsname', title:'商品名称',align:'center',width:'120'}
                 ,{field:'size', title:'规格',align:'center',width:'100'}
                 ,{field:'paytype', title:'支付类型',align:'center',width:'100'}
-                ,{field:'importtime', title:'进货时间',align:'center',width:'150'}
+                ,{field:'saletime', title:'销售时间',align:'center',width:'150'}
                 ,{field:'operateperson', title:'操作员',align:'center',width:'100'}
-                ,{field:'number', title:'进货数量',align:'center',width:'100'}
-                ,{field:'importprice', title:'进货价格',align:'center',width:'100'}
+                ,{field:'number', title:'销售数量',align:'center',width:'100'}
+                ,{field:'saleprice', title:'销售价格',align:'center',width:'100'}
                 ,{field:'remark', title:'备注',align:'center',width:'120'}
-                , {fixed: 'right', title: '操作', align: 'center', toolbar: '#importRowBar', width: '250'}
+                , {fixed: 'right', title: '操作', align: 'center', toolbar: '#saleRowBar', width: '250'}
             ] ]
             , page: true
             //done - 数据渲染完的回调
@@ -266,7 +267,7 @@
                 // //得到数据总量
                 // console.log(count);
                 if (res.data.length == 0 && curr != 1){
-                    btableInit.reload({
+                    tableInit.reload({
                         page:{
                             curr: (curr - 1)
                         }
@@ -275,18 +276,18 @@
             }
         });
 
-        //加载查询条件供应商的下拉列表
-        $.get("/provider/loadAllProviderDropDownList",function (res) {
+        //加载查询条件客户的下拉列表
+        $.get("/customer/loadAllCustomerDropDownList",function (res) {
             var data = res.data;
-            var content = "<option value=\"0\">请选择供应商</option>";
+            var content = "<option value=\"0\">请选择客户</option>";
             $.each(data,function (index,item) {
-                content += "<option value=\""+item.id+"\">"+item.providername+"</option>"
+                content += "<option value=\""+item.id+"\">"+item.customername+"</option>"
             });
-            $("#search_providerid").html(content);
+            $("#search_customerid").html(content);
             form.render("select");
         });
 
-        //加载查询条件商品进货的下拉列表
+        //加载查询条件销售出库的下拉列表
         $.get("/goods/loadAllGoodsDropDownList",function (res) {
             var data = res.data;
             var content = "<option value=\"0\">请选择商品</option>";
@@ -299,7 +300,7 @@
 
         //模糊查询
         form.on("submit(doSearch)", function (data) {
-            btableInit.reload({
+            tableInit.reload({
                 where: data.field,
                 page: {
                     curr: 1
@@ -309,33 +310,33 @@
         });
 
         //监听头工具栏事件
-        table.on('toolbar(importTable)', function (obj) {
+        table.on('toolbar(saleTable)', function (obj) {
             //得到选中行
             // var checkStatus = table.checkStatus(obj.config.id);
-            var checkStatus = table.checkStatus('importTable');
+            var checkStatus = table.checkStatus('saleTable');
             // alert(checkStatus);
             switch (obj.event) {
-                case 'batchDeleteImport':
-                    batchDeleteImport(checkStatus);
+                case 'batchDeleteSale':
+                    batchDeleteSale(checkStatus);
                     break;
-                case 'addImport':
-                    openAddImportLayer();
+                case 'addSale':
+                    openAddSaleLayer();
                     break;
             }
         });
 
         //监听行工具条的事件
-        table.on('tool(importTable)', function (obj) { //注：tool 是工具条事件名，deleteImport 是 table 原始容器的属性 lay-filter="对应的值"
+        table.on('tool(saleTable)', function (obj) { //注：tool 是工具条事件名，deleteSale 是 table 原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
             // var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
             switch (layEvent) {
-                case 'deleteImport':
+                case 'deleteSale':
                     // layer.msg("删除");
-                    deleteImport(data);
+                    deleteSale(data);
                     break;
-                case 'updateImport':
-                    openUpdateImportLayer(data);
+                case 'updateSale':
+                    openUpdateSaleLayer(data);
                     break;
                 case 'back':
                     openBackGoodsLayer(data);
@@ -344,22 +345,23 @@
         });
 
         /**
-         * 打开添加商品进货的弹出层
+         * 打开添加销售出库的弹出层
          */
         var mainIndex;
         var url;
 
-        function openAddImportLayer() {
+        function openAddSaleLayer() {
             mainIndex = layer.open({
                 type: 1,
                 content: $("#addOrUpdateDiv"),
                 area: ['800px', '600px'],
-                title: '添加商品进货',
+                title: '添加销售出库',
                 success: function () {
                     $("#dataForm")[0].reset();
-                    url = "/import/addImport";
-                    //加载查询供应商的下拉列表
-                    initProviderForSelect();
+                    url = "/sale/addSale";
+                    //加载查询客户的下拉列表
+                    initCustomerForSelect();
+                    initGoodsSelect();
                     //加载仓库的下拉列表
                     $.get("/depot/loadAllDepotDropDownList",function (res) {
                         var data = res.data;
@@ -370,40 +372,40 @@
                         $("#depotId").html(content);
                         form.render("select");
                     });
-                    //隐藏禁用供应商和商品的下拉框的div
+                    //隐藏禁用客户和商品的下拉框的div
                     $(".mydiv").hide();
                 }
             });
         }
 
-        //加载添加或修改弹出层的查询供应商的下拉列表
-        function initProviderForSelect(providerid) {
+        //加载添加或修改弹出层的查询客户的下拉列表
+        function initCustomerForSelect(customerid) {
             //点击修改后再添加需清空
             $("#goodsid").html("");
-            $.get("/provider/loadAllProviderDropDownList",function (res) {
+            $.get("/customer/loadAllCustomerDropDownList",function (res) {
                 var data = res.data;
-                var content = "<option value=\"0\">请选择供应商</option>";
+                var content = "<option value=\"0\">请选择客户</option>";
                 $.each(data,function (index,item) {
-                    content += "<option value=\""+item.id+"\">"+item.providername+"</option>"
+                    content += "<option value=\""+item.id+"\">"+item.customername+"</option>"
                 });
-                $("#providerid").html(content);
-                if (providerid!=undefined){
-                    $("#providerid").val(providerid);
+                $("#customerid").html(content);
+                if (customerid!=undefined){
+                    $("#customerid").val(customerid);
                 }
                 form.render("select");
             });
         }
 
-        //监听添加页面的供应商下拉框的改变事件 lay-filter="providerid"
-        form.on('select(providerid)', function(data){
-            console.log(data);
-            var providerid = data.value;
-            initGoodsSelect(providerid);
-        });
+        //监听添加页面的客户下拉框的改变事件 lay-filter="customerid"
+        // form.on('select(customerid)', function(data){
+        //     console.log(data);
+        //     var customerid = data.value;
+        //     initGoodsSelect(customerid);
+        // });
 
         //加载商品下拉列表
-        function initGoodsSelect(providerid,goodsid) {
-            $.get("/goods/loadGoodsDropDownListByProviderId",{providerid:providerid},function (res) {
+        function initGoodsSelect(customerid,goodsid) {
+            $.get("/goods/loadAllGoodsDropDownList",function (res) {
                 var data = res.data;
                 var content = "<option value=\"0\">请选择商品</option>";
                 $.each(data,function (index,item) {
@@ -419,22 +421,22 @@
         }
 
         /**
-         * 打开修改商品进货的弹出层
+         * 打开修改销售出库的弹出层
          */
-        function openUpdateImportLayer(data) {
+        function openUpdateSaleLayer(data) {
             mainIndex = layer.open({
                 type: 1,
                 content: $("#addOrUpdateDiv"),
                 area: ['800px', '600px'],
-                title: '商品进货修改',
+                title: '销售出库修改',
                 success: function () {
                     $("#dataForm")[0].reset();//应该可以不加
                     //装载数据
                     form.val("dataForm", data);
-                    url = "/import/updateImport";
-                    //加载查询供应商的下拉列表并选中
-                    initProviderForSelect(data.providerid);
-                    initGoodsSelect(data.providerid,data.goodsid);
+                    url = "/sale/updateSale";
+                    //加载查询客户的下拉列表并选中
+                    initCustomerForSelect(data.customerid);
+                    initGoodsSelect(data.customerid,data.goodsid);
                     $.get("/depot/loadAllDepotDropDownList",function (res) {
                         var res_data = res.data;
                         var content = "<option value=\"0\">请选择仓库</option>";
@@ -448,20 +450,20 @@
                         $("#depotId").html(content);
                         form.render("select");
                     });
-                    //禁用供应商和商品的下拉框
+                    //禁用客户和商品的下拉框
                     $(".mydiv").show();
                 }
             });
         }
 
         /**
-         * 监听添加或修改商品进货的提交
+         * 监听添加或修改销售出库的提交
          */
         form.on("submit(doSubmit)",function (data) {
             $.post(url, data.field, function (result) {
                 // alert(JSON.stringify(data.field));
                 if (result.code == 200) {
-                    btableInit.reload();
+                    tableInit.reload();
                 }
                 layer.msg(result.msg);
                 layer.close(mainIndex);
@@ -478,11 +480,11 @@
             $.post(url, data, function (result) {
                 // alert(JSON.stringify(data.field));
                 if (result.code == 200) {
-                    btableInit.reload();
-                    //刷新商品进货树
-                    window.parent.left.importTree.reload();
+                    tableInit.reload();
+                    //刷新销售出库树
+                    window.parent.left.saleTree.reload();
                     //刷新下拉树
-                    selectImportTree.reload();
+                    selectSaleTree.reload();
                 }
                 layer.msg(result.msg);
                 layer.close(mainIndex);
@@ -497,7 +499,7 @@
             $.post(url,data.field,function (result) {
                 // alert(JSON.stringify(data.field));
                 if (result.code == 200){
-                    btableInit.reload();
+                    tableInit.reload();
                 }
                 layer.msg(result.msg);
                 layer.close(mainIndex);
@@ -506,18 +508,18 @@
         })*/
 
         /**
-         * 删除商品进货
+         * 删除销售出库
          * @param data
          */
-        function deleteImport(data) {
+        function deleteSale(data) {
             // console.log(data);
-            layer.confirm('你确定要删除这个商品进货吗', {icon: 3, title: '提示'}, function (index) {
+            layer.confirm('你确定要删除这条销售出库的记录吗', {icon: 3, title: '提示'}, function (index) {
                 // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                 layer.close(index);
                 //向服务端发送删除指令
-                $.post("/import/deleteImport", {id: data.id}, function (res) {
+                $.post("/sale/deleteSale", {id: data.id}, function (res) {
                     if (res.code == 200) {
-                        btableInit.reload();
+                        tableInit.reload();
                     }
                     layer.msg(res.msg);
                 });
@@ -526,13 +528,13 @@
         }
 
         /**
-         * 批量删除商品进货
+         * 批量删除销售出库
          * @param checkStatus
          */
-        function batchDeleteImport(checkStatus) {
+        function batchDeleteSale(checkStatus) {
             var length = checkStatus.data.length;
             if (length > 0) {
-                layer.confirm("你确定要删除这些商品进货吗",{icon: 3, title: '提示'},function (index) {
+                layer.confirm("你确定要删除这些销售出库吗",{icon: 3, title: '提示'},function (index) {
                     layer.close(index);
                     //获取选中行的数据
                     var data = checkStatus.data;
@@ -546,9 +548,9 @@
                     });
                     // alert(ids);
                     //向服务端发送请求
-                    $.post("/import/batchDeleteImport",ids,function (result) {
+                    $.post("/sale/batchDeleteSale",ids,function (result) {
                         if (result.code == 200){
-                            btableInit.reload();
+                            tableInit.reload();
                         }
                         layer.msg(result.msg);
                     });
@@ -590,11 +592,10 @@
          * 监听退货提交
          */
         form.on("submit(doBackSubmit)",function (data) {
-            $.post("/returns/addReturns", data.field, function (result) {
+            $.post("/saleBack/addSaleBack", data.field, function (result) {
                 // alert(JSON.stringify(data.field));
                 if (result.code == 200) {
-                    btableInit.reload();
-                    // window.parent.atableInit.reload();
+                    tableInit.reload();
                 }
                 layer.msg(result.msg);
                 layer.close(mainIndex);
