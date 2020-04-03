@@ -1,5 +1,7 @@
 package com.lzh.wms.system.controller;
 
+import com.lzh.wms.business.domain.PurchaseBill;
+import com.lzh.wms.business.service.PurchaseBillService;
 import com.lzh.wms.system.common.SpringUtils;
 import com.lzh.wms.system.common.WebUtils;
 import com.lzh.wms.system.domain.LeaveBill;
@@ -229,12 +231,21 @@ public class SystemController {
     @RequestMapping("toDoTask")
     public String toDoTask(WorkFlowVo workFlowVo, Model model){
         //1、根据任务id查请假单
-        LeaveBill leaveBill = workFlowService.queryLeaveBillByTaskId(workFlowVo.getTaskId());
-        model.addAttribute("leaveBill",leaveBill);
+//        LeaveBill leaveBill = workFlowService.queryLeaveBillByTaskId(workFlowVo.getTaskId());
+        Object object = workFlowService.queryObjectBillByTaskId(workFlowVo.getTaskId());
+        String url = null;
+        if (object instanceof LeaveBill){
+            model.addAttribute("leaveBill",object);
+            url = "system/workFlow/doTaskManager";
+        }else if (object instanceof PurchaseBill){
+            model.addAttribute("purchaseBill",object);
+            url = "system/workFlow/doPurchaseBillTaskManager";
+        }
         //2、根据任务id查询连线信息
         List<String> outgoingName = workFlowService.queryOutgoingNameByTaskId(workFlowVo.getTaskId());
         model.addAttribute("outgoingName",outgoingName);
-        return "system/workFlow/doTaskManager";
+//        return "system/workFlow/doTaskManager";
+        return url;
     }
 
 
@@ -259,17 +270,27 @@ public class SystemController {
 
     @Autowired
     private LeaveBillService leaveBillService;
+    @Autowired
+    private PurchaseBillService purchaseBillService;
     /**
-     * 根据请假单id查询请假单和对应审批批注的信息
+     * 根据请假单id或采购单id查询请假单和对应审批批注的信息
      * @param workFlowVo
      * @param model
      * @return
      */
     @RequestMapping("viewSpProcess")
     public String viewSpProcess(WorkFlowVo workFlowVo, Model model){
-        LeaveBill leaveBill = leaveBillService.getById(workFlowVo.getLeaveBillId());
-        model.addAttribute("leaveBill",leaveBill);
-        return "/system/workFlow/viewSpProcess";
+        String url = null;
+        if (workFlowVo.getLeaveBillId()!=null){
+            LeaveBill leaveBill = leaveBillService.getById(workFlowVo.getLeaveBillId());
+            model.addAttribute("leaveBill",leaveBill);
+            url = "/system/workFlow/viewSpProcess";
+        }else if (workFlowVo.getPurchaseBillId()!=null){
+            PurchaseBill purchaseBill = purchaseBillService.getById(workFlowVo.getPurchaseBillId());
+            model.addAttribute("purchaseBill",purchaseBill);
+            url = "/system/workFlow/viewPurchaseBillSpProcess";
+        }
+        return url;
     }
 
     /**

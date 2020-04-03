@@ -128,14 +128,15 @@ public class WorkFlowController {
 
     /**
      * 启动流程
-     * @param leaveBillId
-     * @param type
+     * @param workFlowVo
      * @return
      */
     @RequestMapping("startProcess")
-    public ResultObj startProcess(Integer leaveBillId,String type){
+//    public ResultObj startProcess(Integer leaveBillId,String type){
+    public ResultObj startProcess(WorkFlowVo workFlowVo){
         try {
-            workFlowService.startProcess(leaveBillId,type);
+//            workFlowService.startProcess(leaveBillId,type);
+            workFlowService.startProcess(workFlowVo);
             return ResultObj.START_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
@@ -186,13 +187,13 @@ public class WorkFlowController {
 
 
     /**
-     * 根据请假单id查询批注信息
+     * 根据请假单或采购单id查询批注信息
      * @param workFlowVo
      * @return
      */
-    @RequestMapping("queryCommentByLeaveBillId")
-    public DataGridView queryCommentByLeaveBillId(WorkFlowVo workFlowVo){
-         return workFlowService.queryCommentByLeaveBillId(workFlowVo.getLeaveBillId());
+    @RequestMapping("queryCommentByBillId")
+    public DataGridView queryCommentByBillId(WorkFlowVo workFlowVo){
+         return workFlowService.queryCommentByBillId(workFlowVo);
     }
 
     @RequestMapping("queryCurrentUserHistoryTask")

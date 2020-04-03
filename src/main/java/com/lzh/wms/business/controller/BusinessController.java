@@ -158,4 +158,13 @@ public class BusinessController {
         return "business/depotStock/stockAlarmManager";
     }
 
+    /**
+     * 跳转到采购单申请
+     * @return
+     */
+    @RequestMapping("toPurchaseBillManager")
+    public String toPurchaseBillManager(){
+        return "business/purchaseBill/purchaseBillManager";
+    }
+
 }

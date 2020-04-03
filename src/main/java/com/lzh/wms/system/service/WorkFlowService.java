@@ -51,10 +51,10 @@ public interface WorkFlowService {
 
     /**
      * 启动流程
-     * @param leaveBillId
-     * @param type
+     * @param workFlowVo
      */
-    void startProcess(Integer leaveBillId, String type);
+//    void startProcess(Integer leaveBillId, String type);
+    void startProcess(WorkFlowVo workFlowVo);
 
     /**
      * 查询当前用户待办任务
@@ -64,11 +64,12 @@ public interface WorkFlowService {
     DataGridView queryCurrentUserTask(WorkFlowVo workFlowVo);
 
     /**
-     * 根据任务id查询请假单id
+     * 根据任务id查询不同类型单id
      * @param taskId
      * @return
      */
-    LeaveBill queryLeaveBillByTaskId(String taskId);
+//    LeaveBill queryLeaveBillByTaskId(String taskId);
+    Object queryObjectBillByTaskId(String taskId);
 
     /**
      * 根据任务id查询连线信息
@@ -105,11 +106,11 @@ public interface WorkFlowService {
     Map<String, Object> queryTaskCoordinateByTaskId(String taskId);
 
     /**
-     * 根据请假单id查询批注信息
-     * @param leaveBillId
+     * 根据请假单或采购单id查询批注信息
+     * @param workFlowVo
      * @return
      */
-    DataGridView queryCommentByLeaveBillId(Integer leaveBillId);
+    DataGridView queryCommentByBillId(WorkFlowVo workFlowVo);
 
     /**
      * 查看我的审批记录

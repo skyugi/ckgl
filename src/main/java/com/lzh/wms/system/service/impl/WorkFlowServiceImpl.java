@@ -1,5 +1,7 @@
 package com.lzh.wms.system.service.impl;
 
+import com.lzh.wms.business.domain.PurchaseBill;
+import com.lzh.wms.business.mapper.PurchaseBillMapper;
 import com.lzh.wms.system.common.Constant;
 import com.lzh.wms.system.common.DataGridView;
 import com.lzh.wms.system.common.WebUtils;
@@ -9,6 +11,7 @@ import com.lzh.wms.system.mapper.LeaveBillMapper;
 import com.lzh.wms.system.service.WorkFlowService;
 import com.lzh.wms.system.vo.WorkFlowVo;
 import com.lzh.wms.system.vo.camunda.*;
+import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.engine.*;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
@@ -54,6 +57,8 @@ public class WorkFlowServiceImpl implements WorkFlowService {
     private IdentityService identityService;
     @Autowired
     private HistoryService historyService;
+    @Autowired
+    private PurchaseBillMapper purchaseBillMapper;
 
     @Override
     public DataGridView queryAllProcessDeployment(WorkFlowVo workFlowVo) {
@@ -145,21 +150,38 @@ public class WorkFlowServiceImpl implements WorkFlowService {
     }
 
     @Override
-    public void startProcess(Integer leaveBillId, String type) {
+//    public void startProcess(Integer leaveBillId, String type) {
+    public void startProcess(WorkFlowVo workFlowVo) {
 //        String processDefinitionKey = type.replace("","").getClass().getSimpleName();
-        String processDefinitionKey = type;
-        //LeaveBill:1
-        String businessKey = processDefinitionKey + ":" +leaveBillId;
+        //LeaveBill PurchaseBill
+        String processDefinitionKey = workFlowVo.getType();
+        String businessKey = null;
+        if (workFlowVo.getLeaveBillId()!=null) {
+            //LeaveBill:1
+            businessKey = processDefinitionKey + ":" +workFlowVo.getLeaveBillId();
+        }else if (workFlowVo.getPurchaseBillId()!=null){
+            businessKey = processDefinitionKey + ":" +workFlowVo.getPurchaseBillId();
+        }
+
         Map<String, Object> variables = new HashMap<>();
         User user = (User) WebUtils.getSession().getAttribute("user");
         //设置流程变量，下个任务的办理人
         variables.put("username",user.getName());
         runtimeService.startProcessInstanceByKey(processDefinitionKey,businessKey,variables);
-        //更新请假单的状态
-        LeaveBill leaveBill = leaveBillMapper.selectByPrimaryKey(leaveBillId);
-        //审批中
-        leaveBill.setState(Constant.STATE_LEAVEBILL_ONE);
-        leaveBillMapper.updateByPrimaryKeySelective(leaveBill);
+
+        if (workFlowVo.getLeaveBillId()!=null){
+            //更新请假单的状态
+            LeaveBill leaveBill = leaveBillMapper.selectByPrimaryKey(workFlowVo.getLeaveBillId());
+            //审批中
+            leaveBill.setState(Constant.STATE_LEAVEBILL_ONE);
+            leaveBillMapper.updateByPrimaryKeySelective(leaveBill);
+        }else if (workFlowVo.getPurchaseBillId()!=null){
+            //更新采购单的状态
+            PurchaseBill purchaseBill = purchaseBillMapper.selectById(workFlowVo.getPurchaseBillId());
+            //审批中
+            purchaseBill.setState(Constant.STATE_LEAVEBILL_ONE);
+            purchaseBillMapper.updateById(purchaseBill);
+        }
     }
 
     @Override
@@ -179,7 +201,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
     }
 
     @Override
-    public LeaveBill queryLeaveBillByTaskId(String taskId) {
+    public Object queryObjectBillByTaskId(String taskId) {
         //1、根据任务id查询任务
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         //2、取流程实例id或执行实例id,执行实例没有查business的api
@@ -191,8 +213,14 @@ public class WorkFlowServiceImpl implements WorkFlowService {
         //4、取   LeaveBill:16
         String businessKey = processInstance.getBusinessKey();
         String[] split = businessKey.split(":");
-        String leaveBillId = split[1];
-        return leaveBillMapper.selectByPrimaryKey(Integer.valueOf(leaveBillId));
+//        String leaveBillId = split[1];
+        String billId = split[1];
+        if (businessKey.contains("LeaveBill")){
+            return leaveBillMapper.selectByPrimaryKey(Integer.valueOf(billId));
+        }else if (businessKey.contains("PurchaseBill")){
+            return purchaseBillMapper.selectById(billId);
+        }
+        return null;
     }
 
     @Override
@@ -269,6 +297,8 @@ public class WorkFlowServiceImpl implements WorkFlowService {
         String outgoingName = workFlowVo.getOutgoingName();
         //请假单id
         Integer leaveBillId = workFlowVo.getLeaveBillId();
+        //采购单id
+        Integer purchaseBillId = workFlowVo.getPurchaseBillId();
         //批注
         String comment = workFlowVo.getComment();
         //1、根据任务id查任务实例
@@ -309,7 +339,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 //        identityService.setAuthenticatedUserId(username);好像只涉及ACT_RU_AUTHORIZATION的表，这里好像可以不用再设回去因为完成任务后这条数据就没了,ACT_HI_AUTHORIZATION不知道有没有影响反正暂时不用查到这个表
 //        但是如果是驳回呢，测试一下,应该没问题
 
-        if (processInstance == null) {
+        if (processInstance == null&&leaveBillId!=null) {
             //说明流程结束
             LeaveBill leaveBill = new LeaveBill();
             leaveBill.setId(leaveBillId);
@@ -320,6 +350,16 @@ public class WorkFlowServiceImpl implements WorkFlowService {
                 leaveBill.setState(Constant.STATE_LEAVEBILL_TWO);
             }
             leaveBillMapper.updateByPrimaryKeySelective(leaveBill);
+        }else if (processInstance == null&&purchaseBillId!=null){
+            PurchaseBill purchaseBill = new PurchaseBill();
+            purchaseBill.setId(purchaseBillId);
+            if (outgoingName.equals("取消")){
+                purchaseBill.setState(Constant.STATE_LEAVEBILL_THREE);
+            }else {
+                //审批完成
+                purchaseBill.setState(Constant.STATE_LEAVEBILL_TWO);
+            }
+            purchaseBillMapper.updateById(purchaseBill);
         }
     }
 
@@ -363,9 +403,16 @@ public class WorkFlowServiceImpl implements WorkFlowService {
     }
 
     @Override
-    public DataGridView queryCommentByLeaveBillId(Integer leaveBillId) {
+    public DataGridView queryCommentByBillId(WorkFlowVo workFlowVo) {
+        Integer leaveBillId = workFlowVo.getLeaveBillId();
+        Integer purchaseBillId = workFlowVo.getPurchaseBillId();
+        String businessKey = null;
         //组装businessKey
-        String businessKey = LeaveBill.class.getSimpleName()+":"+leaveBillId;
+        if (leaveBillId!=null){
+            businessKey = LeaveBill.class.getSimpleName()+":"+leaveBillId;
+        }else if (purchaseBillId!=null){
+           businessKey = PurchaseBill.class.getSimpleName()+":"+purchaseBillId;
+        }
         //如果流程结束task为null
         //Task task = taskService.createTaskQuery().processInstanceBusinessKey(businessKey).singleResult();//因为leaveBillId是唯一的
         //String taskId = task.getId();

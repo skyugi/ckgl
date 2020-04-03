@@ -41,6 +41,14 @@ public class WorkFlowVo {
      */
     private Integer leaveBillId;
     /**
+     * 采购单id
+     */
+    private Integer purchaseBillId;
+    /**
+     * 类型
+     */
+    private String type;
+    /**
      * 任务id
       */
     private String taskId;
