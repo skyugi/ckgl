@@ -139,4 +139,23 @@ public class BusinessController {
     public String toSaleBackRecordManager(){
         return "business/sale/saleBackRecordManager";
     }
+
+    /**
+     * 跳转到库存查询
+     * @return
+     */
+    @RequestMapping("toDepotStockManager")
+    public String toDepotStockManager(){
+        return "business/depotStock/depotStockManager";
+    }
+
+    /**
+     * 跳转到库存报警
+     * @return
+     */
+    @RequestMapping("toStockAlarmManager")
+    public String toStockAlarmManager(){
+        return "business/depotStock/stockAlarmManager";
+    }
+
 }

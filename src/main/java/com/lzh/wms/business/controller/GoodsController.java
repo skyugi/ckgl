@@ -167,5 +167,33 @@ public class GoodsController {
 
     }
 
+    /**
+     * 查询库存预警
+     * @param page
+     * @param limit
+     * @return
+     */
+    @RequestMapping("/loadStockAlarm")
+    public DataGridView loadStockAlarm(Integer page,Integer limit){
+        IPage<Goods> page1 = new Page<Goods>(page,limit);
+        //组装查询条件
+        QueryWrapper<Goods> queryWrapper = new QueryWrapper<>();
+        //不用写where
+        queryWrapper.apply("number < dangernum");
+        goodsService.page(page1,queryWrapper);
+        List<Goods> records = page1.getRecords();
+        for (Goods goods : records) {
+            Provider provider = providerService.getById(goods.getProviderid());
+            Kind kind = kindService.getById(goods.getKindId());
+            if (null!=provider){
+                goods.setProvidername(provider.getProvidername());
+            }
+            if (kind!=null){
+                goods.setKindName(kind.getName());
+            }
+        }
+        return new  DataGridView(page1.getTotal(),records);
+    }
+
 }
 
