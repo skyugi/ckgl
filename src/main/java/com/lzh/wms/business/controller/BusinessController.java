@@ -167,4 +167,13 @@ public class BusinessController {
         return "business/purchaseBill/purchaseBillManager";
     }
 
+    /**
+     * 跳转到我的消息
+     * @return
+     */
+    @RequestMapping("toMyMessageManager")
+    public String toMessageManager(){
+        return "business/message/myMessageManager";
+    }
+
 }

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的消息管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="/resources/favicon.ico">
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/resources/css/public.css" media="all"/>
+    <style>
+        input#depotName {
+            border-radius: 10px;
+            height: 30px;
+            margin-top: 4px;
+        }
+        input#goodsName {
+            border-radius: 10px;
+            height: 30px;
+            margin-top: 4px;
+        }
+        input#leaderprovideridTree_select_input_id {
+            border-radius: 10px;
+            height: 30px;
+            margin-top: 4px;
+        }
+        input.layui-input.layui-unselect {
+            border-radius: 10px;
+            height: 30px;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body class="childrenBody">
+<!--<h1>我的消息</h1>-->
+<!--数据表格开始-->
+<div style="padding-top: 12px">
+    <table title="我的消息" class="layui-hide" id="messageTable" lay-filter="messageTable" style="margin-top: 15px;"></table>
+    <div id="messageToolBar" style="display: none">
+<!--        <button type="button" lay-event="addProvider" class="layui-btn layui-btn-sm "><span-->
+<!--                class="layui-icon layui-icon-add-1"></span>添加供应商-->
+<!--        </button>-->
+<!--        <button type="button" lay-event="batchDeleteProvider" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>批量删除</button>-->
+        <span style="color: black;font-weight: bold">我的消息</span>
+    </div>
+</div>
+<!--数据表格结束-->
+
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.use(['jquery', 'form', 'table', 'layer', 'laydate','layedit'], function () {
+        var $ = layui.jquery;
+        var form = layui.form;
+        var table = layui.table;
+        var layer = layui.layer;
+        var laydate = layui.laydate;
+        var layedit = layui.layedit;
+        //初始化时间选择器
+        laydate.render({
+            elem:'#startTime',
+            type:'datetime'
+        });
+        laydate.render({
+            elem:'#endTime',
+            type:'datetime'
+        });
+        //初始化富文本
+        // var editIndex = layedit.build('content');
+
+        //加载数据表格数据
+        var tableInit = table.render({
+            elem: '#messageTable'
+            ,url:'/message/loadAllMessage'
+            ,toolbar: '#messageToolBar' //开启头部工具栏，并为其绑定左侧模板
+            ,title: '我的消息数据表'
+            ,height: 'full-20'
+            ,cols: [ [
+                {type: 'checkbox', fixed: 'left', width:50}
+                ,{field:'id', title:'ID', align: 'center', unresize: true, sort: true, width:80}
+                ,{field:'username', title:'发消息人', align: 'center', edit: 'text', minWidth:120}
+                ,{field:'title', title:'消息标题', align: 'center', edit: 'text', minWidth:120}
+                ,{field:'time', title:'消息接收时间', align: 'center', sort: true, minWidth:120}
+                ,{field:'goods', title:'内容', align: 'center', minWidth:100}
+                ,{field:'num', title:'数量', align: 'center', sort: true, minWidth:100}
+                ,{field:'reason', title:'详情', align: 'center', minWidth:120}
+                ,{fixed: 'right', title:'操作',align: 'center', toolbar: '#messageRowBar', minWidth:220}
+            ] ]
+            ,page: true
+        });
+
+        //模糊查询
+        form.on("submit(doSearch)",function (data) {
+            tableInit.reload({
+                where:data.field,
+                page:{
+                    curr:1
+                }
+            });
+            return false;
+        });
+        
+    });
+</script>
+</body>
+</html>
