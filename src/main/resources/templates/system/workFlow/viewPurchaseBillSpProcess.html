@@ -36,6 +36,12 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
+                <label class="layui-form-label">采购数量</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="num" id="num" th:value="${purchaseBill.num}" disabled="disabled" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
                 <label class="layui-form-label">采购时间</label>
                 <div class="layui-input-inline">
                     <input type="text" name="purchasetime" id="purchasetime" th:value="${#dates.format(purchaseBill.purchasetime,'yyyy-MM-dd HH:mm:ss')}" disabled="disabled" autocomplete="off" class="layui-input">

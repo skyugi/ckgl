@@ -250,7 +250,16 @@ public class WorkFlowServiceImpl implements WorkFlowService {
             // PvmTransition就是连接对象
             for (PvmTransition pvmTransition : transitions) {
                 String name = pvmTransition.getProperty("name").toString();
-                names.add(name);
+
+
+
+
+
+                //
+                if (name != null) {
+                    names.add(name);
+                }
+//                names.add(name);
             }
         }
         return names;
@@ -326,8 +335,14 @@ public class WorkFlowServiceImpl implements WorkFlowService {
         //!!!!!!!!!!注意这里key写outgo,流程图里这样定义了
         variables.put("outgo",outgoingName);
 
-        Double days = leaveBillMapper.selectByPrimaryKey(leaveBillId).getDays();
-        variables.put("days",days);
+        //---------------------------网关---------------------------------------
+        if (leaveBillId!=null){
+            Double days = leaveBillMapper.selectByPrimaryKey(leaveBillId).getDays();
+            variables.put("days",days);
+        }else if (purchaseBillId!=null){
+            Integer num = purchaseBillMapper.selectById(purchaseBillId).getNum();
+            variables.put("num",num);
+        }
 
         taskService.complete(taskId,variables);
 

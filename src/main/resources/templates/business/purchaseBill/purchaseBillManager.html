@@ -108,6 +108,13 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
+                <label class="layui-form-label">采购数量</label>
+                <div class="layui-input-inline">
+<!--                    <input type="text" name="purchasetime" id="purchasetime" lay-verify="required" readonly="readonly" autocomplete="off" class="layui-input">-->
+                    <input type="text" name="num" id="num" lay-verify="required|number"autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
                 <label class="layui-form-label">采购时间</label>
                 <div class="layui-input-inline">
 <!--                    <input type="text" name="purchasetime" id="purchasetime" lay-verify="required" readonly="readonly" autocomplete="off" class="layui-input">-->
@@ -170,6 +177,7 @@
                 ,{field:'title', title:'采购单标题', align: 'center', edit: 'text', minWidth:120}
                 ,{field:'purchasetime', title:'采购时间', align: 'center', sort: true, minWidth:120}
                 ,{field:'goods', title:'采购物品', align: 'center', sort: true, minWidth:100}
+                ,{field:'num', title:'采购数量', align: 'center', sort: true, minWidth:100}
                 ,{field:'reason', title:'采购详情', align: 'center', minWidth:120}
                 ,{field: 'state', title: '状态', minWidth:100, align:"center",templet:function(d){
                         var html="";

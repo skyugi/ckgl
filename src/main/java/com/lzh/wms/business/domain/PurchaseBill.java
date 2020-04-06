@@ -47,5 +47,6 @@ public class PurchaseBill implements Serializable {
 
     private Integer userid;
 
+    private Integer num;
 
 }

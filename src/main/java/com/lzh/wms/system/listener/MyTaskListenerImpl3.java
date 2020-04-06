@@ -8,11 +8,10 @@ import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.engine.delegate.TaskListener;
 
 /**
- * 支持请假网关,设置二级领导为待办人
  * @author lzh
- * @date 2020-04-06
+ * @date 2020-04-06 22:46
  */
-public class MyTaskListenerImpl2 implements TaskListener {
+public class MyTaskListenerImpl3 implements TaskListener {
     @Override
     public void notify(DelegateTask delegateTask) {
         //得到当前用户
@@ -21,10 +20,9 @@ public class MyTaskListenerImpl2 implements TaskListener {
         //这里没法注入，好像是因为MyTaskListenerImpl不是由spring创建的，加component也不行
         UserService userService = SpringUtils.getBean(UserService.class);
         User leaderOfCurrentUser = userService.getById(mgr);
-
-        User leaderOfCurrentUserLeader = userService.getById(leaderOfCurrentUser.getMgr());
-
-//        delegateTask.setAssignee(leaderOfCurrentUser.getName());
-        delegateTask.setAssignee(leaderOfCurrentUserLeader.getName());
+        //必须是采购部的领导
+        if (leaderOfCurrentUser.getDeptid()==33){
+            delegateTask.setAssignee(leaderOfCurrentUser.getName());
+        }
     }
 }
