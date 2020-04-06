@@ -325,6 +325,10 @@ public class WorkFlowServiceImpl implements WorkFlowService {
         Map<String,Object> variables = new HashMap<>(16);
         //!!!!!!!!!!注意这里key写outgo,流程图里这样定义了
         variables.put("outgo",outgoingName);
+
+        Double days = leaveBillMapper.selectByPrimaryKey(leaveBillId).getDays();
+        variables.put("days",days);
+
         taskService.complete(taskId,variables);
 
 
