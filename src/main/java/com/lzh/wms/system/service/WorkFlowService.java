@@ -57,6 +57,11 @@ public interface WorkFlowService {
     void startProcess(WorkFlowVo workFlowVo);
 
     /**
+     * 启动汇总当日销售额流程
+     */
+    void startSaleReportProcess();
+
+    /**
      * 查询当前用户待办任务
      * @param workFlowVo
      * @return

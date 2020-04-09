@@ -144,6 +144,21 @@ public class WorkFlowController {
         }
     }
 
+    @RequestMapping("startSaleReportProcess")
+//    public ResultObj startProcess(Integer leaveBillId,String type){
+    public ResultObj startSaleReportProcess(){
+        try {
+//            workFlowService.startProcess(leaveBillId,type);
+            workFlowService.startSaleReportProcess();
+            return ResultObj.START_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.START_ERROR;
+        }
+    }
+
+
+
     /**
      * 查询当前用户的待办任务
      * @param workFlowVo

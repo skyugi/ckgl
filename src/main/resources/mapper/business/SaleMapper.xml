@@ -2,4 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lzh.wms.business.mapper.SaleMapper">
 
+    <select id="statMonthSale" resultType="java.math.BigDecimal">
+--         天数+1是因为我的mysql时间比系统的慢了1天多
+      -- SELECT sum(saleprice*number ) FROM bus_sale WHERE TO_DAYS(bus_sale.saletime) = TO_DAYS(NOW()) + 1
+      -- select sum(saleprice*number ) from bus_sale where STR_TO_DATE(`saletime`,'%Y-%m-%d') = STR_TO_DATE(NOW(),'%Y-%m-%d') + 1;
+        select sum(saleprice*number) from bus_sale where date_format(`saletime`, '%Y%m') = date_format(curdate() , '%Y%m');
+    </select>
 </mapper>

@@ -87,6 +87,9 @@
         <button type="button" lay-event="addSale"  class="layui-btn layui-btn-sm "><span
                 class="layui-icon layui-icon-add-1"></span>添加
         </button>
+        <button type="button" lay-event="saleReport"  class="layui-btn layui-btn-sm "><span
+                class="layui-icon layui-icon-add-1"></span>汇总当日销售额
+        </button>
     </div>
     <div id="saleRowBar" style="display: none">
         <button type="button" lay-event="updateSale"  class="layui-btn layui-btn-sm layui-btn-normal"><span
@@ -316,6 +319,9 @@
                 case 'addSale':
                     openAddSaleLayer();
                     break;
+                case 'saleReport':
+                    openSaleReportLayer();
+                    break;
             }
         });
 
@@ -337,6 +343,19 @@
                     break;
             }
         });
+
+        function openSaleReportLayer() {
+            layer.confirm('你确定要汇总今天的销售额吗',{icon: 3, title: '提示'},function (index) {
+                layer.close(index);
+                //向服务端发送删除指令
+                $.post("/workFlow/startSaleReportProcess", function (result) {
+                    if (result.code == 200){
+                        tableInit.reload();
+                    }
+                    layer.msg(result.msg);
+                });
+            });
+        }
 
         /**
          * 打开添加销售出库的弹出层

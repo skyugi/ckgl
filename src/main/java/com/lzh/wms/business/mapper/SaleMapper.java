@@ -3,6 +3,8 @@ package com.lzh.wms.business.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lzh.wms.business.domain.Sale;
 
+import java.math.BigDecimal;
+
 /**
  * <p>
  *  Mapper 接口
@@ -13,4 +15,9 @@ import com.lzh.wms.business.domain.Sale;
  */
 public interface SaleMapper extends BaseMapper<Sale> {
 
+    /**
+     * 汇总当月销售额
+     * @return
+     */
+    BigDecimal statMonthSale();
 }

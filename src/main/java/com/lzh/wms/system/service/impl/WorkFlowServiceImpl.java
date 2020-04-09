@@ -2,6 +2,10 @@ package com.lzh.wms.system.service.impl;
 
 import com.lzh.wms.business.domain.PurchaseBill;
 import com.lzh.wms.business.mapper.PurchaseBillMapper;
+import com.lzh.wms.business.mapper.SaleMapper;
+import com.lzh.wms.business.mapper.SaleReportMapper;
+import com.lzh.wms.business.service.SaleReportService;
+import com.lzh.wms.business.service.SaleService;
 import com.lzh.wms.system.common.Constant;
 import com.lzh.wms.system.common.DataGridView;
 import com.lzh.wms.system.common.WebUtils;
@@ -34,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.zip.ZipInputStream;
 
@@ -59,6 +64,11 @@ public class WorkFlowServiceImpl implements WorkFlowService {
     private HistoryService historyService;
     @Autowired
     private PurchaseBillMapper purchaseBillMapper;
+    @Autowired
+    private SaleMapper saleMapper;
+    @Autowired
+//    private SaleReportMapper saleReportMapper;
+    private SaleReportService saleReportService;
 
     @Override
     public DataGridView queryAllProcessDeployment(WorkFlowVo workFlowVo) {
@@ -182,6 +192,97 @@ public class WorkFlowServiceImpl implements WorkFlowService {
             purchaseBill.setState(Constant.STATE_LEAVEBILL_ONE);
             purchaseBillMapper.updateById(purchaseBill);
         }
+    }
+
+    @Override
+    public void startSaleReportProcess() {
+        String processDefinitionKey = "SaleReport";
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey);
+        System.out.println("汇总销售额流程启动成功:" + processInstance.getId() + "   " + processInstance.getProcessDefinitionId() + "  "
+                + processInstance.getProcessInstanceId());
+            doReceiveTaskOfSaleReport(processInstance);
+    }
+
+    /**
+     * 汇总当月销售额
+     * @param processInstance
+     */
+    private void doReceiveTaskOfSaleReport(ProcessInstance processInstance) {
+        User user = (User) WebUtils.getSession().getAttribute("user");
+        /*String processDefinitionKey = "SaleReport";
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey);
+        System.out.println("流程启动成功:" + processInstance.getId() + "   " + processInstance.getProcessDefinitionId() + "  "
+                + processInstance.getProcessInstanceId());*/
+        /** 使用流程变量设置当日销售额，用来传递业务参数 */
+        BigDecimal value = null;// 应该是去查询数据库，进行汇总 ---耗时操作
+        int tryNum=0;
+        while (true) {
+            tryNum++;
+            try {
+//                value = this.hzxx();
+                value = saleMapper.statMonthSale();
+                //睡眠三十秒
+                Thread.sleep(30000);
+                break;
+            } catch (Exception e) {
+                e.printStackTrace();
+                if(tryNum==10) {
+                    System.out.println("尝试10次汇总。全部失败，已终止汇总");
+                    break;
+                }
+            }
+        }
+        runtimeService.setVariable(processInstance.getId(), "当前的销售额", value);
+        /** 向后执行一步，如果流程处于等待状态，使得流程继续执行 */
+        runtimeService.signal(processInstance.getId());
+
+
+
+        try {
+            Thread.sleep(30000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+
+        /** 从流程变量中获取汇总当日销售额的值 */
+        BigDecimal saleMoney = (BigDecimal) runtimeService//
+                .getVariable(processInstance.getId(), "当前的销售额");
+        System.out.println(saleMoney);
+        System.out.println("发送短信");
+        Boolean flag = false;
+        int num = 0;
+        do {
+//            flag = send();
+            flag = saleReportService.addSaleReportRecord(saleMoney,user);
+            num++;
+            if (num == 10) {
+                System.out.println("尝试10次发送。全部失败，已终止发送");
+                break;
+            }
+        } while (!flag);
+
+        /** 向后执行一步，如果流程处于等待状态，使得流程继续执行 */
+        runtimeService.signal(processInstance.getId());
+        System.out.println("流程执行完成");
+    }
+
+    public BigDecimal hzxx() {
+        // 查询数据库
+        System.out.println("数据汇总中....");
+        try {
+            Thread.sleep(2000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("数据汇总完成");
+        return BigDecimal.valueOf(10000);
+    }
+
+    private Boolean send() {
+        System.out.println("发送成功");
+        return true;
     }
 
     @Override

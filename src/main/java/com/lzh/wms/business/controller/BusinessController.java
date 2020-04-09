@@ -168,12 +168,21 @@ public class BusinessController {
     }
 
     /**
-     * 跳转到我的消息
+     * 跳转到我的消息 采购
      * @return
      */
     @RequestMapping("toMyMessageManager")
     public String toMessageManager(){
         return "business/message/myMessageManager";
+    }
+
+    /**
+     * 跳转当月销售汇总消息
+     * @return
+     */
+    @RequestMapping("toSaleReportManager")
+    public String toSaleReportManager(){
+        return "business/message/saleReportManager";
     }
 
 }
