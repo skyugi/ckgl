@@ -39,4 +39,14 @@ public class StatServiceImpl implements StatService {
     public List<Double> queryImportPayTypeYearEachMonthStat(String year) {
         return statMapper.queryImportPayTypeYearEachMonthStat(year);
     }
+
+    @Override
+    public List<BaseEntity> queryRoleNameStatList() {
+        return statMapper.queryRoleNameStatList();
+    }
+
+    @Override
+    public List<BaseEntity> queryDeptEmployeeNumStat() {
+        return statMapper.queryDeptEmployeeNumStat();
+    }
 }

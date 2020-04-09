@@ -102,4 +102,33 @@ public class StatController {
         }
         return list;
     }
+
+    /**
+     * 统计各角色/职位的员工人数占比
+     * @return
+     */
+    @RequestMapping("queryRoleNameStatJson")
+    public List<BaseEntity> queryRoleNameStatJson(){
+        return statService.queryRoleNameStatList();
+    }
+
+    /**
+     * 统计各部门人数
+     * @param
+     * @return
+     */
+    @RequestMapping("queryDeptEmployeeNumStatJson")
+    public Map<String,Object> queryDeptEmployeeNumStatJson(){
+        List<BaseEntity> list = statService.queryDeptEmployeeNumStat();
+        Map<String,Object> map = new HashMap<>(16);
+        List<String> listName = new ArrayList<>();
+        List<Double> listValue = new ArrayList<>();
+        for (BaseEntity baseEntity : list) {
+            listName.add(baseEntity.getName());
+            listValue.add(baseEntity.getValue());
+        }
+        map.put("name",listName);
+        map.put("value",listValue);
+        return map;
+    }
 }

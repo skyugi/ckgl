@@ -35,4 +35,16 @@ public interface StatMapper {
      * @return
      */
     List<Double> queryImportPayTypeYearEachMonthStat(String year);
+
+    /**
+     * 统计各角色/职位的员工人数占比
+     * @return
+     */
+    List<BaseEntity> queryRoleNameStatList();
+
+    /**
+     * 统计部门人数
+     * @return
+     */
+    List<BaseEntity> queryDeptEmployeeNumStat();
 }
