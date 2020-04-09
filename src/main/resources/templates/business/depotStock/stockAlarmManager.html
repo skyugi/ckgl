@@ -82,6 +82,9 @@
             ,cols: [ [
                 // {field:'id', title:'ID',align:'center' ,width:'80'}
                 {field:'goodsname', title:'商品名称',align:'center',width:'120'}
+                ,{field:'goodsimg', title:'商品图片',align:'center',width:'100', templet:function(d){
+                        return '<img width=40 height=40 src=/file/showImageByPath?path='+d.goodsimg+ ' />';
+                    }}
                 ,{field:'providername', title:'供应商',align:'center',width:'120'}
                 ,{field:'kindName', title:'类别',align:'center',width:'120'}
                 ,{field:'produceplace', title:'产地',align:'center',width:'120'}
@@ -93,9 +96,6 @@
                 ,{field:'price', title:'商品价格',align:'center',width:'100'}
                 ,{field:'number', title:'库存量',align:'center',width:'100'}
                 ,{field:'dangernum', title:'预警库存',align:'center',width:'100'}
-                ,{field:'goodsimg', title:'商品图片',align:'center',width:'100', templet:function(d){
-                        return '<img width=40 height=40 src=/file/showImageByPath?path='+d.goodsimg+ ' />';
-                    }}
                 ,{field:'available', title:'是否有效',align:'center',width:'120',templet:function(d){
                         return d.available==1?'<font color=blue>是</font>':'<font color=red>否</font>';
                     }}
