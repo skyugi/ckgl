@@ -51,12 +51,21 @@ public class BusinessController {
     }
 
     /**
-     * 跳转到退货查询
+     * 跳转到采购退货查询
      * @return
      */
     @RequestMapping("/toReturnsManager")
     public String toReturnsManager(){
         return "/business/returns/returnsManager";
+    }
+
+    /**
+     * 跳转到采购退货
+     * @return
+     */
+    @RequestMapping("/toImportReturnManager")
+    public String toImportReturnManager(){
+        return "/business/import/importReturnManager";
     }
 
     /**
@@ -76,4 +85,104 @@ public class BusinessController {
     public String toKindManager(){
         return "/business/kind/kindManager";
     }
+
+    /**
+     * 跳转到医药货品管理
+     * @return
+     */
+    @RequestMapping("/toProductManager")
+    public String toProductManager(){
+        return "/business/product/productManager";
+    }
+
+    /**
+     * 跳转到客户地区统计
+     * @return
+     */
+    @RequestMapping("toCustomerInfoStat")
+    public String toCustomerAreaStat(){
+        return "statistics/customerInfoStat";
+    }
+
+    /**
+     * 跳转到采购统计
+     * @return
+     */
+    @RequestMapping("toImportInfoStat")
+    public String toImportInfoStat(){
+        return "statistics/importInfoStat";
+    }
+
+    /**
+     * 跳转到销售出库
+     * @return
+     */
+    @RequestMapping("toSaleManager")
+    public String toSaleManager(){
+        return "business/sale/saleManager";
+    }
+
+    /**
+     * 跳转到退货入库
+     * @return
+     */
+    @RequestMapping("toSaleReturnManager")
+    public String toSaleReturnManager(){
+        return "business/sale/saleReturnManager";
+    }
+
+    /**
+     * 跳转到退货入库记录
+     * @return
+     */
+    @RequestMapping("toSaleBackRecordManager")
+    public String toSaleBackRecordManager(){
+        return "business/sale/saleBackRecordManager";
+    }
+
+    /**
+     * 跳转到库存查询
+     * @return
+     */
+    @RequestMapping("toDepotStockManager")
+    public String toDepotStockManager(){
+        return "business/depotStock/depotStockManager";
+    }
+
+    /**
+     * 跳转到库存报警
+     * @return
+     */
+    @RequestMapping("toStockAlarmManager")
+    public String toStockAlarmManager(){
+        return "business/depotStock/stockAlarmManager";
+    }
+
+    /**
+     * 跳转到采购单申请
+     * @return
+     */
+    @RequestMapping("toPurchaseBillManager")
+    public String toPurchaseBillManager(){
+        return "business/purchaseBill/purchaseBillManager";
+    }
+
+    /**
+     * 跳转到我的消息 采购
+     * @return
+     */
+    @RequestMapping("toMyMessageManager")
+    public String toMessageManager(){
+        return "business/message/myMessageManager";
+    }
+
+    /**
+     * 跳转当月销售汇总消息
+     * @return
+     */
+    @RequestMapping("toSaleReportManager")
+    public String toSaleReportManager(){
+        return "business/message/saleReportManager";
+    }
+
 }

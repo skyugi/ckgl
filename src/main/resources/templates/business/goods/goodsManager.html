@@ -32,6 +32,14 @@
                 </div>
             </div>
             <div class="layui-inline">
+                <label class="layui-form-label">类别</label>
+                <div class="layui-input-inline" style="width: 250px">
+                    <select name="kindId" id="search_kindId" >
+                        <option value="0">请选择类别</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
                 <label class="layui-form-label">商品名称</label>
                 <div class="layui-input-inline" style="width: 250px">
                     <input type="text" name="goodsname" id="goodsname" autocomplete="off" class="layui-input">
@@ -109,6 +117,14 @@
                         <div class="layui-input-block">
                             <select name="providerid" id="providerid">
                                 <option value="0">请选择供应商</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item magt3">
+                        <label class="layui-form-label">类别</label>
+                        <div class="layui-input-block">
+                            <select name="kindId" id="kindId">
+                                <option value="0">请选择类别</option>
                             </select>
                         </div>
                     </div>
@@ -218,11 +234,12 @@
             , url: '/goods/loadAllGoods'
             , toolbar: '#goodsToolBar' //开启头部工具栏，并为其绑定左侧模板
             , title: '商品数据表'
-            , height: 'full-163'
+            , height: 'full-111'
             , cols: [ [
                 {field:'id', title:'ID',align:'center' ,width:'80'}
                 ,{field:'goodsname', title:'商品名称',align:'center',width:'150'}
                 ,{field:'providername', title:'供应商',align:'center',width:'120'}
+                ,{field:'kindName', title:'类别',align:'center',width:'120'}
                 ,{field:'produceplace', title:'产地',align:'center',width:'120'}
                 ,{field:'size', title:'商品规格',align:'center',width:'120'}
                 ,{field:'goodspackage', title:'商品包装',align:'center',width:'120'}
@@ -268,6 +285,17 @@
                 content += "<option value=\""+item.id+"\">"+item.providername+"</option>"
             });
             $("#search_providerid").html(content);
+            form.render("select");
+        });
+
+        //加载查询条件类别的下拉列表
+        $.get("/kind/loadAllKindDropDownList",function (res) {
+            var data = res.data;
+            var content = "<option value=\"0\">请选择类别</option>";
+            $.each(data,function (index,item) {
+                content += "<option value=\""+item.id+"\">"+item.name+"</option>"
+            });
+            $("#search_kindId").html(content);
             form.render("select");
         });
 
@@ -339,6 +367,16 @@
                         $("#providerid").html(content);
                         form.render("select");
                     });
+                    //加载查询条件类别的下拉列表
+                    $.get("/kind/loadAllKindDropDownList",function (res) {
+                        var data = res.data;
+                        var content = "<option value=\"0\">请选择类别</option>";
+                        $.each(data,function (index,item) {
+                            content += "<option value=\""+item.id+"\">"+item.name+"</option>"
+                        });
+                        $("#kindId").html(content);
+                        form.render("select");
+                    });
                     //设置默认图片
                     $('.thumbImg').attr('src','/file/showImageByPath?path=images/defaultgoodsimg.png');
                     $("#goodsimg").val('images/defaultgoodsimg.png');
@@ -372,6 +410,20 @@
                             }
                         });
                         $("#providerid").html(content);
+                        form.render("select");
+                    });
+                    //加载查询条件类别的下拉列表
+                    $.get("/kind/loadAllKindDropDownList",function (res) {
+                        var res_data = res.data;
+                        var content = "<option value=\"0\">请选择类别</option>";
+                        $.each(res_data,function (index,item) {
+                            if (data.kindId==item.id){
+                                content += "<option value=\""+item.id+"\" selected >"+item.name+"</option>"
+                            }else {
+                                content += "<option value=\""+item.id+"\">"+item.name+"</option>"
+                            }
+                        });
+                        $("#kindId").html(content);
                         form.render("select");
                     });
                     $('.thumbImg').attr('src','/file/showImageByPath?path='+data.goodsimg);

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>查看流程图的弹出层</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="/resources/favicon.ico">
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/resources/css/public.css" media="all"/>
+    <link rel="stylesheet" href="/resources/layui_ext/dtree/dtree.css" media="all"/>
+    <link rel="stylesheet" href="/resources/layui_ext/dtree/font/dtreefont.css" media="all"/>
+
+    <style type="text/css">
+        div{
+            /*border: 2px solid blue;*/
+            /*padding: 4px;*/
+            /*display: none;*/
+        }
+    </style>
+</head>
+<body>
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script type="text/javascript">
+    var deploymentId = '[[${workFlowVo.deploymentId}]]';
+/*
+    layui.use(['jquery', 'upload', 'table', 'layer'], function () {
+        var $ = layui.jquery;
+    });
+
+    $(function () {
+        $('#flowDiagram').attr('src',"/workFlow/viewFlowDiagram?deploymentId="+deploymentId);
+    });*/
+    if ('[[${coordinate}]]'!=undefined){
+        var x = '[[${coordinate.x}]]';
+        var y = '[[${coordinate.y}]]';
+        var width = '[[${coordinate.width}]]';
+        var height = '[[${coordinate.height}]]';
+    }
+
+    window.onload=function () {
+        if (x!=undefined&&y!=undefined&&width!=undefined&&height!=undefined){
+            var A = document.getElementById("a");
+            A.style.left=x-160+width/2+"px";
+            A.style.top=y-120+height/2+"px";
+            A.style.width=width+"px";
+            A.style.height=height+"px";
+        }
+    }
+    // $(function () {
+    //     var A = document.getElementById("a");
+    //     A.left(x);
+    //     A.top(y);
+    //     A.width(width);
+    //     A.height(height);
+    // })
+</script>
+    <img alt="流程图" th:src="@{${viewFlowDiagramPath}}">
+<!--<img alt="流程图" id="flowDiagram" name="flowDiagram">-->
+<!--    left=x-160+width/2 top=y-120+height/2 width=width+12-->
+<!--<div th:style="position: absolute;left: '@{${coordinate.x}}'px;top: '@{${coordinate.y}}'px;width: '@{${coordinate.width}}'px;height: '@{${coordinate.height}}'px"></div>-->
+<div id="a" style="position: absolute;left:  px;top: px;width:px;height: px;text-align: center">
+    <span style="color: green;font-weight: bold;position: absolute;bottom: 6px;right: 6px">当前节点</span>
+</div>
+</body>
+</html>

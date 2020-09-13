@@ -95,9 +95,9 @@
         <button type="button" lay-event="deleteImport"  class="layui-btn layui-btn-sm layui-btn-danger"><span
                 class="layui-icon layui-icon-delete"></span>删除
         </button>
-        <button type="button" lay-event="back"  class="layui-btn layui-btn-sm layui-btn-normal"><span
+        <!--<button type="button" lay-event="back"  class="layui-btn layui-btn-sm layui-btn-normal"><span
                 class="layui-icon layui-icon-delete"></span>退货
-        </button>
+        </button>-->
 
     </div>
 </div>
@@ -131,7 +131,8 @@
                 <label class="layui-form-label">进货数量</label>
                 <div class="layui-input-inline">
                     <input type="hidden" name="id">
-                    <input type="text" class="layui-input"  name="number" lay-verify="number" placeholder="请输入商品进货包装">
+                    <input type="text" class="layui-input"  name="number" lay-verify="number" placeholder="请输入商品进货数量">
+                    <div class="mydiv" title="不可修改" style="position:absolute;width:100%;height:100%;left:0px;top:0px;background:#fff;opacity:0;filter:alpha(opacity=0)"> </div>
                 </div>
             </div>
             <div class="layui-inline">
@@ -142,11 +143,22 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">支付类型</label>
-            <div class="layui-input-block">
-                <input type="radio" name="paytype" value="支付宝" title="支付宝">
-                <input type="radio" name="paytype" value="微信" title="微信">
-                <input type="radio" name="paytype" value="信用卡" title="信用卡">
+            <div class="layui-inline">
+                <label class="layui-form-label">入库仓库</label>
+                <div class="layui-input-inline">
+                    <select name="depotId" id="depotId">
+                        <option value="0">请选择仓库</option>
+                    </select>
+                    <div class="mydiv" title="不可修改" style="position:absolute;width:100%;height:100%;left:0px;top:0px;background:#fff;opacity:0;filter:alpha(opacity=0)"> </div>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">支付类型</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="paytype" value="支付宝" title="支付宝">
+                    <input type="radio" name="paytype" value="微信" title="微信">
+                    <input type="radio" name="paytype" value="信用卡" title="信用卡">
+                </div>
             </div>
         </div>
         <div class="layui-form-item">
@@ -200,7 +212,7 @@
 
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
 <script type="text/javascript">
-    var tableInit;
+    var atableInit;
     layui.use(['jquery', 'form', 'table', 'layer', 'laydate'], function () {
         var $ = layui.jquery;
         var form = layui.form;
@@ -218,7 +230,7 @@
         });
 
         //加载数据表格数据
-        tableInit = table.render({
+        atableInit = table.render({
             elem: '#importTable'
             , url: '/import/loadAllImport'
             , toolbar: '#importToolBar' //开启头部工具栏，并为其绑定左侧模板
@@ -227,6 +239,7 @@
             , cols: [ [
                 {field:'id', title:'进货ID',align:'center' ,sort:true, width:'100'}
                 ,{field:'providername', title:'供应商',align:'center',width:'120'}
+                ,{field:'depotName', title:'入库仓库',align:'center',width:'120'}
                 ,{field:'goodsname', title:'商品名称',align:'center',width:'120'}
                 ,{field:'size', title:'规格',align:'center',width:'100'}
                 ,{field:'paytype', title:'支付类型',align:'center',width:'100'}
@@ -248,7 +261,7 @@
                 // //得到数据总量
                 // console.log(count);
                 if (res.data.length == 0 && curr != 1){
-                    tableInit.reload({
+                    atableInit.reload({
                         page:{
                             curr: (curr - 1)
                         }
@@ -281,7 +294,7 @@
 
         //模糊查询
         form.on("submit(doSearch)", function (data) {
-            tableInit.reload({
+            atableInit.reload({
                 where: data.field,
                 page: {
                     curr: 1
@@ -342,6 +355,16 @@
                     url = "/import/addImport";
                     //加载查询供应商的下拉列表
                     initProviderForSelect();
+                    //加载仓库的下拉列表
+                    $.get("/depot/loadAllDepotDropDownList",function (res) {
+                        var data = res.data;
+                        var content = "<option value=\"0\">请选择仓库</option>";
+                        $.each(data,function (index,item) {
+                            content += "<option value=\""+item.id+"\">"+item.name+"</option>"
+                        });
+                        $("#depotId").html(content);
+                        form.render("select");
+                    });
                     //隐藏禁用供应商和商品的下拉框的div
                     $(".mydiv").hide();
                 }
@@ -407,6 +430,19 @@
                     //加载查询供应商的下拉列表并选中
                     initProviderForSelect(data.providerid);
                     initGoodsSelect(data.providerid,data.goodsid);
+                    $.get("/depot/loadAllDepotDropDownList",function (res) {
+                        var res_data = res.data;
+                        var content = "<option value=\"0\">请选择仓库</option>";
+                        $.each(res_data,function (index,item) {
+                            if (data.depotId==item.id){
+                                content += "<option value=\""+item.id+"\" selected >"+item.name+"</option>"
+                            }else {
+                                content += "<option value=\""+item.id+"\">"+item.name+"</option>"
+                            }
+                        });
+                        $("#depotId").html(content);
+                        form.render("select");
+                    });
                     //禁用供应商和商品的下拉框
                     $(".mydiv").show();
                 }
@@ -420,7 +456,10 @@
             $.post(url, data.field, function (result) {
                 // alert(JSON.stringify(data.field));
                 if (result.code == 200) {
-                    tableInit.reload();
+                    atableInit.reload();
+                    // if (window.parent.btableInit!=undefined){
+                    //     window.parent.btableInit.reload();
+                    // }
                 }
                 layer.msg(result.msg);
                 layer.close(mainIndex);
@@ -437,7 +476,7 @@
             $.post(url, data, function (result) {
                 // alert(JSON.stringify(data.field));
                 if (result.code == 200) {
-                    tableInit.reload();
+                    atableInit.reload();
                     //刷新商品进货树
                     window.parent.left.importTree.reload();
                     //刷新下拉树
@@ -456,7 +495,7 @@
             $.post(url,data.field,function (result) {
                 // alert(JSON.stringify(data.field));
                 if (result.code == 200){
-                    tableInit.reload();
+                    atableInit.reload();
                 }
                 layer.msg(result.msg);
                 layer.close(mainIndex);
@@ -476,7 +515,7 @@
                 //向服务端发送删除指令
                 $.post("/import/deleteImport", {id: data.id}, function (res) {
                     if (res.code == 200) {
-                        tableInit.reload();
+                        atableInit.reload();
                     }
                     layer.msg(res.msg);
                 });
@@ -507,7 +546,7 @@
                     //向服务端发送请求
                     $.post("/import/batchDeleteImport",ids,function (result) {
                         if (result.code == 200){
-                            tableInit.reload();
+                            atableInit.reload();
                         }
                         layer.msg(result.msg);
                     });
@@ -552,7 +591,7 @@
             $.post("/returns/addReturns", data.field, function (result) {
                 // alert(JSON.stringify(data.field));
                 if (result.code == 200) {
-                    tableInit.reload();
+                    atableInit.reload();
                 }
                 layer.msg(result.msg);
                 layer.close(mainIndex);

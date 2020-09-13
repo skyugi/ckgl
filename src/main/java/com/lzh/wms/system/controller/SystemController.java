@@ -1,7 +1,22 @@
 package com.lzh.wms.system.controller;
 
+import com.lzh.wms.business.domain.PurchaseBill;
+import com.lzh.wms.business.service.PurchaseBillService;
+import com.lzh.wms.system.common.SpringUtils;
+import com.lzh.wms.system.common.WebUtils;
+import com.lzh.wms.system.domain.LeaveBill;
+import com.lzh.wms.system.service.LeaveBillService;
+import com.lzh.wms.system.service.WorkFlowService;
+import com.lzh.wms.system.vo.WorkFlowVo;
+import org.camunda.bpm.engine.repository.ProcessDefinition;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.jws.WebParam;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 系统前端控制器 路由
@@ -166,4 +181,125 @@ public class SystemController {
     public String toCacheManager() {
         return "system/cache/cacheManager";
     }
+
+    /**
+     * 跳转到请假单管理
+     * @return
+     */
+    @RequestMapping("toLeaveBillManager")
+    public String toLeavebillManager(){
+        return "system/leaveBill/leaveBillManager";
+    }
+
+    /**
+     * 跳转到流程管理
+     * @return
+     */
+    @RequestMapping("toWorkFlowManager")
+    public String toWorkFlowManager(){
+        return "system/workFlow/workFlowManager";
+    }
+
+    /**
+     * 跳转到查看流程图的界面
+     * @param workFlowVo
+     * @return
+     */
+    @RequestMapping("toViewFlowDiagram")
+    public String toViewFlowDiagram(WorkFlowVo workFlowVo, Model model){
+//        WebUtils.getSession().setAttribute("viewFlowDiagramPath","/workFlow/viewFlowDiagram?deploymentId="+workFlowVo.getDeploymentId());
+        model.addAttribute("viewFlowDiagramPath","/workFlow/viewFlowDiagram?deploymentId="+workFlowVo.getDeploymentId());
+        return "system/workFlow/viewFlowDiagramWithoutZb";
+    }
+
+    /**
+     * 跳转到我的待办任务
+     * @return
+     */
+    @RequestMapping("toMyTaskManager")
+    public String toMyTaskManager(){
+        return "system/workFlow/MyTaskManager";
+    }
+
+    WorkFlowService workFlowService = SpringUtils.getBean(WorkFlowService.class);
+
+    /**
+     * 跳转到办理任务的界面
+     * @param workFlowVo
+     * @return
+     */
+    @RequestMapping("toDoTask")
+    public String toDoTask(WorkFlowVo workFlowVo, Model model){
+        //1、根据任务id查请假单
+//        LeaveBill leaveBill = workFlowService.queryLeaveBillByTaskId(workFlowVo.getTaskId());
+        Object object = workFlowService.queryObjectBillByTaskId(workFlowVo.getTaskId());
+        String url = null;
+        if (object instanceof LeaveBill){
+            model.addAttribute("leaveBill",object);
+            url = "system/workFlow/doTaskManager";
+        }else if (object instanceof PurchaseBill){
+            model.addAttribute("purchaseBill",object);
+            url = "system/workFlow/doPurchaseBillTaskManager";
+        }
+        //2、根据任务id查询连线信息
+        List<String> outgoingName = workFlowService.queryOutgoingNameByTaskId(workFlowVo.getTaskId());
+        model.addAttribute("outgoingName",outgoingName);
+//        return "system/workFlow/doTaskManager";
+        return url;
+    }
+
+
+    /**
+     * 根据任务id查看流程图进度
+     * @param workFlowVo
+     * @param model
+     * @return
+     */
+    @RequestMapping("toViewProcessByTaskId")
+    public String toViewProcessByTaskId(WorkFlowVo workFlowVo,Model model){
+        ProcessDefinition processDefinition = workFlowService.queryProcessDefinitionByTaskId(workFlowVo.getTaskId());
+        //取出流程部署id
+        String deploymentId = processDefinition.getDeploymentId();
+        workFlowVo.setDeploymentId(deploymentId);
+        //根据任务id查询节点坐标
+        Map<String,Object> coordinate = workFlowService.queryTaskCoordinateByTaskId(workFlowVo.getTaskId());
+        model.addAttribute("viewFlowDiagramPath","/workFlow/viewFlowDiagram?deploymentId="+workFlowVo.getDeploymentId());
+        model.addAttribute("coordinate",coordinate);
+        return "/system/workFlow/viewFlowDiagram";
+    }
+
+    @Autowired
+    private LeaveBillService leaveBillService;
+    @Autowired
+    private PurchaseBillService purchaseBillService;
+    /**
+     * 根据请假单id或采购单id查询请假单和对应审批批注的信息
+     * @param workFlowVo
+     * @param model
+     * @return
+     */
+    @RequestMapping("viewSpProcess")
+    public String viewSpProcess(WorkFlowVo workFlowVo, Model model){
+        String url = null;
+        if (workFlowVo.getLeaveBillId()!=null){
+            LeaveBill leaveBill = leaveBillService.getById(workFlowVo.getLeaveBillId());
+            model.addAttribute("leaveBill",leaveBill);
+            url = "/system/workFlow/viewSpProcess";
+        }else if (workFlowVo.getPurchaseBillId()!=null){
+            PurchaseBill purchaseBill = purchaseBillService.getById(workFlowVo.getPurchaseBillId());
+            model.addAttribute("purchaseBill",purchaseBill);
+            url = "/system/workFlow/viewPurchaseBillSpProcess";
+        }
+        return url;
+    }
+
+    /**
+     * 跳转到我的任务处理记录
+     * @return
+     */
+    @RequestMapping("toMySpManager")
+    public String toMySpManager(){
+        return "system/workFlow/mySpManager";
+    }
+
 }

@@ -317,6 +317,12 @@ public class BusinessCacheAspect {
             return result1;
         }else {
             Goods result2 = (Goods) joinPoint.proceed();
+
+            if (result2==null){
+                return null;
+            }
+
+
             CACHE_CONTAINER.put(CACHE_GOODS_PREFIX+result2.getId(),result2);
             log.info("未从缓存里找到商品对象，查询数据库并放入缓存：------"+CACHE_GOODS_PREFIX+result2.getId() + "------");
             return result2;

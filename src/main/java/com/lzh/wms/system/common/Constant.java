@@ -37,9 +37,20 @@ public interface Constant {
     /**
      * 商品默认图片
      */
-    String IMAGES_DEFAULTGOODSIMG_PNG = "images/defaultgoodsimg.png";
+    String IMAGES_DEFAULTGOODSIMG_PNG = "images/defaultProductImgPath.png";
     /**
      * 临时图片后缀
      */
     String TEMP_IMAGE_SUFFIX = "_temp";
+    /**
+     * 请假单的状态
+     */
+    //未提交
+    public static final String STATE_LEAVEBILL_ZERO = "0";
+    //审批中
+    public static final String STATE_LEAVEBILL_ONE = "1";
+    //审批完成
+    public static final String STATE_LEAVEBILL_TWO = "2";
+    //取消
+    public static final String STATE_LEAVEBILL_THREE = "3";
 }

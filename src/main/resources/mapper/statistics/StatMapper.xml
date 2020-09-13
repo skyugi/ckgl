@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lzh.wms.statistics.mapper.StatMapper">
+
+    <select id="queryCustomerAreaStatList" resultType="com.lzh.wms.statistics.domain.BaseEntity">
+        select address as name,count(1) as value from bus_customer
+		GROUP BY address
+    </select>
+    <select id="queryCustomerNameStatList" resultType="com.lzh.wms.statistics.domain.BaseEntity">
+        select customername as name,count(1) as value from bus_customer
+		GROUP BY customername
+    </select>
+    <select id="queryImportPayTypeYearStat" resultType="com.lzh.wms.statistics.domain.BaseEntity">
+        select paytype as name,sum(importprice) as value from bus_import
+		where
+		DATE_FORMAT(importtime,"%Y")=#{year} GROUP BY paytype
+    </select>
+    <select id="queryImportPayTypeYearEachMonthStat" resultType="java.lang.Double">
+        select sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'01')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'02')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'03')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'04')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'05')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'06')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'07')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'08')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'09')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'10')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'11')
+		UNION all
+		select
+		sum(importprice*number) from bus_import where
+		DATE_FORMAT(importtime,"%Y%m")=concat(#{value},'12')
+    </select>
+    <select id="queryRoleNameStatList" resultType="com.lzh.wms.statistics.domain.BaseEntity">
+-- 		SELECT sys_role.name,rid,uid,sys_user.name FROM `sys_role` LEFT JOIN sys_role_user ON sys_role.id = sys_role_user.rid LEFT JOIN sys_user ON sys_role_user.uid = sys_user.id
+		SELECT sys_role.name,count(rid) as value FROM `sys_role` LEFT JOIN sys_role_user ON sys_role.id = sys_role_user.rid LEFT JOIN sys_user ON sys_role_user.uid = sys_user.id GROUP BY `name`
+	</select>
+	<select id="queryDeptEmployeeNumStat" resultType="com.lzh.wms.statistics.domain.BaseEntity">
+		-- SELECT a.title,b.name from sys_dept a LEFT JOIN sys_user b ON a.id = b.deptid
+		-- SELECT a.title,count(a.title) as value,b.name from sys_dept a LEFT JOIN sys_user b ON a.id = b.deptid GROUP BY a.title
+		-- SELECT a.title,CASE
+		-- 	WHEN count(a.title)=1 and b.name is null THEN 0
+		-- 	ELSE
+		-- 		count(a.title)
+		-- END as value,b.name from sys_dept a LEFT JOIN sys_user b ON a.id = b.deptid GROUP BY a.title
+		SELECT a.title as name,CASE
+			WHEN count(a.title)=1 and b.name is null THEN 0
+			ELSE
+				count(a.title)
+		END as value from sys_dept a LEFT JOIN sys_user b ON a.id = b.deptid GROUP BY a.title
+	</select>
+</mapper>
