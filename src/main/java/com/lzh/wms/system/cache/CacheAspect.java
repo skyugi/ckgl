@@ -172,6 +172,12 @@ public class CacheAspect {
             return result1;
         }else {
             User result2 = (User) joinPoint.proceed();
+
+            if (result2==null){
+                return null;
+            }
+
+
             CACHE_CONTAINER.put(CACHE_USER_PREFIX+result2.getId(),result2);
             log.info("未从缓存里找到用户对象，查询数据库并放入缓存：------"+CACHE_USER_PREFIX+result2.getId() + "------");
             return result2;

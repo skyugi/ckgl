@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html style="height: 100%" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>日志管理</title>
@@ -14,61 +14,69 @@
     <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" href="/resources/css/public.css" media="all"/>
 </head>
-<body class="childrenBody">
+<body style="height: 100%" class="childrenBody">
 <!--查询条件开始-->
 <!--<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">-->
 <!--    <legend>查询条件</legend>-->
 <!--</fieldset>-->
-<blockquote class="layui-elem-quote">
-    <form action="" method="post" id="searchForm" lay-filter="searchForm" class="layui-form layui-form-pane">
-        <div class="layui-form-item" style="text-align: center">
-            <div class="layui-inline">
-                <label class="layui-form-label">登录名称</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="loginname" id="loginname" autocomplete="off" class="layui-input">
+<!--<blockquote class="layui-elem-quote">-->
+<div style="height: 100%">
+    <div style="float: right;width: 60%">
+        <form action="" method="post" id="searchForm" lay-filter="searchForm" class="layui-form layui-form-pane">
+            <div class="layui-form-item" style="text-align: center">
+                <div class="layui-inline">
+                    <label class="layui-form-label">登录名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="loginname" id="loginname" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">登录地址</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="loginip" id="loginip"  autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">开始时间</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" name="startTime" id="startTime" readonly="readonly"class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">结束时间</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" name="endTime" id="endTime" readonly="readonly" class="layui-input">
+                    </div>
                 </div>
             </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">登录地址</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="loginip" id="loginip"  autocomplete="off" class="layui-input">
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="text-align: center">
+                    <button type="button" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>查询</button>
+                    <button type="reset" class="layui-btn layui-btn-sm layui-btn-normal"><span class="layui-icon layui-icon-refresh"></span>重置</button>
                 </div>
             </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">开始时间</label>
-                <div class="layui-input-inline">
-                    <input type="tel" name="startTime" id="startTime" readonly="readonly" placeholder="yyyy-MM-dd HH:mm:ss" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">结束时间</label>
-                <div class="layui-input-inline">
-                    <input type="tel" name="endTime" id="endTime" readonly="readonly" placeholder="yyyy-MM-dd HH:mm:ss" class="layui-input">
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-input-block" style="text-align: center">
-                <button type="button" class="layui-btn" lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>查询</button>
-                <button type="reset" class="layui-btn layui-btn-normal"><span class="layui-icon layui-icon-refresh"></span>重置</button>
-            </div>
-        </div>
-    </form>
-</blockquote>
-<!--查询条件结束-->
+        </form>
+        <!--</blockquote>-->
+        <!--查询条件结束-->
 
-<!--数据表格开始-->
-<div>
-    <table class="layui-hide" id="logInfoTable" lay-filter="logInfoTable"></table>
-    <div id="logInfoToolBar" style="display: none">
-        <button type="button" lay-event="batchDeleteLogInfo" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>批量删除</button>
+        <!--数据表格开始-->
+        <div>
+            <table class="layui-hide" id="logInfoTable" lay-filter="logInfoTable"></table>
+            <div id="logInfoToolBar" style="display: none">
+                <button type="button" lay-event="batchDeleteLogInfo" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>批量删除</button>
+            </div>
+            <div id="logInfoRowBar" style="display: none">
+                <button type="button" lay-event="deleteLogInfo" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
+            </div>
+        </div>
+        <!--数据表格结束-->
     </div>
-    <div id="logInfoRowBar" style="display: none">
-        <button type="button" lay-event="deleteLogInfo" class="layui-btn layui-btn-sm layui-btn-danger"><span class="layui-icon layui-icon-delete"></span>删除</button>
-    </div>
+    <div id="container1" style="float: right;height: 100%;width: 40%"></div>
+
 </div>
-<!--数据表格结束-->
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script type="text/javascript" src="/resources/echarts/js/echarts.min.js"></script>
+<script type="text/javascript" src="/resources/echarts/js/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
     layui.use(['jquery', 'form', 'table', 'layer', 'laydate'], function () {
         var $ = layui.jquery;
@@ -200,6 +208,51 @@
         }
 
     });
+
+
+    $.get("/stat/queryLoginNameStatJson",function (data) {
+        var dom = document.getElementById("container1");
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        option = {
+            title: {
+                text: '登录用户',
+                subtext: '',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: data
+            },
+            series: [
+                {
+                    name: '登录用户(占比)',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '60%'],
+                    data: data,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        ;
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+    })
+
 </script>
 </body>
 </html>

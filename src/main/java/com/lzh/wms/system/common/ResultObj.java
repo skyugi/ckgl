@@ -42,4 +42,7 @@ public class ResultObj {
     public static final ResultObj  OPERATE_SUCCESS=new ResultObj(Constant.OK, "操作成功");
     public static final ResultObj  OPERATE_ERROR=new ResultObj(Constant.ERROR, "操作失败");
 
+    public static final ResultObj  START_SUCCESS=new ResultObj(Constant.OK, "启动成功");
+    public static final ResultObj  START_ERROR=new ResultObj(Constant.ERROR, "启动失败");
+
 }

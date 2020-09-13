@@ -2,4 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lzh.wms.system.mapper.LogInfoMapper">
 
+    <select id="queryLoginNameStatList" resultType="com.lzh.wms.statistics.domain.BaseEntity">
+        select loginname as name,count(1) as value from sys_logInfo
+		GROUP BY loginname
+    </select>
 </mapper>

@@ -5,8 +5,10 @@ spring:
       enabled: false
   datasource:
     druid:
-      driver-class-name: com.mysql.cj.jdbc.Driver
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+      driver-class-name: com.mysql.jdbc.Driver
       url: jdbc:mysql://192.168.25.129:3306/medicine-wms-lzh?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=UTC
+#      url: @datasource.url@
       username: root
       password: 666
       max-active: 20
@@ -23,6 +25,9 @@ spring:
         allow:
         deny:
         url-pattern: /druid/*
+  jpa:
+    hibernate.ddl-auto: update
+    show-sql: true
   #thymeleaf的配置
   thymeleaf:
     cache: false
@@ -59,3 +64,19 @@ shiro:
 #  log-out-url: /login/logout*
   authc-ulrs:
     - /**
+
+# camunda流程引擎配置
+camunda:
+  bpm:
+    history-level: FULL
+    history-level-default: FULL
+    auto-deployment-enabled: false
+    filter:
+      create: All tasks
+    database:
+      schema-update: true
+    metrics:
+      enabled: false
+    authorization:
+      # 开启权限检测
+      enabled: true

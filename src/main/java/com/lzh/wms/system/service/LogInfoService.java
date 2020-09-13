@@ -1,7 +1,10 @@
 package com.lzh.wms.system.service;
 
+import com.lzh.wms.statistics.domain.BaseEntity;
 import com.lzh.wms.system.domain.LogInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface LogInfoService extends IService<LogInfo> {
 
+    /**
+     * 统计用户登录
+     * @return
+     */
+    List<BaseEntity> queryLoginNameStatList();
 }

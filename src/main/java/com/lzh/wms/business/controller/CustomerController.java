@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lzh.wms.business.domain.Customer;
+import com.lzh.wms.business.domain.Provider;
 import com.lzh.wms.business.service.CustomerService;
 import com.lzh.wms.business.vo.CustomerVo;
+import com.lzh.wms.system.common.Constant;
 import com.lzh.wms.system.common.DataGridView;
 import com.lzh.wms.system.common.ResultObj;
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +21,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -118,6 +121,19 @@ public class CustomerController {
             e.printStackTrace();
             return ResultObj.DELETE_ERROR;
         }
+    }
+
+    /**
+     * 为销售出库查询提供查询所有有效的客户
+     * @return
+     */
+    @RequestMapping("/loadAllCustomerDropDownList")
+    public DataGridView loadAllCustomerDropDownList(){
+        //组装查询条件
+        QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("available", Constant.AVAILABLE_TRUE);
+        List<Customer> list = customerService.list(queryWrapper);
+        return new  DataGridView(list);
     }
 
 }

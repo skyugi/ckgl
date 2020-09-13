@@ -55,7 +55,12 @@ public class Goods implements Serializable {
 
     private Integer providerid;
 
+    private Integer kindId;
+
     @TableField(exist = false)
     private String providername;
+
+    @TableField(exist = false)
+    private String kindName;
 
 }

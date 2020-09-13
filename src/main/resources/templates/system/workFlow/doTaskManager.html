@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>办理任务管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="/resources/favicon.ico">
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/resources/css/public.css" media="all"/>
+    <link rel="stylesheet" href="/resources/layui_ext/dtree/dtree.css" media="all"/>
+    <link rel="stylesheet" href="/resources/layui_ext/dtree/font/dtreefont.css" media="all"/>
+</head>
+<body class="childrenBody">
+
+<!--办理任务的弹出层开始-->
+<!--<div style="display: none;padding: 10px" id="addOrUpdateDiv">-->
+<div style="padding: 10px" id="">
+    <form action="" method="post" class="layui-form layui-form-pane" id="dataForm" lay-filter="dataForm" >
+        <div class="layui-form-item">
+            <label class="layui-form-label">请假标题</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" th:value="${leaveBill.title}" disabled="disabled" autocomplete="off"  class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">请假天数</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="days" th:value="${leaveBill.days}" disabled="disabled" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">请假时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="leavetime" id="leavetime" th:value="${#dates.format(leaveBill.leavetime,'yyyy-MM-dd HH:mm:ss')}" disabled="disabled" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">请假原因</label>
+            <div class="layui-input-block">
+<!--                <textarea class="layui-textarea" name="reason" th:value="${leaveBill.reason}" id="reason"></textarea>-->
+                <input class="layui-textarea" name="reason" th:value="${leaveBill.reason}" disabled="disabled" id="reason"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">批注</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入批注内容"  name="comment" id="comment" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align: right">
+<!--            <div class="layui-input-inline"  >-->
+<!--                <button type="button" lay-submit="" lay-filter="doSubmit" id="doSubmit"  class="layui-btn layui-btn-sm"><span class="layui-icon"></span>"${gw}"</button>-->
+                <input type="button" th:each="var,varstate:${outgoingName}" lay-submit="" th:value="${var}" lay-filter="doSubmit" id="doSubmit"  class="layui-btn layui-btn-sm layui-btn-normal completeTask"/>
+<!--                <button type="reset" class="layui-btn layui-btn-sm layui-btn-normal"><span class="layui-icon layui-icon-refresh-1"></span>重置</button>-->
+<!--            </div>-->
+        </div>
+    </form>
+</div>
+<!--添加和办理任务的弹出层结束-->
+
+<!--数据表格开始-->
+<div>
+    <table class="layui-hide" id="commentTable" lay-filter="commentTable"></table>
+</div>
+<!--数据表格结束-->
+
+
+
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script type="text/javascript" src="/resources/layui_ext/dtree/dtree.js"></script>
+<script type="text/javascript">
+    layui.extend({
+        dtree: '/resources/layui_ext/dtree/dtree'   // {/}的意思即代表采用自有路径，即不跟随 base 路径
+    }).use(['jquery', 'form', 'table', 'layer', 'dtree'], function () {
+        var $ = layui.jquery;
+        var form = layui.form;
+        var table = layui.table;
+        var layer = layui.layer;
+        var dtree = layui.dtree;
+        // var taskId = ${workFlowVo.taskId};
+        //加载数据表格数据
+        var tableInit = table.render({
+            elem: '#commentTable'
+            ,url:'/workFlow/queryAllCommentByTaskId?taskId='+'[[${workFlowVo.taskId}]]'
+            // ,toolbar: '#roleToolBar' //开启头部工具栏，并为其绑定左侧模板
+            ,title: '用户办理任务数据表'
+            ,height: 'full-205'
+            ,cols: [ [
+                {field:'time', title:'批注时间', align: 'center', sort: true}
+                ,{field:'taskName', title:'办理任务名称', align: 'center', edit: 'text'}
+                ,{field:'userId', title:'批注人', align: 'center'}
+                , {field: 'message', title: '批注内容', align: 'center'}
+            ] ]
+            ,page: true
+        });
+
+        // form.on("submit(doSubmit)",function (data) {
+        //      // alert(data.field);
+        //     $.post("/workFlow/completeTask",data.field,function (result) {
+        //         // alert(JSON.stringify(data.field));
+        //         if (result.code == 200){
+        //             tableInit.reload();
+        //         }
+        //         layer.msg(result.msg);
+        //         // layer.close(mainIndex);
+        //         var index = parent.layer.getFrameIndex(window.name);
+        //         window.parent.layer.close(index);
+        //     });
+        //     return false;
+        // });
+        //监控按钮事件,上面的在获取按钮值时老是只获取到一个值
+        $(".completeTask").click(function(obj){
+            var outgoingName=this.value;
+            $.post("/workFlow/completeTask",{
+                taskId:'[[${workFlowVo.taskId}]]',
+                outgoingName:outgoingName,
+                leaveBillId:'[[${leaveBill.id}]]',
+                comment:$("#comment").val()
+            },function(data){
+                layer.msg(data.msg);
+                //关闭部署的弹出层
+                var index = parent.layer.getFrameIndex(window.name);
+                window.parent.layer.close(index);
+                //刷新父页面的table
+                window.parent.tableInit.reload();
+            })
+
+        })
+    });
+</script>
+</body>
+</html>

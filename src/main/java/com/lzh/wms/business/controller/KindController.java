@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lzh.wms.business.domain.Kind;
+import com.lzh.wms.business.domain.Provider;
 import com.lzh.wms.business.service.KindService;
 import com.lzh.wms.business.vo.KindVo;
+import com.lzh.wms.system.common.Constant;
 import com.lzh.wms.system.common.DataGridView;
 import com.lzh.wms.system.common.ResultObj;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * <p>
@@ -114,6 +117,18 @@ public class KindController {
             e.printStackTrace();
             return ResultObj.DELETE_ERROR;
         }
+    }
+
+    /**
+     * 为医药货品查询提供查询所有类别
+     * @return
+     */
+    @RequestMapping("/loadAllKindDropDownList")
+    public DataGridView loadAllKindDropDownList(){
+        //组装查询条件
+        QueryWrapper<Kind> queryWrapper = new QueryWrapper<>();
+        List<Kind> list = kindService.list(queryWrapper);
+        return new  DataGridView(list);
     }
 
 }
